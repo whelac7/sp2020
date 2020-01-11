@@ -92,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             SheetService sheetService = new SheetService(account.getAccount(), context);
-            sheetService.pushInformation();
+            //sheetService.pushInformation();
             sheetService.getInformation();
+            //sheetService.createSheet("1732 - Test");
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
