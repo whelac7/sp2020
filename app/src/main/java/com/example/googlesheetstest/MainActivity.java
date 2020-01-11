@@ -32,6 +32,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.services.sheets.v4.model.Sheet;
 
+import java.util.concurrent.ExecutionException;
+
 
 public class MainActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
@@ -89,8 +91,9 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            SheetService.sheetTest(account.getAccount(), context);
-            // Signed in successfully, show authenticated UI.
+            SheetService sheetService = new SheetService(account.getAccount(), context);
+            sheetService.pushInformation();
+            sheetService.getInformation();
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
