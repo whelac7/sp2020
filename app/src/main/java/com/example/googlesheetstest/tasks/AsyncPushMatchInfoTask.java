@@ -3,6 +3,7 @@ package com.example.googlesheetstest.tasks;
 import android.os.AsyncTask;
 
 import com.example.googlesheetstest.SheetService;
+import com.example.googlesheetstest.objects.Team;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
@@ -12,9 +13,11 @@ import java.util.List;
 
 public class AsyncPushMatchInfoTask extends AsyncTask<Void, Void, Void> {
     private SheetService sheetService;
+    private Team team;
 
-    public AsyncPushMatchInfoTask(SheetService sheetService) {
+    public AsyncPushMatchInfoTask(SheetService sheetService, Team team) {
         this.sheetService = sheetService;
+        this.team = team;
     }
 
     protected Void doInBackground(Void... params) {

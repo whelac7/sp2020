@@ -9,6 +9,9 @@ import androidx.annotation.Nullable;
 
 import android.util.Log;
 
+import com.example.googlesheetstest.objects.Team;
+import com.example.googlesheetstest.responses.GetMatchInfoResponse;
+import com.example.googlesheetstest.tasks.AsyncGetMatchInfoTask;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,8 +33,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.Sheet;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
@@ -94,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
             SheetService sheetService = new SheetService(account.getAccount(), context);
             //sheetService.pushInformation();
             sheetService.getInformation();
-            //sheetService.createSheet("1732 - Test");
+            sheetService.getMatchInfo();
+
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
