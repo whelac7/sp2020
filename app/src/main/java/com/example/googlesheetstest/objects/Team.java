@@ -1,21 +1,25 @@
 package com.example.googlesheetstest.objects;
 
-public class Team {
-    private int initLine;
-    private int autoLower;
-    private int autoOuter;
-    private int autoInner;
-    private int lower;
-    private int outer;
-    private int inner;
-    private int rotation;
-    private int position;
-    private int park;
-    private int hang;
-    private int level;
-    private int disableTime;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-    public Team(int initLine, int autoLower, int autoOuter, int autoInner, int lower, int outer, int inner, int rotation, int position, int park, int hang, int level, int disableTime) {
+public class Team {
+    private Integer number;
+    private Integer initLine;
+    private Integer autoLower;
+    private Integer autoOuter;
+    private Integer autoInner;
+    private Integer lower;
+    private Integer outer;
+    private Integer inner;
+    private Integer rotation;
+    private Integer position;
+    private Integer park;
+    private Integer hang;
+    private Integer level;
+    private Integer disableTime;
+
+    public Team(Integer number, Integer initLine, Integer autoLower, Integer autoOuter, Integer autoInner, Integer lower, Integer outer, Integer inner, Integer rotation, Integer position, Integer park, Integer hang, Integer level, Integer disableTime) {
+        this.number = number;
         this.initLine = initLine;
         this.autoLower = autoLower;
         this.autoOuter = autoOuter;
@@ -31,55 +35,72 @@ public class Team {
         this.disableTime = disableTime;
     }
 
-    public int getInitLine() {
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Team) {
+            return number == ((Team)obj).number;
+        }
+        return false;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public Integer getInitLine() {
         return initLine;
     }
 
-    public int getAutoLower() {
+    public Integer getAutoLower() {
         return autoLower;
     }
 
-    public int getAutoOuter() {
+    public Integer getAutoOuter() {
         return autoOuter;
     }
 
-    public int getAutoInner() {
+    public Integer getAutoInner() {
         return autoInner;
     }
 
-    public int getLower() {
+    public Integer getLower() {
         return lower;
     }
 
-    public int getOuter() {
+    public Integer getOuter() {
         return outer;
     }
 
-    public int getInner() {
+    public Integer getInner() {
         return inner;
     }
 
-    public int getRotation() {
+    public Integer getRotation() {
         return rotation;
     }
 
-    public int getPosition() {
+    public Integer getPosition() {
         return position;
     }
 
-    public int getPark() {
+    public Integer getPark() {
         return park;
     }
 
-    public int getHang() {
+    public Integer getHang() {
         return hang;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public int getDisableTime() {
+    public Integer getDisableTime() {
         return disableTime;
     }
 }
