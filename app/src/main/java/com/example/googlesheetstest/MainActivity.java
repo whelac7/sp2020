@@ -1,6 +1,5 @@
 package com.example.googlesheetstest;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import androidx.annotation.Nullable;
 
 import android.util.Log;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,20 +25,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.googlesheetstest.SheetService;
-
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.services.sheets.v4.model.Sheet;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
-import com.google.zxing.qrcode.encoder.QRCode;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     GoogleSignInAccount account;
     Context context;
     private static final String TAG = "SignInActivity";
-    private static final int RC_SIGN_IN = 9001;
     private static String SPREADSHEETS_SCOPE = "https://www.googleapis.com/auth/spreadsheets";
 
     @Override
@@ -71,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         test.setY(250);
 
         TextView test2 = findViewById(R.id.textView);
-        test2.setX(500);
-        test2.setY(500);
+        test2.setY(1200);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 signIn();
-                //Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                //Intent intent = new Intent(MainActivity.this, QRScannerActivity.class);
                 //startActivity(intent);
             }
         });
@@ -92,11 +83,10 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, QRScannerActivity.class);
+                startActivityForResult(intent, RequestCodes.QR_SCAN.getValue());
             }
         });
-        test2.setText(getIntent().getStringExtra("String"));
     }
 
     public void updateText(String text) {
@@ -105,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, RequestCodes.RC_SIGN_IN.getValue());
     }
 
     @Override
@@ -113,11 +103,24 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RequestCodes.RC_SIGN_IN.getValue()) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        }
+
+        if (requestCode == RequestCodes.QR_SCAN.getValue() && resultCode == RESULT_OK) {
+            updateText(data.getStringExtra("data"));
+            String[] propertyStrings = data.getStringExtra("data").split(",");
+            Dictionary<String, String> properties = new Hashtable<String, String>();
+            for (String propertyString : propertyStrings) {
+                String[] splitString = propertyString.split("=");
+                properties.put(splitString[0], splitString[1]);
+            }
+            System.out.println(properties.get("app"));
+            System.out.println(properties.get("initLine"));
+            System.out.println(properties.get("number"));
         }
     }
 
