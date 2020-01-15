@@ -2,6 +2,7 @@ package com.example.googlesheetstest;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -22,6 +23,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.googlesheetstest.SheetService;
 
@@ -31,7 +35,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.services.sheets.v4.model.Sheet;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.encoder.QRCode;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 
@@ -59,6 +67,13 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        ImageView test = findViewById(R.id.imageView2);
+        test.setY(250);
+
+        TextView test2 = findViewById(R.id.textView);
+        test2.setX(500);
+        test2.setY(500);
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,8 +81,26 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 signIn();
+                //Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                //startActivity(intent);
             }
         });
+
+        Button button = findViewById(R.id.button);
+        button.setY(700);
+        button.setText("Scan QR");
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                startActivity(intent);
+            }
+        });
+        test2.setText(getIntent().getStringExtra("String"));
+    }
+
+    public void updateText(String text) {
+        ((TextView)(findViewById(R.id.textView))).setText(text);
     }
 
     private void signIn() {
@@ -94,6 +127,13 @@ public class MainActivity extends AppCompatActivity {
             SheetService sheetService = new SheetService(account.getAccount(), context);
             //sheetService.pushInformation();
             sheetService.getInformation();
+            try {
+                Bitmap bmp = QRCodeHelper.createQRCode("app=1732ScoutingApp,number=1732,initLine=1001,autoLower=1002,autoOuter=1003,autoInner=100,lower=100,outer=100,inner=100,rotation=100,position=100,park=100,hang=100,level=100,disableTime=100,notes=none");
+                ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(bmp);
+            }
+            catch (IOException | WriterException ex) {
+                System.out.println(ex);
+            }
             //sheetService.createSheet("1732 - Test");
             updateUI(account);
         } catch (ApiException e) {
