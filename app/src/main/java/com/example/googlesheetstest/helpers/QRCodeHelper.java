@@ -1,4 +1,4 @@
-package com.example.googlesheetstest;
+package com.example.googlesheetstest.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
