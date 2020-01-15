@@ -2,7 +2,7 @@ package com.example.googlesheetstest.tasks;
 
 import android.os.AsyncTask;
 
-import com.example.googlesheetstest.SheetService;
+import com.example.googlesheetstest.services.SheetService;
 import com.google.api.services.sheets.v4.model.AddSheetRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.Request;
