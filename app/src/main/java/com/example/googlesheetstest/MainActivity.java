@@ -37,12 +37,11 @@ import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-
 public class MainActivity extends AppCompatActivity {
-    GoogleSignInOptions gso;
-    GoogleSignInClient  mGoogleSignInClient;
-    GoogleSignInAccount account;
-    Context context;
+    private GoogleSignInOptions gso;
+    private GoogleSignInClient  mGoogleSignInClient;
+    private GoogleSignInAccount account;
+    private Context context;
     private static final String TAG = "SignInActivity";
     private static String SPREADSHEETS_SCOPE = "https://www.googleapis.com/auth/spreadsheets";
 
@@ -89,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, RequestCodes.QR_SCAN.getValue());
             }
         });
+
+        Intent i = new Intent(MainActivity.this, SQLiteDatabaseActivity.class);
+        startActivity(i);
     }
 
     public void updateText(String text) {
