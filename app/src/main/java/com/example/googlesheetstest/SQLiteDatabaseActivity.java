@@ -43,9 +43,23 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
     private void saveToDB() {
         SQLiteDBHelper DBHelper = new SQLiteDBHelper(this);
         SQLiteDatabase database = DBHelper.getWritableDatabase();
+
         ContentValues values = new ContentValues();
+        values.put(SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID, 0); // Have to figure out how to get the COMPETITION_ID
         values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, activityBinding.ageEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, activityBinding.genderEditText.getText().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_LOWER, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_OUTER, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_INNER, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_ROTATION, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_POSITION, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_PARK, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_HANG, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_LEVEL, 0);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME, 0);
 
         DBHelper.createTableIfNotExists(database, "frc" + activityBinding.nameEditText.getText().toString());
         long newRowId = database.insert("frc" + activityBinding.nameEditText.getText().toString(), null, values);
@@ -60,8 +74,21 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         SQLiteDatabase database = new SQLiteDBHelper(this).getReadableDatabase();
 
         String[] projection = {
+                SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID,
                 SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER,
-                SQLiteDBHelper.TEAM_COLUMN_INIT_LINE
+                SQLiteDBHelper.TEAM_COLUMN_INIT_LINE,
+                SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER,
+                SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER,
+                SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER,
+                SQLiteDBHelper.TEAM_COLUMN_LOWER,
+                SQLiteDBHelper.TEAM_COLUMN_OUTER,
+                SQLiteDBHelper.TEAM_COLUMN_INNER,
+                SQLiteDBHelper.TEAM_COLUMN_ROTATION,
+                SQLiteDBHelper.TEAM_COLUMN_POSITION,
+                SQLiteDBHelper.TEAM_COLUMN_PARK,
+                SQLiteDBHelper.TEAM_COLUMN_HANG,
+                SQLiteDBHelper.TEAM_COLUMN_LEVEL,
+                SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME
         };
 
         String selection = null;
