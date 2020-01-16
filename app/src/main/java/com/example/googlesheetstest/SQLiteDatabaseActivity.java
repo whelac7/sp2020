@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
@@ -48,34 +47,33 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, activityBinding.ageEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, activityBinding.genderEditText.getText().toString());
 
-        DBHelper.createTableIfNotExists(database, activityBinding.nameEditText.getText().toString());
-        long newRowId = database.insert(activityBinding.nameEditText.getText().toString(), null, values);
+        DBHelper.createTableIfNotExists(database, "frc" + activityBinding.nameEditText.getText().toString());
+        long newRowId = database.insert("frc" + activityBinding.nameEditText.getText().toString(), null, values);
 
         Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
     }
 
     private void readFromDB() {
-        String name = activityBinding.nameEditText.getText().toString();
-        String gender = activityBinding.genderEditText.getText().toString();
-        String age = activityBinding.ageEditText.getText().toString();
-        if (age.isEmpty())
-            age = "0";
+        String team = "frc" + activityBinding.nameEditText.getText().toString();
+        String match = activityBinding.ageEditText.getText().toString();
 
         SQLiteDatabase database = new SQLiteDBHelper(this).getReadableDatabase();
 
         String[] projection = {
                 SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER,
-                SQLiteDBHelper.TEAM_COLUMN_INIT_LINE,
+                SQLiteDBHelper.TEAM_COLUMN_INIT_LINE
         };
 
-        String selection =
-                SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER + " > ? or " +
-                        SQLiteDBHelper.TEAM_COLUMN_INIT_LINE + " like ?";
-
-        String[] selectionArgs = {"%" + age, "%" + gender};
+        String selection = null;
+        String[] selectionArgs = null;
+        if (!match.isEmpty()) {
+            selection =
+                    SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER + " = ?";
+            selectionArgs = new String[]{match};
+        }
 
         Cursor cursor = database.query(
-                name,   // The table to query
+                team,   // The table to query
                 projection,                               // The columns to return
                 selection,                                // The columns for the WHERE clause
                 selectionArgs,                            // The values for the WHERE clause
@@ -88,8 +86,9 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         cursor.moveToFirst();
         String stuff = "";
         for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
-            stuff += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + "\n";
+            stuff += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE)) + "\n";
         }
+        cursor.close();
         Toast.makeText(this, stuff, Toast.LENGTH_LONG).show();
     }
 }
