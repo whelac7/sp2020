@@ -3,6 +3,7 @@ package com.example.googlesheetstest;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,18 +45,18 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         SQLiteDBHelper DBHelper = new SQLiteDBHelper(this);
         SQLiteDatabase database = DBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, activityBinding.ageEditText.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, activityBinding.genderEditText.getText().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, activityBinding.matchEditText.getText().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, activityBinding.initLineEditText.getText().toString());
 
-        DBHelper.createTableIfNotExists(database, "frc" + activityBinding.nameEditText.getText().toString());
-        long newRowId = database.insert("frc" + activityBinding.nameEditText.getText().toString(), null, values);
+        DBHelper.createTableIfNotExists(database, "frc" + activityBinding.numberEditText.getText().toString());
+        long newRowId = database.insert("frc" + activityBinding.numberEditText.getText().toString(), null, values);
 
         Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
     }
 
     private void readFromDB() {
-        String team = "frc" + activityBinding.nameEditText.getText().toString();
-        String match = activityBinding.ageEditText.getText().toString();
+        String team = "frc" + activityBinding.numberEditText.getText().toString();
+        String match = activityBinding.matchEditText.getText().toString();
 
         SQLiteDatabase database = new SQLiteDBHelper(this).getReadableDatabase();
 
@@ -72,23 +73,30 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
             selectionArgs = new String[]{match};
         }
 
-        Cursor cursor = database.query(
-                team,   // The table to query
-                projection,                               // The columns to return
-                selection,                                // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                      // don't sort
-        );
+        try {
+            Cursor cursor = database.query(
+                    team,   // The table to query
+                    projection,                               // The columns to return
+                    selection,                                // The columns for the WHERE clause
+                    selectionArgs,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                      // don't sort
+            );
 
-        Log.d(TAG, "The total cursor count is " + cursor.getCount());
-        cursor.moveToFirst();
-        String stuff = "";
-        for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
-            stuff += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE)) + "\n";
+            Log.d(TAG, "The total cursor count is " + cursor.getCount());
+            cursor.moveToFirst();
+            String stuff = "";
+            for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
+                stuff += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE)) + "\n";
+            }
+            cursor.close();
+            Toast.makeText(this, stuff, Toast.LENGTH_LONG).show();
         }
-        cursor.close();
-        Toast.makeText(this, stuff, Toast.LENGTH_LONG).show();
+        catch (SQLiteException ex) {
+            if (ex.getMessage().startsWith("no such table")) {
+                Toast.makeText(this, "No such table: " + team, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

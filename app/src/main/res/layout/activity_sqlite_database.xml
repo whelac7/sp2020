@@ -16,62 +16,63 @@
             android:paddingTop="16dp">
 
             <TextView
-                android:id="@+id/nameLabel"
+                android:id="@+id/numberLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="8dp"
                 android:paddingTop="15dp"
-                android:text="Fullname"
+                android:text="Team Number"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/nameEditText"
+                android:id="@+id/numberEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/nameLabel"
-                android:layout_toRightOf="@id/nameLabel" />
-
-            <TextView
-                android:id="@+id/ageLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nameLabel"
-                android:paddingTop="15dp"
-                android:text="Age"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/ageEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/ageLabel"
-                android:layout_alignLeft="@id/nameEditText"
-                android:layout_toRightOf="@id/ageLabel"
+                android:layout_alignBottom="@id/numberLabel"
+                android:layout_toRightOf="@id/numberLabel"
                 android:inputType="number"/>
 
             <TextView
-                android:id="@+id/genderLabel"
+                android:id="@+id/matchLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ageLabel"
+                android:layout_below="@id/numberLabel"
                 android:paddingTop="15dp"
-                android:text="Gender"
+                android:text="Match Number"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/genderEditText"
+                android:id="@+id/matchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/genderLabel"
-                android:layout_alignLeft="@id/nameEditText"
-                android:layout_toRightOf="@id/genderLabel" />
+                android:layout_alignBottom="@id/matchLabel"
+                android:layout_alignLeft="@id/numberEditText"
+                android:layout_toRightOf="@id/matchLabel"
+                android:inputType="number"/>
+
+            <TextView
+                android:id="@+id/initLineLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/matchLabel"
+                android:paddingTop="15dp"
+                android:text="Init Line"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/initLineEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/initLineLabel"
+                android:layout_alignLeft="@id/numberEditText"
+                android:layout_toRightOf="@id/initLineLabel" />
 
             <Button
                 android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/genderLabel"
+                android:layout_below="@id/initLineLabel"
                 android:layout_marginBottom="30dp"
                 android:text="Save" />
 
@@ -80,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@id/genderLabel"
+                android:layout_below="@id/initLineLabel"
                 android:layout_marginBottom="30dp"
                 android:text="Search" />
         </RelativeLayout>
