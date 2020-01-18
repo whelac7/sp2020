@@ -10,6 +10,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "1732scouting";
     public static final String TEAM_TABLE_NAME = "template";
+    public static final String TEAM_COLUMN_COMPETITION_ID = "competition_id";
     public static final String TEAM_COLUMN_MATCH_NUMBER = "match_number";
     public static final String TEAM_COLUMN_INIT_LINE = "init_line";
     public static final String TEAM_COLUMN_AUTO_LOWER = "auto_lower";
@@ -33,6 +34,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + TEAM_TABLE_NAME + " (" +
                 TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
+                TEAM_COLUMN_COMPETITION_ID + " TEXT, " +
                 TEAM_COLUMN_INIT_LINE + " INT UNSIGNED, " +
                 TEAM_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
                 TEAM_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +
@@ -57,6 +59,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String team_table_name) {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + team_table_name + " (" +
                 TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
+                TEAM_COLUMN_COMPETITION_ID + " TEXT, " +
                 TEAM_COLUMN_INIT_LINE + " INT UNSIGNED, " +
                 TEAM_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
                 TEAM_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +

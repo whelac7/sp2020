@@ -65,14 +65,69 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/initLineLabel"
                 android:layout_alignLeft="@id/numberEditText"
-                android:layout_toRightOf="@id/initLineLabel" />
+                android:layout_toRightOf="@id/initLineLabel"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/autoLowerLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/initLineLabel"
+                android:paddingTop="15dp"
+                android:text="Auto Lower"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/autoLowerEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/autoLowerLabel"
+                android:layout_alignLeft="@id/numberEditText"
+                android:layout_toRightOf="@id/autoLowerLabel"
+                android:inputType="number"/>
+
+            <TextView
+                android:id="@+id/autoOuterLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/autoLowerLabel"
+                android:paddingTop="15dp"
+                android:text="Auto Outer"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/autoOuterEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/autoOuterLabel"
+                android:layout_alignLeft="@id/numberEditText"
+                android:layout_toRightOf="@id/autoOuterLabel"
+                android:inputType="number"/>
+
+            <TextView
+                android:id="@+id/autoInnerLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/autoOuterLabel"
+                android:paddingTop="15dp"
+                android:text="Auto Inner"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/autoInnerEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/autoInnerLabel"
+                android:layout_alignLeft="@id/numberEditText"
+                android:layout_toRightOf="@id/autoInnerLabel"
+                android:inputType="number"/>
 
             <Button
                 android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@id/initLineLabel"
+                android:layout_below="@id/autoInnerLabel"
                 android:layout_marginBottom="30dp"
                 android:text="Save" />
 
@@ -81,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@id/initLineLabel"
+                android:layout_below="@id/autoInnerLabel"
                 android:layout_marginBottom="30dp"
                 android:text="Search" />
         </RelativeLayout>

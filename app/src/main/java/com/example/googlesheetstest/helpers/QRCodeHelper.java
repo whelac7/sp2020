@@ -33,7 +33,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 public class QRCodeHelper {
     public static Bitmap createQRCode(String qrCodeData) throws WriterException, IOException {
         QRCodeWriter writer = new QRCodeWriter();
-        BitMatrix bitMatrix = writer.encode(qrCodeData, BarcodeFormat.QR_CODE, 512, 512);
+        BitMatrix bitMatrix = writer.encode(qrCodeData, BarcodeFormat.QR_CODE, 1024, 1024);
         int width = bitMatrix.getWidth();
         int height = bitMatrix.getHeight();
         Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);

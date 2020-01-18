@@ -61,10 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         ImageView test = findViewById(R.id.imageView2);
-        test.setY(250);
-
         TextView test2 = findViewById(R.id.textView);
-        test2.setY(1200);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button button = findViewById(R.id.button);
-        button.setY(700);
         button.setText("Scan QR");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
