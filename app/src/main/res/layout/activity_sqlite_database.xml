@@ -1,42 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".SQLiteDatabaseActivity">
 
         <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="16dp"
             android:paddingLeft="16dp"
+            android:paddingTop="16dp"
             android:paddingRight="16dp"
-            android:paddingTop="16dp">
+            android:paddingBottom="16dp">
 
             <TextView
-                android:id="@+id/numberLabel"
+                android:id="@+id/teamNumberLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="8dp"
                 android:paddingTop="15dp"
+                android:paddingRight="8dp"
                 android:text="Team Number"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/numberEditText"
+                android:id="@+id/teamNumberEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/numberLabel"
-                android:layout_toRightOf="@id/numberLabel"
-                android:inputType="number"/>
+                android:layout_alignBottom="@id/teamNumberLabel"
+                android:layout_toRightOf="@id/teamNumberLabel"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/matchLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/numberLabel"
+                android:layout_below="@id/teamNumberLabel"
                 android:paddingTop="15dp"
                 android:text="Match Number"
                 android:textSize="18sp" />
@@ -45,10 +46,10 @@
                 android:id="@+id/matchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/teamNumberEditText"
                 android:layout_alignBottom="@id/matchLabel"
-                android:layout_alignLeft="@id/numberEditText"
                 android:layout_toRightOf="@id/matchLabel"
-                android:inputType="number"/>
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/initLineLabel"
@@ -63,8 +64,8 @@
                 android:id="@+id/initLineEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/teamNumberEditText"
                 android:layout_alignBottom="@id/initLineLabel"
-                android:layout_alignLeft="@id/numberEditText"
                 android:layout_toRightOf="@id/initLineLabel"
                 android:inputType="number" />
 
@@ -81,10 +82,10 @@
                 android:id="@+id/autoLowerEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/teamNumberEditText"
                 android:layout_alignBottom="@id/autoLowerLabel"
-                android:layout_alignLeft="@id/numberEditText"
                 android:layout_toRightOf="@id/autoLowerLabel"
-                android:inputType="number"/>
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/autoOuterLabel"
@@ -99,10 +100,10 @@
                 android:id="@+id/autoOuterEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/teamNumberEditText"
                 android:layout_alignBottom="@id/autoOuterLabel"
-                android:layout_alignLeft="@id/numberEditText"
                 android:layout_toRightOf="@id/autoOuterLabel"
-                android:inputType="number"/>
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/autoInnerLabel"
@@ -117,17 +118,17 @@
                 android:id="@+id/autoInnerEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/teamNumberEditText"
                 android:layout_alignBottom="@id/autoInnerLabel"
-                android:layout_alignLeft="@id/numberEditText"
                 android:layout_toRightOf="@id/autoInnerLabel"
-                android:inputType="number"/>
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_below="@id/autoInnerLabel"
+                android:layout_alignParentRight="true"
                 android:layout_marginBottom="30dp"
                 android:text="Save" />
 
@@ -135,10 +136,28 @@
                 android:id="@+id/searchButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@id/autoInnerLabel"
+                android:layout_alignParentLeft="true"
                 android:layout_marginBottom="30dp"
                 android:text="Search" />
+
+            <Button
+                android:id="@+id/scanQRButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="Scan QR"/>
+
+            <ImageView
+                android:id="@+id/QRCodeImage"
+                android:layout_marginTop="50dp"
+                android:layout_width="235dp"
+                android:layout_height="228dp"
+                android:layout_below="@id/scanQRButton"
+                android:layout_centerHorizontal="true"
+                tools:srcCompat="@tools:sample/avatars" />
+
         </RelativeLayout>
 
         <include layout="@layout/content_sqlite_database" />

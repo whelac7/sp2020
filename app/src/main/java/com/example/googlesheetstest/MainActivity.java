@@ -70,23 +70,17 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 signIn();
-                //Intent intent = new Intent(MainActivity.this, QRScannerActivity.class);
-                //startActivity(intent);
             }
         });
 
-        Button button = findViewById(R.id.button);
-        button.setText("Scan QR");
+        Button button = findViewById(R.id.logMatchButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, QRScannerActivity.class);
-                startActivityForResult(intent, RequestCodes.QR_SCAN.getValue());
+                Intent intent = new Intent(MainActivity.this, SQLiteDatabaseActivity.class);
+                startActivity(intent);
             }
         });
-
-        Intent i = new Intent(MainActivity.this, SQLiteDatabaseActivity.class);
-        startActivity(i);
     }
 
     public void updateText(String text) {
@@ -109,19 +103,6 @@ public class MainActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
-
-        if (requestCode == RequestCodes.QR_SCAN.getValue() && resultCode == RESULT_OK) {
-            updateText(data.getStringExtra("data"));
-            String[] propertyStrings = data.getStringExtra("data").split(",");
-            Dictionary<String, String> properties = new Hashtable<String, String>();
-            for (String propertyString : propertyStrings) {
-                String[] splitString = propertyString.split("=");
-                properties.put(splitString[0], splitString[1]);
-            }
-            System.out.println(properties.get("app"));
-            System.out.println(properties.get("initLine"));
-            System.out.println(properties.get("number"));
-        }
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -131,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             //sheetService.pushInformation();
             sheetService.getInformation();
             try {
-                Bitmap bmp = QRCodeHelper.createQRCode("app=1732ScoutingApp,number=1732,initLine=1001,autoLower=1002,autoOuter=1003,autoInner=100,lower=100,outer=100,inner=100,rotation=100,position=100,park=100,hang=100,level=100,disableTime=100,notes=none");
+                Bitmap bmp = QRCodeHelper.createQRCode("app=1732ScoutingApp,teamNumber=1732,matchNumber=52,initLine=1001,autoLower=1002,autoOuter=1003,autoInner=100,lower=100,outer=100,inner=100,rotation=100,position=100,park=100,hang=100,level=100,disableTime=100,notes=none");
                 ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(bmp);
             }
             catch (IOException | WriterException ex) {

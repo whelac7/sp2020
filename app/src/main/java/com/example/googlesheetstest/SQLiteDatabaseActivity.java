@@ -1,9 +1,11 @@
 package com.example.googlesheetstest;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +16,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.googlesheetstest.databinding.ActivitySqliteDatabaseBinding;
+import com.example.googlesheetstest.helpers.QRCodeHelper;
 import com.example.googlesheetstest.helpers.SQLiteDBHelper;
+import com.google.zxing.WriterException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class SQLiteDatabaseActivity extends AppCompatActivity {
 
@@ -31,7 +38,7 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         activityBinding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveToDB();
+                saveToQR();
             }
         });
 
@@ -41,6 +48,73 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
                 displayQueryResult(readFromDB(activityBinding.matchEditText.getText().toString()));
             }
         });
+
+        activityBinding.scanQRButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent QRIntent = new Intent(SQLiteDatabaseActivity.this, QRScannerActivity.class);
+               startActivityForResult(QRIntent, RequestCodes.QR_SCAN.getValue());
+           }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RequestCodes.QR_SCAN.getValue() && resultCode == RESULT_OK) {
+            String[] propertyStrings = data.getStringExtra("data").split(",");
+            Dictionary<String, String> properties = new Hashtable<String, String>();
+            for (String propertyString : propertyStrings) {
+                String[] nameToValue = propertyString.split("=");
+                properties.put(nameToValue[0], nameToValue[1]);
+            }
+            populateFields(properties.get("teamNumber"), properties.get("matchNumber"), properties.get("initLine"), properties.get("autoLower"), properties.get("autoOuter"), properties.get("autoInner"));
+        }
+    }
+
+    private void populateFields(String teamNumber, String matchNumber, String initLine, String autoLower, String autoOuter, String autoInner) {
+        activityBinding.teamNumberEditText.setText(teamNumber);
+        activityBinding.matchEditText.setText(matchNumber);
+        activityBinding.initLineEditText.setText(initLine);
+        activityBinding.autoLowerEditText.setText(autoLower);
+        activityBinding.autoOuterEditText.setText(autoOuter);
+        activityBinding.autoInnerEditText.setText(autoInner);
+    }
+
+    private void saveToQR() {
+        try {
+            Bitmap code = QRCodeHelper.createQRCode(String.format("app=1732ScoutingApp,teamNumber=%s,matchNumber=%s,initLine=%s,autoLower=%s,autoOuter=%s,autoInner=%s,lower=%s,outer=%s,inner=%s,rotation=%s,position=%s,park=%s,hang=%s,level=%s,disableTime=%s,notes=%s",
+                    activityBinding.teamNumberEditText.getText().toString(),
+                    activityBinding.matchEditText.getText().toString(),
+                    activityBinding.initLineEditText.getText().toString(),
+                    activityBinding.autoLowerEditText.getText().toString(),
+                    activityBinding.autoOuterEditText.getText().toString(),
+                    activityBinding.autoInnerEditText.getText().toString(),
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0"));
+            //activityBinding.QRCodeImage.setImageBitmap(code);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            code.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] codeInBytes = stream.toByteArray();
+            Bundle bundledCode = new Bundle();
+            bundledCode.putByteArray("codeInBytes", codeInBytes);
+
+            QRCodeDialog qrCodeDialog = new QRCodeDialog();
+            qrCodeDialog.setArguments(bundledCode);
+            qrCodeDialog.show(getSupportFragmentManager(), "QR Code Dialog");
+        }
+        catch (IOException | WriterException ex) {
+            System.out.println(ex);
+        }
     }
 
     private ContentValues processPushInput() {
@@ -53,7 +127,6 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID, 0); // Have to figure out how to get the COMPETITION_ID
         values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, activityBinding.matchEditText.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, activityBinding.initLineEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, activityBinding.initLineEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER, activityBinding.autoLowerEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER, activityBinding.autoOuterEditText.getText().toString());
@@ -75,8 +148,8 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         SQLiteDatabase database = DBHelper.getWritableDatabase();
 
         try {
-            DBHelper.createTableIfNotExists(database, "frc" + activityBinding.numberEditText.getText().toString());
-            long newRowId = database.insert("frc" + activityBinding.numberEditText.getText().toString(), null, processPushInput());
+            DBHelper.createTableIfNotExists(database, "frc" + activityBinding.teamNumberEditText.getText().toString());
+            long newRowId = database.insert("frc" + activityBinding.teamNumberEditText.getText().toString(), null, processPushInput());
 
             Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
         }
@@ -95,7 +168,7 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
     }
 
     private Cursor readFromDB(String match) {
-        String team = "frc" + activityBinding.numberEditText.getText().toString();
+        String team = "frc" + activityBinding.teamNumberEditText.getText().toString();
         SQLiteDatabase database = new SQLiteDBHelper(this).getReadableDatabase();
 
         String[] projection = {
