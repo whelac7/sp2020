@@ -30,6 +30,7 @@ public class SaveDialogDatabaseFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 DBListener.saveToDB();
+                getActivity().onBackPressed();
             }
         });
 

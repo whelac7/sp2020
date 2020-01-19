@@ -49,7 +49,7 @@
                 android:layout_alignLeft="@id/teamNumberEditText"
                 android:layout_alignBottom="@id/matchLabel"
                 android:layout_toRightOf="@id/matchLabel"
-                android:inputType="number" />
+                android:inputType="number"/>
 
             <TextView
                 android:id="@+id/initLineLabel"

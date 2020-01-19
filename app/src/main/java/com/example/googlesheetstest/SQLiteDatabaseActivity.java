@@ -38,11 +38,12 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_sqlite_database);
+        System.out.println("matchNum: " + activityBinding.matchEditText.getText().toString());
 
         activityBinding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveToQR();
+                startSaveDialog();
             }
         });
 
@@ -54,11 +55,11 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
         });
 
         activityBinding.scanQRButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Intent QRIntent = new Intent(SQLiteDatabaseActivity.this, QRScannerActivity.class);
-               startActivityForResult(QRIntent, RequestCodes.QR_SCAN.getValue());
-           }
+            @Override
+            public void onClick(View view) {
+                Intent QRIntent = new Intent(SQLiteDatabaseActivity.this, QRScannerActivity.class);
+                startActivityForResult(QRIntent, RequestCodes.QR_SCAN.getValue());
+            }
         });
     }
 
@@ -86,8 +87,9 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
         activityBinding.autoInnerEditText.setText(autoInner);
     }
 
-    private void saveToQR() {
+    private void startSaveDialog() {
         try {
+            processInputs();
             Bitmap code = QRCodeHelper.createQRCode(String.format("app=1732ScoutingApp,teamNumber=%s,matchNumber=%s,initLine=%s,autoLower=%s,autoOuter=%s,autoInner=%s,lower=%s,outer=%s,inner=%s,rotation=%s,position=%s,park=%s,hang=%s,level=%s,disableTime=%s,notes=%s",
                     activityBinding.teamNumberEditText.getText().toString(),
                     activityBinding.matchEditText.getText().toString(),
@@ -122,22 +124,40 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
             SaveDataDialog saveDataDialog = new SaveDataDialog(this);
             saveDataDialog.setArguments(bundledCode);
             saveDataDialog.show(ft, "Save Data Dialog");
-        }
-        catch (IOException | WriterException ex) {
+        } catch (IOException | WriterException ex) {
             System.out.println(ex);
+        } catch (IllegalArgumentException ex) {
+            if (ex.getMessage().startsWith("no team specified")) {
+                Toast.makeText(this, "You must specify a team number.", Toast.LENGTH_LONG).show();
+            } else if (ex.getMessage().startsWith("match exists")) {
+                Toast.makeText(this, "Match " + activityBinding.matchEditText.getText().toString() + " already exists.", Toast.LENGTH_LONG).show();
+            } else if (ex.getMessage().startsWith("no match specified")) {
+                Toast.makeText(this, "You must specify a match number.", Toast.LENGTH_LONG).show();
+            } else if (ex.getMessage().startsWith("empty parameter")) {
+                String msg = ex.getMessage();
+                int reasonIndex = msg.indexOf(":") + 2;
+                Toast.makeText(this, "You left a field empty: " + msg.substring(reasonIndex, msg.length()), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
-    private ContentValues processPushInput() {
+    private ContentValues processInputs() throws IllegalArgumentException {
         if (activityBinding.teamNumberEditText.getText().toString().trim().isEmpty()) {
-            throw new IllegalArgumentException("no team specified: You must input a team number.");
-        }
-        else if (activityBinding.matchEditText.getText().toString().trim().isEmpty()) {
-            throw new IllegalArgumentException("no match specified: You must input a match number.");
-        }
-        else if (matchExists(activityBinding.matchEditText.getText().toString())) {
+            throw new IllegalArgumentException("no team specified: You must specify a team number.");
+        } else if (activityBinding.matchEditText.getText().toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("no match specified: You must specify a match number.");
+        } else if (matchExists(activityBinding.matchEditText.getText().toString())) {
             throw new IllegalArgumentException("match exists: Match " + activityBinding.matchEditText.getText().toString() + " already exists.");
+        } else if (activityBinding.initLineEditText.getText().toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("empty parameter: Init Line");
+        } else if (activityBinding.autoLowerEditText.getText().toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("empty parameter: Auto Lower");
+        } else if (activityBinding.autoOuterEditText.getText().toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("empty parameter: Auto Outer");
+        } else if (activityBinding.autoInnerEditText.getText().toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("empty parameter: Auto Inner");
         }
+
         ContentValues values = new ContentValues();
         values.put(SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID, 0); // Have to figure out how to get the COMPETITION_ID
         values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, activityBinding.matchEditText.getText().toString());
@@ -163,28 +183,35 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
 
         try {
             DBHelper.createTableIfNotExists(database, "frc" + activityBinding.teamNumberEditText.getText().toString());
-            long newRowId = database.insert("frc" + activityBinding.teamNumberEditText.getText().toString(), null, processPushInput());
+            long newRowId = database.insert("frc" + activityBinding.teamNumberEditText.getText().toString(), null, processInputs());
 
             Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
-        }
-        catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             if (ex.getMessage().startsWith("no team specified")) {
                 Toast.makeText(this, "You must specify a team number.", Toast.LENGTH_LONG).show();
-            }
-            else if (ex.getMessage().startsWith("match exists")) {
+            } else if (ex.getMessage().startsWith("match exists")) {
                 Toast.makeText(this, "Match " + activityBinding.matchEditText.getText().toString() + " already exists.", Toast.LENGTH_LONG).show();
-            }
-            else if (ex.getMessage().startsWith("no match specified")) {
+            } else if (ex.getMessage().startsWith("no match specified")) {
                 Toast.makeText(this, "You must specify a match number.", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     private boolean matchExists(String match) {
-        return readFromDB(match).getCount() >= 1;
+        Cursor cursor = readFromDB(match);
+        if (cursor != null) {
+            return cursor.getCount() >= 1;
+        }
+        return false;
     }
 
-    private Cursor readFromDB(String match) {
+    /**
+     *
+     * @param match
+     * @return null if no such team exists
+     * @throws SQLiteException
+     */
+    private Cursor readFromDB(String match) throws SQLiteException {
         String team = "frc" + activityBinding.teamNumberEditText.getText().toString();
         SQLiteDatabase database = new SQLiteDBHelper(this).getReadableDatabase();
 
@@ -214,9 +241,8 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
             selectionArgs = new String[]{match};
         }
 
-        Cursor cursor = null;
         try {
-            cursor = database.query(
+            Cursor cursor = database.query(
                     team,   // The table to query
                     projection,                               // The columns to return
                     selection,                                // The columns for the WHERE clause
@@ -225,16 +251,14 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
                     null,                                     // don't filter by row groups
                     null                                      // don't sort
             );
-
             Log.d(TAG, "The total cursor count is " + cursor.getCount());
-        }
-        catch (SQLiteException ex) {
+            return cursor;
+        } catch (SQLiteException ex) {
             if (ex.getMessage().startsWith("no such table")) {
-                Toast.makeText(this, "No such table: " + team, Toast.LENGTH_LONG).show();
+                return null;
             }
+            throw ex;
         }
-
-        return cursor;
     }
 
     private void displayQueryResult(Cursor cursor) {
@@ -245,12 +269,12 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
             }
 
             cursor.moveToFirst();
-            String stuff = "";
+            String result = "";
             for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
-                stuff += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE)) + "\n";
+                result += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE)) + "\n";
             }
             cursor.close();
-            Toast.makeText(this, stuff, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, result, Toast.LENGTH_LONG).show();
         }
     }
 }
