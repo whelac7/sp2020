@@ -108,9 +108,9 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
             Bundle bundledCode = new Bundle();
             bundledCode.putByteArray("codeInBytes", codeInBytes);
 
-            QRCodeDialog qrCodeDialog = new QRCodeDialog();
-            qrCodeDialog.setArguments(bundledCode);
-            qrCodeDialog.show(getSupportFragmentManager(), "QR Code Dialog");
+            SaveDataDialog saveDataDialog = new SaveDataDialog();
+            saveDataDialog.setArguments(bundledCode);
+            saveDataDialog.show(getSupportFragmentManager(), "QR Code Dialog");
         }
         catch (IOException | WriterException ex) {
             System.out.println(ex);

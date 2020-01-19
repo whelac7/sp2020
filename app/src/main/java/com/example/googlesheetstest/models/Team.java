@@ -1,4 +1,4 @@
-package com.example.googlesheetstest.objects;
+package com.example.googlesheetstest.models;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 

@@ -2,19 +2,15 @@ package com.example.googlesheetstest.services;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.os.AsyncTask;
 
-import com.example.googlesheetstest.objects.Team;
-import com.example.googlesheetstest.responses.GetMatchInfoResponse;
+import com.example.googlesheetstest.models.Team;
 import com.example.googlesheetstest.tasks.AsyncConnectToSheetsTask;
 import com.example.googlesheetstest.tasks.AsyncCreateSheetTask;
 import com.example.googlesheetstest.tasks.AsyncGetInformationTask;
 import com.example.googlesheetstest.tasks.AsyncGetMatchInfoTask;
 import com.example.googlesheetstest.tasks.AsyncPushInformationTask;
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.ValueRange;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 

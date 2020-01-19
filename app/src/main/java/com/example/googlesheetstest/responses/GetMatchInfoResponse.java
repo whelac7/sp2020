@@ -1,6 +1,6 @@
 package com.example.googlesheetstest.responses;
 
-import com.example.googlesheetstest.objects.Team;
+import com.example.googlesheetstest.models.Team;
 
 import java.util.List;
 
