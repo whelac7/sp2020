@@ -1,4 +1,4 @@
-package com.frc1732scoutingapp;
+package org.frc1732scoutingapp;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -13,8 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.frc1732scoutingapp.databinding.ActivitySqliteDatabaseBinding;
-import com.frc1732scoutingapp.helpers.SQLiteDBHelper;
+import org.frc1732scoutingapp.databinding.ActivitySqliteDatabaseBinding;
+import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
 
 public class SQLiteDatabaseActivity extends AppCompatActivity {
 

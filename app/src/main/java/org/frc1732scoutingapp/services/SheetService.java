@@ -1,14 +1,14 @@
-package com.frc1732scoutingapp.services;
+package org.frc1732scoutingapp.services;
 
 import android.accounts.Account;
 import android.content.Context;
 
-import com.frc1732scoutingapp.objects.Team;
-import com.frc1732scoutingapp.tasks.AsyncConnectToSheetsTask;
-import com.frc1732scoutingapp.tasks.AsyncCreateSheetTask;
-import com.frc1732scoutingapp.tasks.AsyncGetInformationTask;
-import com.frc1732scoutingapp.tasks.AsyncGetMatchInfoTask;
-import com.frc1732scoutingapp.tasks.AsyncPushInformationTask;
+import org.frc1732scoutingapp.objects.Team;
+import org.frc1732scoutingapp.tasks.AsyncConnectToSheetsTask;
+import org.frc1732scoutingapp.tasks.AsyncCreateSheetTask;
+import org.frc1732scoutingapp.tasks.AsyncGetInformationTask;
+import org.frc1732scoutingapp.tasks.AsyncGetMatchInfoTask;
+import org.frc1732scoutingapp.tasks.AsyncPushInformationTask;
 import com.google.api.services.sheets.v4.Sheets;
 
 import java.util.List;

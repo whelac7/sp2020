@@ -1,4 +1,4 @@
-package com.frc1732scoutingapp;
+package org.frc1732scoutingapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,8 +9,9 @@ import androidx.annotation.Nullable;
 
 import android.util.Log;
 
-import com.frc1732scoutingapp.helpers.QRCodeHelper;
-import com.frc1732scoutingapp.services.SheetService;
+import org.frc1732scoutingapp.helpers.QRCodeHelper;
+import org.frc1732scoutingapp.services.SheetService;
+
 import com.google.android.gms.common.api.Scope;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;

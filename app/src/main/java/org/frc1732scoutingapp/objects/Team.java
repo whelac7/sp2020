@@ -1,4 +1,4 @@
-package com.frc1732scoutingapp.objects;
+package org.frc1732scoutingapp.objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 

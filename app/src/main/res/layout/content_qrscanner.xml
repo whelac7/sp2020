@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.frc1732scoutingapp.QRScannerActivity"
+    tools:context="com.frc1732scoutingapp.org.frc1732scoutingapp.QRScannerActivity"
     tools:showIn="@layout/activity_qrscanner">
 
 </android.support.constraint.ConstraintLayout>

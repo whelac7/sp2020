@@ -1,4 +1,4 @@
-package com.frc1732scoutingapp.helpers;
+package org.frc1732scoutingapp.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

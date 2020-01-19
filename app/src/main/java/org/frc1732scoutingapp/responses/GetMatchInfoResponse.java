@@ -1,6 +1,6 @@
-package com.frc1732scoutingapp.responses;
+package org.frc1732scoutingapp.responses;
 
-import com.frc1732scoutingapp.objects.Team;
+import org.frc1732scoutingapp.objects.Team;
 
 import java.util.List;
 

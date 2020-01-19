@@ -1,4 +1,4 @@
-package com.frc1732scoutingapp.tasks;
+package org.frc1732scoutingapp.tasks;
 
 import android.accounts.Account;
 import android.content.Context;
