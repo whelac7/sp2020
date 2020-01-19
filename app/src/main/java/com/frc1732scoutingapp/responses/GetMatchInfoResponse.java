@@ -1,6 +1,6 @@
-package com.example.googlesheetstest.responses;
+package com.frc1732scoutingapp.responses;
 
-import com.example.googlesheetstest.objects.Team;
+import com.frc1732scoutingapp.objects.Team;
 
 import java.util.List;
 

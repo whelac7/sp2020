@@ -1,8 +1,8 @@
-package com.example.googlesheetstest.tasks;
+package com.frc1732scoutingapp.tasks;
 
 import android.os.AsyncTask;
 
-import com.example.googlesheetstest.services.SheetService;
+import com.frc1732scoutingapp.services.SheetService;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import java.io.IOException;

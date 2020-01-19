@@ -1,4 +1,4 @@
-package com.example.googlesheetstest;
+package com.frc1732scoutingapp;
 
 import android.content.Intent;
 import android.os.Bundle;

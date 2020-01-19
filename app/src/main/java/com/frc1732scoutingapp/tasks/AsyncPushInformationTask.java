@@ -1,8 +1,8 @@
-package com.example.googlesheetstest.tasks;
+package com.frc1732scoutingapp.tasks;
 
 import android.os.AsyncTask;
 
-import com.example.googlesheetstest.services.SheetService;
+import com.frc1732scoutingapp.services.SheetService;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AsyncPushMatchInfoTask extends AsyncTask<Void, Void, Void> {
+public class AsyncPushInformationTask extends AsyncTask<Void, Void, Void> {
     private SheetService sheetService;
 
-    public AsyncPushMatchInfoTask(SheetService sheetService) {
+    public AsyncPushInformationTask(SheetService sheetService) {
         this.sheetService = sheetService;
     }
 

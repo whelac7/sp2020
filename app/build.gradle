@@ -5,7 +5,7 @@ android {
     buildToolsVersion '29.0.2'
     dataBinding.enabled = true
     defaultConfig {
-        applicationId "com.example.googlesheetstest"
+        applicationId "com.frc1732scoutingapp"
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1

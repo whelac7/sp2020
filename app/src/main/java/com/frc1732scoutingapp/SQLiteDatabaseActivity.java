@@ -1,4 +1,4 @@
-package com.example.googlesheetstest;
+package com.frc1732scoutingapp;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -13,10 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.googlesheetstest.databinding.ActivitySqliteDatabaseBinding;
-import com.example.googlesheetstest.helpers.SQLiteDBHelper;
-
-import java.util.Dictionary;
+import com.frc1732scoutingapp.databinding.ActivitySqliteDatabaseBinding;
+import com.frc1732scoutingapp.helpers.SQLiteDBHelper;
 
 public class SQLiteDatabaseActivity extends AppCompatActivity {
 
