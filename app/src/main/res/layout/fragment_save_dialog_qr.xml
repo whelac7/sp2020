@@ -10,12 +10,13 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/QRCodeImage"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:id="@+id/QRImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            tools:srcCompat="@tools:sample/avatars"/>
+            tools:srcCompat="@tools:sample/avatars" />
+
     </RelativeLayout>
 
 </FrameLayout>

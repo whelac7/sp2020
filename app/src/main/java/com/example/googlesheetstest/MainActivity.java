@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.example.googlesheetstest.helpers.QRCodeHelper;
+import com.example.googlesheetstest.models.RequestCodes;
 import com.example.googlesheetstest.services.SheetService;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,8 +20,6 @@ import com.google.android.gms.common.api.ApiException;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.view.View;
 import android.view.Menu;
@@ -36,8 +35,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.zxing.WriterException;
 
 import java.io.IOException;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 public class MainActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
@@ -61,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        ImageView test = findViewById(R.id.imageView2);
-        TextView test2 = findViewById(R.id.textView);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

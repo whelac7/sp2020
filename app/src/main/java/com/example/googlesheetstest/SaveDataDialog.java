@@ -1,37 +1,35 @@
 package com.example.googlesheetstest;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.googlesheetstest.responses.SubmitToDBCallback;
 import com.google.android.material.tabs.TabLayout;
 
-public class SaveDataDialog extends AppCompatDialogFragment {
+public class SaveDataDialog extends DialogFragment {
+    private View view;
     private ImageView qrCodeImage;
     private byte[] codeInBytes;
+    private SubmitToDBCallback DBListener;
+
+    public SaveDataDialog(SubmitToDBCallback DBListener) {
+        this.DBListener = DBListener;
+    }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_savedatadialog, null);
-        builder.setView(view);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.layout_savedatadialog, container, false);
         codeInBytes = getArguments().getByteArray("codeInBytes");
         ViewPager viewPager = view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new SaveDialogPagerAdapter(getChildFragmentManager(), codeInBytes));
-        TabLayout dialogTabLayout = view.findViewById(R.id.dialog_qrtab);
+        viewPager.setAdapter(new SaveDialogPagerAdapter(getChildFragmentManager(), codeInBytes, DBListener));
+        TabLayout dialogTabLayout = view.findViewById(R.id.tabLayout);
         dialogTabLayout.setupWithViewPager(viewPager);
-
-        return builder.create();
+        return view;
     }
 }

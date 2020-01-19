@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 import com.example.googlesheetstest.databinding.ActivitySqliteDatabaseBinding;
 import com.example.googlesheetstest.helpers.QRCodeHelper;
 import com.example.googlesheetstest.helpers.SQLiteDBHelper;
+import com.example.googlesheetstest.models.RequestCodes;
+import com.example.googlesheetstest.responses.SubmitToDBCallback;
 import com.google.zxing.WriterException;
 
 import java.io.ByteArrayOutputStream;
@@ -25,7 +29,7 @@ import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-public class SQLiteDatabaseActivity extends AppCompatActivity {
+public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitToDBCallback {
 
     private ActivitySqliteDatabaseBinding activityBinding;
     private String TAG = "SqliteDatabaseActivity";
@@ -108,9 +112,16 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
             Bundle bundledCode = new Bundle();
             bundledCode.putByteArray("codeInBytes", codeInBytes);
 
-            SaveDataDialog saveDataDialog = new SaveDataDialog();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("Save Data Dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+
+            SaveDataDialog saveDataDialog = new SaveDataDialog(this);
             saveDataDialog.setArguments(bundledCode);
-            saveDataDialog.show(getSupportFragmentManager(), "QR Code Dialog");
+            saveDataDialog.show(ft, "Save Data Dialog");
         }
         catch (IOException | WriterException ex) {
             System.out.println(ex);
@@ -118,7 +129,10 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
     }
 
     private ContentValues processPushInput() {
-        if (activityBinding.matchEditText.getText().toString().trim().isEmpty()) {
+        if (activityBinding.teamNumberEditText.getText().toString().trim().isEmpty()) {
+            throw new IllegalArgumentException("no team specified: You must input a team number.");
+        }
+        else if (activityBinding.matchEditText.getText().toString().trim().isEmpty()) {
             throw new IllegalArgumentException("no match specified: You must input a match number.");
         }
         else if (matchExists(activityBinding.matchEditText.getText().toString())) {
@@ -143,7 +157,7 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         return values;
     }
 
-    private void saveToDB() {
+    public void saveToDB() {
         SQLiteDBHelper DBHelper = new SQLiteDBHelper(this);
         SQLiteDatabase database = DBHelper.getWritableDatabase();
 
@@ -154,7 +168,10 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
             Toast.makeText(this, "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
         }
         catch (IllegalArgumentException ex) {
-            if (ex.getMessage().startsWith("match exists")) {
+            if (ex.getMessage().startsWith("no team specified")) {
+                Toast.makeText(this, "You must specify a team number.", Toast.LENGTH_LONG).show();
+            }
+            else if (ex.getMessage().startsWith("match exists")) {
                 Toast.makeText(this, "Match " + activityBinding.matchEditText.getText().toString() + " already exists.", Toast.LENGTH_LONG).show();
             }
             else if (ex.getMessage().startsWith("no match specified")) {

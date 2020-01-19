@@ -1,4 +1,4 @@
-package com.example.googlesheetstest;
+package com.example.googlesheetstest.models;
 
 public enum RequestCodes {
     QR_SCAN(100), RC_SIGN_IN(9001);
