@@ -1,8 +1,11 @@
 package org.frc1732scoutingapp.helpers;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class SQLiteDBHelper extends SQLiteOpenHelper {
 
@@ -56,7 +59,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String team_table_name) {
+    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String team_table_name) {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + team_table_name + " (" +
                 TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
                 TEAM_COLUMN_COMPETITION_ID + " TEXT, " +
@@ -74,4 +77,67 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 TEAM_COLUMN_LEVEL + " INT UNSIGNED, " +
                 TEAM_COLUMN_DISABLE_TIME + " INT UNSIGNED" + ")");
         }
+
+    public static boolean matchExists(SQLiteDatabase database, String teamNumber, String match) {
+        Cursor cursor = readFromDB(database, teamNumber, match);
+        if (cursor != null) {
+            return cursor.getCount() >= 1;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param match
+     * @return null if no such team exists
+     * @throws SQLiteException
+     */
+    public static Cursor readFromDB(SQLiteDatabase database, String teamNumber, String match) throws SQLiteException {
+        String team = "frc" + teamNumber;
+
+        String[] projection = {
+                SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID,
+                SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER,
+                SQLiteDBHelper.TEAM_COLUMN_INIT_LINE,
+                SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER,
+                SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER,
+                SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER,
+                SQLiteDBHelper.TEAM_COLUMN_LOWER,
+                SQLiteDBHelper.TEAM_COLUMN_OUTER,
+                SQLiteDBHelper.TEAM_COLUMN_INNER,
+                SQLiteDBHelper.TEAM_COLUMN_ROTATION,
+                SQLiteDBHelper.TEAM_COLUMN_POSITION,
+                SQLiteDBHelper.TEAM_COLUMN_PARK,
+                SQLiteDBHelper.TEAM_COLUMN_HANG,
+                SQLiteDBHelper.TEAM_COLUMN_LEVEL,
+                SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME
+        };
+
+        String selection = null;
+        String[] selectionArgs = null;
+        if (!match.isEmpty()) {
+            selection =
+                    SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER + " = ?";
+            selectionArgs = new String[]{match};
+        }
+
+        try {
+            Cursor cursor = database.query(
+                    team,   // The table to query
+                    projection,                               // The columns to return
+                    selection,                                // The columns for the WHERE clause
+                    selectionArgs,                            // The values for the WHERE clause
+                    null,                                     // don't group the rows
+                    null,                                     // don't filter by row groups
+                    null                                      // don't sort
+            );
+            Log.d("SqliteDatabaseActivity", "The total cursor count is " + cursor.getCount());
+            return cursor;
+        } catch (SQLiteException ex) {
+            if (ex.getMessage().startsWith("no such table")) {
+                return null;
+            }
+            throw ex;
+        }
+    }
 }

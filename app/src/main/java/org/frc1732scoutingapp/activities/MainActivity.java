@@ -127,15 +127,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(@Nullable GoogleSignInAccount account) {
         if (account != null) {
-            //mStatusTextView.setText(getString(R.string.signed_in_fmt, account.getDisplayName()));
-
             findViewById(R.id.fab).setVisibility(View.GONE);
-            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
-            //mStatusTextView.setText(R.string.signed_out);
-
             findViewById(R.id.fab).setVisibility(View.VISIBLE);
-            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
 
