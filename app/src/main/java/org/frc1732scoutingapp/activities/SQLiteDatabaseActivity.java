@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.frc1732scoutingapp.R;
+import org.frc1732scoutingapp.fragments.SaveDataDialog;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
 import com.google.zxing.WriterException;
 

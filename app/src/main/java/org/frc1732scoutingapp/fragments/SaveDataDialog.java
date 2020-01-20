@@ -1,4 +1,4 @@
-package org.frc1732scoutingapp.activities;
+package org.frc1732scoutingapp.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
