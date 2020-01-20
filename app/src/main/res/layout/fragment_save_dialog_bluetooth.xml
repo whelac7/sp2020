@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SaveDialogBluetoothFragment">
+    tools:context="org.frc1732scoutingapp.fragments.SaveDialogBluetoothFragment">
 
     <TextView
         android:id="@+id/testText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="hello" />
 
 </RelativeLayout>
