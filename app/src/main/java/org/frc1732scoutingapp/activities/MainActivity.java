@@ -12,6 +12,7 @@ import android.util.Log;
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.helpers.QRCodeHelper;
 import org.frc1732scoutingapp.models.RequestCodes;
+import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.services.SheetService;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -36,6 +37,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.zxing.WriterException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
@@ -70,18 +73,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button button = findViewById(R.id.logMatchButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button logMatchButton = findViewById(R.id.logMatchButton);
+        logMatchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SQLiteDatabaseActivity.class);
                 startActivity(intent);
             }
         });
-    }
 
-    public void updateText(String text) {
-        ((TextView)(findViewById(R.id.textView))).setText(text);
+        Button syncSheetsButton = findViewById(R.id.syncSheetsButton);
+        syncSheetsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SyncSheetsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void signIn() {
@@ -107,15 +115,9 @@ public class MainActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             SheetService sheetService = new SheetService(account.getAccount(), context);
             //sheetService.pushInformation();
-            sheetService.getInformation();
-            try {
-                Bitmap bmp = QRCodeHelper.createQRCode("app=1732ScoutingApp,teamNumber=1732,matchNumber=52,initLine=1001,autoLower=1002,autoOuter=1003,autoInner=100,lower=100,outer=100,inner=100,rotation=100,position=100,park=100,hang=100,level=100,disableTime=100,notes=none");
-                ((ImageView)findViewById(R.id.imageView2)).setImageBitmap(bmp);
-            }
-            catch (IOException | WriterException ex) {
-                System.out.println(ex);
-            }
+            //sheetService.getInformation();
             //sheetService.createSheet("1732 - Test");
+
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

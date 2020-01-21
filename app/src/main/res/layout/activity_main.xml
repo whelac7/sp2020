@@ -48,6 +48,13 @@
             android:layout_toRightOf="@id/logMatchButton"
             tools:srcCompat="@tools:sample/avatars" />
 
+        <Button
+            android:id="@+id/syncSheetsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/logMatchButton"
+            android:text="Sync to Sheets" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
