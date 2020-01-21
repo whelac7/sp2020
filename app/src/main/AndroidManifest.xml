@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.googlesheetstest">
+    package="org.frc1732scoutingapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -13,15 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SQLiteDatabaseActivity"
+            android:name="org.frc1732scoutingapp.SQLiteDatabaseActivity"
             android:label="@string/title_activity_sqllite_database"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".QRScannerActivity"
-            android:label="@string/title_activity_main2"
+            android:name="org.frc1732scoutingapp.QRScannerActivity"
+            android:label="@string/title_activity_qrscanner"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="org.frc1732scoutingapp.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

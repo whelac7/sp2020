@@ -1,4 +1,4 @@
-package com.example.googlesheetstest.helpers;
+package org.frc1732scoutingapp.helpers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

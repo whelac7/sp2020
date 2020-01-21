@@ -1,8 +1,8 @@
-package com.example.googlesheetstest.tasks;
+package org.frc1732scoutingapp.tasks;
 
 import android.os.AsyncTask;
 
-import com.example.googlesheetstest.services.SheetService;
+import org.frc1732scoutingapp.services.SheetService;
 import com.google.api.services.sheets.v4.model.AddSheetRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.Request;
