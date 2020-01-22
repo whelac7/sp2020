@@ -30,6 +30,7 @@ public class AsyncPushMatchInfoTask extends AsyncTask<Void, Void, Void> {
 
             for (int i = 0; i < matchResults.size(); i++) {
                 input.add(new ArrayList<Object>());
+                input.get(i).add(matchResults.get(i).getTeamNumber());
                 input.get(i).add(matchResults.get(i).getMatchNumber());
                 input.get(i).add(matchResults.get(i).getInitLine());
                 input.get(i).add(matchResults.get(i).getAutoLower());
@@ -47,7 +48,7 @@ public class AsyncPushMatchInfoTask extends AsyncTask<Void, Void, Void> {
             }
             requestBody.setValues(input);
 
-            UpdateValuesResponse response = sheetService.getService().spreadsheets().values().update(sheetService.getSpreadsheetID(), "A2:N", requestBody)
+            UpdateValuesResponse response = sheetService.getService().spreadsheets().values().update(sheetService.getSpreadsheetID(), "A2:O", requestBody)
                     .setValueInputOption("USER_ENTERED")
                     .execute();
             System.out.println(response);

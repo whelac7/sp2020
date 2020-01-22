@@ -28,6 +28,7 @@ import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
 import org.frc1732scoutingapp.models.RequestCodes;
 import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.services.SheetService;
+import org.frc1732scoutingapp.tasks.AsyncPushMatchInfoTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,8 @@ public class SyncSheetsActivity extends AppCompatActivity {
                     if (database == null) {
                         database = new SQLiteDBHelper(SyncSheetsActivity.this).getReadableDatabase();
                     }
-                    syncToSheets();
+                    //syncToSheets(teamNumberEditText.getText().toString());
+                    syncAllToSheets();
                 }
             });
         }
@@ -66,18 +68,39 @@ public class SyncSheetsActivity extends AppCompatActivity {
         }
     }
 
-    private void syncToSheets() {
-        Cursor cursor = SQLiteDBHelper.readFromDB(database, teamNumberEditText.getText().toString());
+    private void syncAllToSheets() {
+        Cursor teams = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        List<Team> allMatchResults = new ArrayList<Team>();
+        if (teams.moveToFirst()) {
+            for (int i = 0; i < teams.getCount(); i++, teams.moveToNext()) {
+                String teamString = teams.getString(0);
+                String target = "frc";
+                if (teamString.startsWith(target)) {
+                    String teamNumber = teamString.substring(3);
+                    System.out.println(teamNumber);
+                    allMatchResults.addAll(parseMatches(teamNumber));
+                }
+            }
+        }
+        teams.close();
+
+        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), this);
+        sheetService.pushMatchInfo(allMatchResults);
+    }
+
+    private List<Team> parseMatches(String teamNumber) {
+        System.out.println(teamNumber);
+        Cursor cursor = SQLiteDBHelper.readFromDB(database, teamNumber);
         if (cursor.getCount() == 0) {
             Toast.makeText(SyncSheetsActivity.this, "No results found.", Toast.LENGTH_LONG).show();
-            return;
+            return null;
         }
         cursor.moveToFirst();
         String result = "";
         ArrayList<Team> matchResults = new ArrayList<Team>();
         for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
             matchResults.add(new Team(
-                    tryParseInt(teamNumberEditText.getText().toString()),
+                    tryParseInt(teamNumber),
                     tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER))),
                     tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE))),
                     tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER))),
@@ -97,6 +120,16 @@ public class SyncSheetsActivity extends AppCompatActivity {
         cursor.close();
         Toast.makeText(SyncSheetsActivity.this, result, Toast.LENGTH_LONG).show();
 
+        return matchResults;
+    }
+
+    private void syncToSheets(String teamNumber, List<Team> matchResults) {
+        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), this);
+        sheetService.pushMatchInfo(matchResults);
+    }
+
+    private void syncToSheets(String teamNumber) {
+        List<Team> matchResults = parseMatches(teamNumber);
         SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), this);
         sheetService.pushMatchInfo(matchResults);
     }
