@@ -1,4 +1,4 @@
-package org.frc1732scoutingapp;
+package org.frc1732scoutingapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

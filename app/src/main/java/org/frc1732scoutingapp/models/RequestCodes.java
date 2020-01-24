@@ -1,4 +1,4 @@
-package org.frc1732scoutingapp;
+package org.frc1732scoutingapp.models;
 
 public enum RequestCodes {
     QR_SCAN(100), RC_SIGN_IN(9001);

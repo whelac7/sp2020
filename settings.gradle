@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='GoogleSheetsTest'
+rootProject.name='FRC1732ScoutingApp'

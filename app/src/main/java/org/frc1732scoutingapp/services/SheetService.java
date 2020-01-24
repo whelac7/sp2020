@@ -3,7 +3,7 @@ package org.frc1732scoutingapp.services;
 import android.accounts.Account;
 import android.content.Context;
 
-import org.frc1732scoutingapp.objects.Team;
+import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.tasks.AsyncConnectToSheetsTask;
 import org.frc1732scoutingapp.tasks.AsyncCreateSheetTask;
 import org.frc1732scoutingapp.tasks.AsyncGetInformationTask;

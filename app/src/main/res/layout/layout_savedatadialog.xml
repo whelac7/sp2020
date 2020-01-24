@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.frc1732scoutingapp.fragments.SaveDataDialog">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            android:text="QR"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            android:text="Bluetooth"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            android:text="Database (MASTER)"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
+        android:background="@android:color/white" />
+
+    </LinearLayout>
+
+</FrameLayout>
