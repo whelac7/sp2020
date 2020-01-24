@@ -1,6 +1,5 @@
-package org.frc1732scoutingapp.activities;
+package org.frc1732scoutingapp.fragments;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -24,19 +23,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.tasks.Task;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
 import org.frc1732scoutingapp.models.RequestCodes;
 import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.services.SheetService;
-import org.frc1732scoutingapp.tasks.AsyncPushMatchInfoTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SyncSheetsActivity extends Fragment {
+public class SyncSheetsFragment extends Fragment {
     private EditText teamNumberEditText;
     private Button syncSheetsButton;
     private Button syncAllSheetsButton;
@@ -47,7 +44,7 @@ public class SyncSheetsActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_sync_sheets, container, false);
+        View view = inflater.inflate(R.layout.fragment_sync_sheets, container, false);
         if (isNetworkAvailable()) {
             teamNumberEditText = view.findViewById(R.id.teamNumberEditText);
             syncSheetsButton = view.findViewById(R.id.syncSheetsButton);

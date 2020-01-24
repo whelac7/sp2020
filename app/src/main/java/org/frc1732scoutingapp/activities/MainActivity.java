@@ -1,7 +1,6 @@
 package org.frc1732scoutingapp.activities;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -10,9 +9,8 @@ import androidx.annotation.Nullable;
 import android.util.Log;
 
 import org.frc1732scoutingapp.R;
-import org.frc1732scoutingapp.helpers.QRCodeHelper;
+import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.models.RequestCodes;
-import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.services.SheetService;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,7 +19,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.common.api.ApiException;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -29,18 +26,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.zxing.WriterException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
@@ -54,10 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
-
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(SPREADSHEETS_SCOPE))
@@ -88,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         syncSheetsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment syncSheetsFragment = new SyncSheetsActivity();
+                Fragment syncSheetsFragment = new SyncSheetsFragment();
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.main_container, syncSheetsFragment);
                 transaction.addToBackStack(null);
