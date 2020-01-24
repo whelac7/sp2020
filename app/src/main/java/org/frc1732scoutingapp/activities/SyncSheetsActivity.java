@@ -1,6 +1,7 @@
 package org.frc1732scoutingapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +11,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,38 +36,50 @@ import org.frc1732scoutingapp.tasks.AsyncPushMatchInfoTask;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SyncSheetsActivity extends AppCompatActivity {
+public class SyncSheetsActivity extends Fragment {
     private EditText teamNumberEditText;
     private Button syncSheetsButton;
+    private Button syncAllSheetsButton;
     private SQLiteDatabase database;
     private GoogleSignInOptions mGoogleSignInOptions;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount mGoogleSignInAccount;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_sync_sheets, container, false);
         if (isNetworkAvailable()) {
-            setContentView(R.layout.activity_sync_sheets);
-            teamNumberEditText = findViewById(R.id.teamNumberEditText);
-            syncSheetsButton = findViewById(R.id.syncSheetsButton);
+            teamNumberEditText = view.findViewById(R.id.teamNumberEditText);
+            syncSheetsButton = view.findViewById(R.id.syncSheetsButton);
+            syncAllSheetsButton = view.findViewById(R.id.syncAllSheetsButton);
             signIntoGoogle();
 
+            // TODO: Application breaks if the team number is not valid - fix.
             syncSheetsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (database == null) {
-                        database = new SQLiteDBHelper(SyncSheetsActivity.this).getReadableDatabase();
+                        database = new SQLiteDBHelper(getContext()).getReadableDatabase();
                     }
-                    //syncToSheets(teamNumberEditText.getText().toString());
-                    syncAllToSheets();
+                    syncToSheets(teamNumberEditText.getText().toString());
                 }
             });
+
+            syncAllSheetsButton.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   if (database == null) {
+                       database = new SQLiteDBHelper(getContext()).getReadableDatabase();
+                   }
+                   syncAllToSheets();
+               }
+            });
+
+            return view;
         }
         else {
-            Toast.makeText(this, "You must be connected to the internet to sync to Google Sheets.", Toast.LENGTH_LONG).show();
-            finish();
+            Toast.makeText(getContext(), "You must be connected to the internet to sync to Google Sheets.", Toast.LENGTH_LONG).show();
+            return null;
         }
     }
 
@@ -84,7 +99,7 @@ public class SyncSheetsActivity extends AppCompatActivity {
         }
         teams.close();
 
-        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), this);
+        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
         sheetService.pushMatchInfo(allMatchResults);
     }
 
@@ -92,7 +107,7 @@ public class SyncSheetsActivity extends AppCompatActivity {
         System.out.println(teamNumber);
         Cursor cursor = SQLiteDBHelper.readFromDB(database, teamNumber);
         if (cursor.getCount() == 0) {
-            Toast.makeText(SyncSheetsActivity.this, "No results found.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "No results found.", Toast.LENGTH_LONG).show();
             return null;
         }
         cursor.moveToFirst();
@@ -118,19 +133,18 @@ public class SyncSheetsActivity extends AppCompatActivity {
             ));
         }
         cursor.close();
-        Toast.makeText(SyncSheetsActivity.this, result, Toast.LENGTH_LONG).show();
 
         return matchResults;
     }
 
     private void syncToSheets(String teamNumber, List<Team> matchResults) {
-        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), this);
+        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
         sheetService.pushMatchInfo(matchResults);
     }
 
     private void syncToSheets(String teamNumber) {
         List<Team> matchResults = parseMatches(teamNumber);
-        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), this);
+        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
         sheetService.pushMatchInfo(matchResults);
     }
 
@@ -151,7 +165,7 @@ public class SyncSheetsActivity extends AppCompatActivity {
                 .requestScopes(new Scope("https://www.googleapis.com/auth/spreadsheets"))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, mGoogleSignInOptions);
+        mGoogleSignInClient = GoogleSignIn.getClient(getContext(), mGoogleSignInOptions);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RequestCodes.RC_SIGN_IN.getValue());
     }
@@ -166,7 +180,7 @@ public class SyncSheetsActivity extends AppCompatActivity {
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

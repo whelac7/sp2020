@@ -22,6 +22,8 @@ import com.google.android.gms.common.api.ApiException;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.View;
 import android.view.Menu;
@@ -86,8 +88,11 @@ public class MainActivity extends AppCompatActivity {
         syncSheetsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SyncSheetsActivity.class);
-                startActivity(intent);
+                Fragment syncSheetsFragment = new SyncSheetsActivity();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.main_container, syncSheetsFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
     }
