@@ -9,6 +9,8 @@ import org.frc1732scoutingapp.tasks.AsyncCreateSheetTask;
 import org.frc1732scoutingapp.tasks.AsyncGetInformationTask;
 import org.frc1732scoutingapp.tasks.AsyncGetMatchInfoTask;
 import org.frc1732scoutingapp.tasks.AsyncPushInformationTask;
+import org.frc1732scoutingapp.tasks.AsyncPushMatchInfoTask;
+
 import com.google.api.services.sheets.v4.Sheets;
 
 import java.util.List;
@@ -47,6 +49,10 @@ public class SheetService {
 
     public void pushInformation() {
         new AsyncPushInformationTask(this).execute();
+    }
+
+    public void pushMatchInfo(List<Team> matchResults) {
+        new AsyncPushMatchInfoTask(this, matchResults).execute();
     }
 
     public void createSheet(String name) {
