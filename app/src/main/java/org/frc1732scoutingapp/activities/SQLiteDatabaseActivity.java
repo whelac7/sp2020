@@ -95,7 +95,12 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
         activityBinding.searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayQueryResult(SQLiteDBHelper.readFromDB(database, activityBinding.teamNumberEditText.getText().toString(), activityBinding.matchEditText.getText().toString()));
+                if (activityBinding.matchEditText.getText().toString().trim().isEmpty()) {
+                    displayQueryResult(SQLiteDBHelper.readFromDB(database, activityBinding.teamNumberEditText.getText().toString()));
+                }
+                else {
+                    displayQueryResult(SQLiteDBHelper.readFromDB(database, activityBinding.teamNumberEditText.getText().toString(), activityBinding.matchEditText.getText().toString()));
+                }
             }
         });
 
