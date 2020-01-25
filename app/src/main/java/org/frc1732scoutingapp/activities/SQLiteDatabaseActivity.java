@@ -8,6 +8,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -35,8 +38,49 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
     private String TAG = "SqliteDatabaseActivity";
     private SQLiteDatabase database;
 
+    public static int outerPortIncrement = 1;
+    public static boolean autoTeleopToggle;
+    //teleop = true, auto = false
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ImageButton outerPortUp =  findViewById(R.id.outerPortUp);
+        ImageButton outerPortDown = findViewById(R.id.outerPortDown);
+
+        Button toggleTeleop = findViewById(R.id.teleopToggle);
+        Button toggleAuto = findViewById(R.id.autoToggle);
+
+        TextView outerPortOutputAuto = findViewById(R.id.outerPortOutputAuto);
+
+        toggleTeleop.setOnClickListener(new View.OnClickListener(){
+           @Override
+           public void onClick(View av) {
+             autoTeleopToggle = true;
+           }
+        });
+        toggleAuto.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View av) {
+                autoTeleopToggle = false;
+            }
+        });
+    if()
+        outerPortUp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View av) {
+                outerPortIncrement++;
+                outerPortOutputAuto.setText("" + outerPortIncrement);
+            }
+        });
+        outerPortDown.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View av){
+                outerPortIncrement--;
+                outerPortOutputAuto.setText(""+outerPortIncrement);
+            }
+        });
+
         super.onCreate(savedInstanceState);
         activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_sqlite_database);
         database = new SQLiteDBHelper(this).getReadableDatabase();
@@ -158,6 +202,8 @@ public class SQLiteDatabaseActivity extends AppCompatActivity implements SubmitT
         } else if (activityBinding.autoInnerEditText.getText().toString().trim().isEmpty()) {
             throw new IllegalArgumentException("empty parameter: Auto Inner");
         }
+
+        //change errors to the output textviews
 
         ContentValues values = new ContentValues();
         values.put(SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID, 0); // Have to figure out how to get the COMPETITION_ID

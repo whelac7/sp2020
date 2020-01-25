@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -19,16 +20,16 @@
                 android:id="@+id/teamNumberLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingRight="8dp"
                 android:text="Team Number"
                 android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/teamNumberEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/teamNumberLabel"
+                android:layout_width="61dp"
+                android:layout_height="28dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="137dp"
+                android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@id/teamNumberLabel"
                 android:inputType="number" />
 
@@ -36,108 +37,122 @@
                 android:id="@+id/matchLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/teamNumberLabel"
-                android:paddingTop="15dp"
+                android:layout_above="@+id/searchButton"
+                android:layout_marginBottom="276dp"
                 android:text="Match Number"
                 android:textSize="18sp" />
 
+
             <EditText
                 android:id="@+id/matchEditText"
-                android:layout_width="match_parent"
+                android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@id/teamNumberEditText"
                 android:layout_alignBottom="@id/matchLabel"
+                android:layout_marginLeft="-1dp"
+                android:layout_marginBottom="-4dp"
                 android:layout_toRightOf="@id/matchLabel"
-                android:inputType="number"/>
-
-            <TextView
-                android:id="@+id/initLineLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/matchLabel"
-                android:paddingTop="15dp"
-                android:text="Init Line"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/initLineEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/initLineLabel"
-                android:layout_toRightOf="@id/initLineLabel"
                 android:inputType="number" />
 
-            <TextView
-                android:id="@+id/autoLowerLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/initLineLabel"
-                android:paddingTop="15dp"
-                android:text="Auto Lower"
-                android:textSize="18sp" />
+            <Button
+                android:id="@+id/autoToggle"
+                android:layout_width="77dp"
+                android:layout_height="34dp"
+                android:layout_above="@+id/saveButton"
+                android:layout_marginStart="28dp"
+                android:layout_marginBottom="150dp"
+                android:layout_toEndOf="@+id/teleopToggle"
+                android:text="Auto" />
 
-            <EditText
-                android:id="@+id/autoLowerEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/autoLowerLabel"
-                android:layout_toRightOf="@id/autoLowerLabel"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/autoOuterLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/autoLowerLabel"
-                android:paddingTop="15dp"
-                android:text="Auto Outer"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/autoOuterEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/autoOuterLabel"
-                android:layout_toRightOf="@id/autoOuterLabel"
-                android:inputType="number" />
+            <Button
+                android:id="@+id/teleopToggle"
+                android:layout_width="77dp"
+                android:layout_height="34dp"
+                android:layout_above="@+id/saveButton"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="206dp"
+                android:layout_marginBottom="150dp"
+                android:text="Teleop" />
 
             <TextView
-                android:id="@+id/autoInnerLabel"
+                android:layout_width="49dp"
+                android:layout_height="18dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="301dp"
+                android:layout_marginTop="-1dp"
+                android:layout_marginEnd="45dp"
+                android:text="Auto" />
+
+            <TextView
+                android:layout_width="1012dp"
+                android:layout_height="17dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="336dp"
+                android:layout_marginTop="-1dp"
+                android:text="Teleop" />
+
+            <ImageButton
+                android:id="@+id/outerPortUp"
+                android:layout_width="50dp"
+                android:layout_height="38dp"
+                android:layout_above="@+id/scanQRButton"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="78dp"
+                android:layout_marginEnd="209dp"
+                android:layout_marginBottom="210dp"
+                android:layout_toEndOf="@+id/textOuterPort"
+                android:src="@drawable/up_arrow_final" />
+
+
+            <ImageButton
+                android:id="@+id/outerPortDown"
+                android:layout_width="37dp"
+                android:layout_height="38dp"
+                android:layout_above="@+id/searchButton"
+                android:layout_marginBottom="210dp"
+                android:src="@drawable/down_arrow_final" />
+
+            <TextView
+                android:id="@+id/textOuterPort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autoOuterLabel"
-                android:paddingTop="15dp"
-                android:text="Auto Inner"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/autoInnerEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/autoInnerLabel"
-                android:layout_toRightOf="@id/autoInnerLabel"
-                android:inputType="number" />
+                android:layout_above="@+id/searchButton"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginBottom="220dp"
+                android:layout_toEndOf="@+id/outerPortDown"
+                android:layout_toRightOf="@+id/outerPortDown"
+                android:layout_toLeftOf="@+id/outerPortUp"
+                android:text="Outer Port"
+                android:textSize="18dp" />
 
             <Button
                 android:id="@+id/saveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autoInnerLabel"
+                android:layout_alignBottom="@+id/QRCodeImage"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="279dp"
+                android:layout_toEndOf="@+id/scanQRButton"
                 android:text="Save" />
 
             <Button
                 android:id="@+id/searchButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autoInnerLabel"
+                android:layout_alignBottom="@id/QRCodeImage"
                 android:layout_alignParentLeft="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="275dp"
+                android:layout_toStartOf="@+id/scanQRButton"
                 android:text="Search" />
 
             <Button
@@ -157,9 +172,38 @@
                 android:layout_centerHorizontal="true"
                 tools:srcCompat="@tools:sample/avatars" />
 
+            <TextView
+                android:id="@+id/outerPortOutputText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/saveButton"
+                android:layout_marginStart="21dp"
+                android:layout_marginBottom="282dp"
+                android:layout_toEndOf="@+id/teamNumberEditText"
+                android:text="Outer Port" />
+
+            <TextView
+                android:id="@+id/outerPortOutputAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/saveButton"
+                android:layout_marginStart="29dp"
+                android:layout_marginBottom="283dp"
+                android:layout_toEndOf="@+id/outerPortOutputText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/saveButton"
+                android:layout_marginStart="43dp"
+                android:layout_marginBottom="283dp"
+                android:layout_toEndOf="@+id/outerPortOutputAuto" />
         </RelativeLayout>
 
-        <include layout="@layout/content_sqlite_database" />
+        <include
+            layout="@layout/content_sqlite_database"
+            app:layout_anchor="@+id/relativeLayout"
+            app:layout_anchorGravity="center" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
