@@ -4,7 +4,9 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="org.frc1732scoutingapp.activities.SQLiteDatabaseActivity">
+        android:background="#ffffff"
+        android:clickable="true"
+        tools:context="org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
@@ -21,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="15dp"
                 android:paddingRight="8dp"
-                android:text="Team Number"
+                android:text="@string/label_fragment_sqlitedatabase_team_number"
                 android:textSize="18sp" />
 
             <EditText
@@ -38,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/teamNumberLabel"
                 android:paddingTop="15dp"
-                android:text="Match Number"
+                android:text="@string/label_fragment_sqlitedatabase_match_number"
                 android:textSize="18sp" />
 
             <EditText
@@ -56,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/matchLabel"
                 android:paddingTop="15dp"
-                android:text="Init Line"
+                android:text="@string/label_fragment_sqlitedatabase_init_line"
                 android:textSize="18sp" />
 
             <EditText
@@ -74,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/initLineLabel"
                 android:paddingTop="15dp"
-                android:text="Auto Lower"
+                android:text="@string/label_fragment_sqlitedatabase_auto_lower"
                 android:textSize="18sp" />
 
             <EditText
@@ -92,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/autoLowerLabel"
                 android:paddingTop="15dp"
-                android:text="Auto Outer"
+                android:text="@string/label_fragment_sqlitedatabase_auto_outer"
                 android:textSize="18sp" />
 
             <EditText
@@ -110,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/autoOuterLabel"
                 android:paddingTop="15dp"
-                android:text="Auto Inner"
+                android:text="@string/label_fragment_sqlitedatabase_auto_inner"
                 android:textSize="18sp" />
 
             <EditText
@@ -129,7 +131,7 @@
                 android:layout_below="@id/autoInnerLabel"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="30dp"
-                android:text="Save" />
+                android:text="@string/button_fragment_sqlitedatabase_save" />
 
             <Button
                 android:id="@+id/searchButton"
@@ -146,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="Scan QR"/>
+                android:text="@string/button_fragment_sqlitedatabase_scan_qr"/>
 
             <ImageView
                 android:id="@+id/QRCodeImage"

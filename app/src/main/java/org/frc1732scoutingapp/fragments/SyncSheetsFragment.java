@@ -1,5 +1,6 @@
 package org.frc1732scoutingapp.fragments;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -49,6 +50,7 @@ public class SyncSheetsFragment extends Fragment {
             teamNumberEditText = view.findViewById(R.id.teamNumberEditText);
             syncSheetsButton = view.findViewById(R.id.syncSheetsButton);
             syncAllSheetsButton = view.findViewById(R.id.syncAllSheetsButton);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_fragment_sync_sheets);
             signIntoGoogle();
 
             // TODO: Application breaks if the team number is not valid - fix.

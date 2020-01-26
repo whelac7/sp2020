@@ -13,26 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.TestActivity"></activity>
-        <activity android:name=".fragments.SyncSheetsFragment" />
-        <activity
-            android:name=".activities.SQLiteDatabaseActivity"
-            android:label="@string/title_activity_sqllite_database"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.QRScannerActivity"
-            android:label="@string/title_activity_qrscanner"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.QRScannerActivity"
+            android:label="@string/title_activity_qrscanner"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

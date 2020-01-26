@@ -38,7 +38,7 @@
             android:layout_below="@id/teamNumberEditText"
             android:layout_centerVertical="true"
             android:layout_marginBottom="30dp"
-            android:text="Sync" />
+            android:text="@string/button_fragment_syncsheets_sync" />
 
         <Button
             android:id="@+id/syncAllSheetsButton"
@@ -48,7 +48,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="30dp"
-            android:text="Sync All" />
+            android:text="@string/button_fragment_syncsheets_syncall" />
 
     </RelativeLayout>
 </FrameLayout>

@@ -1,8 +1,27 @@
 <resources>
     <string name="app_name">FRC1732ScoutingApp</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_qrscanner">QRCodeScanner</string>
-    <string name="title_activity_sqllite_database">SQLLiteDatabaseActivity</string>
+
+    <string name="title_activity_qrscanner">QR Code Scanner</string>
+    <string name="title_fragment_home">Home</string>
+    <string name="title_fragment_log_match">Log Match</string>
+    <string name="title_fragment_sync_sheets">Sync to Sheets</string>
+
+    <string name="button_fragment_home_log_match">Log Match</string>
+    <string name="button_fragment_home_sync_sheets">Sync to Sheets</string>
+    <string name="text_fragment_home_welcome">Hello there!</string>
+
+    <string name="label_fragment_sqlitedatabase_team_number">Team Number</string>
+    <string name="label_fragment_sqlitedatabase_match_number">Match Number</string>
+    <string name="label_fragment_sqlitedatabase_init_line">Init Line</string>
+    <string name="label_fragment_sqlitedatabase_auto_lower">Auto Lower</string>
+    <string name="label_fragment_sqlitedatabase_auto_outer">Auto Outer</string>
+    <string name="label_fragment_sqlitedatabase_auto_inner">Auto Inner</string>
+    <string name="button_fragment_sqlitedatabase_scan_qr">Scan QR</string>
+    <string name="button_fragment_sqlitedatabase_save">Save</string>
+
+    <string name="button_fragment_syncsheets_sync">Sync</string>
+    <string name="button_fragment_syncsheets_syncall">Sync All</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
