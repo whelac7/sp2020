@@ -3,10 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/syncSheetsFragment">
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="org.frc1732scoutingapp.fragments.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/syncSheetsFragment"
         android:name="org.frc1732scoutingapp.fragments.SyncSheetsFragment"
-        android:label="fragment_sync_sheets"
+        android:label="Sync to Sheets"
         tools:layout="@layout/fragment_sync_sheets" />
+    <fragment
+        android:id="@+id/SQLLiteDatabaseFragment"
+        android:name="org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment"
+        android:label="Log Match"
+        tools:layout="@layout/fragment_sqlite_database" />
 </navigation>

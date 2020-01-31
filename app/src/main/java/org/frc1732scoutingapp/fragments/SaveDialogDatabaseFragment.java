@@ -9,14 +9,17 @@ import android.widget.Button;
 import androidx.fragment.app.Fragment;
 
 import org.frc1732scoutingapp.R;
+import org.frc1732scoutingapp.responses.DismissDialogCallback;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
 
 public class SaveDialogDatabaseFragment extends Fragment {
     private Button pushToDBButton;
-    private SubmitToDBCallback DBListener;
+    private SubmitToDBCallback DBCallback;
+    private DismissDialogCallback dismissDialogCallback;
 
-    public SaveDialogDatabaseFragment(SubmitToDBCallback DBListener) {
-        this.DBListener = DBListener;
+    public SaveDialogDatabaseFragment(SubmitToDBCallback DBListener, DismissDialogCallback dismissDialogCallback) {
+        this.DBCallback = DBListener;
+        this.dismissDialogCallback = dismissDialogCallback;
     }
 
     @Override
@@ -28,8 +31,8 @@ public class SaveDialogDatabaseFragment extends Fragment {
         pushToDBButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBListener.saveToDB();
-                getActivity().onBackPressed();
+                DBCallback.saveToDB();
+                dismissDialogCallback.dismissDialog();
             }
         });
 
