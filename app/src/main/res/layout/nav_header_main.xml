@@ -17,8 +17,7 @@
         android:layout_width="71dp"
         android:layout_height="93dp"
         android:contentDescription="FRC1732"
-        android:paddingTop="8dp"
-        app:srcCompat="@drawable/hilltopperrobotics" />
+        android:paddingTop="8dp"/>
 
     <TextView
         android:layout_width="match_parent"
