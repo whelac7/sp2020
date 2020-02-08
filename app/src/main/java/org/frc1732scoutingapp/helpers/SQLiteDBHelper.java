@@ -70,11 +70,12 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TEAM_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
-    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String team_table_name) {
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + team_table_name + " (" +
+    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String table_name) {
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
                 TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
                 TEAM_COLUMN_COMPETITION_ID + " TEXT, " +
                 TEAM_COLUMN_INIT_LINE + " INT UNSIGNED, " +

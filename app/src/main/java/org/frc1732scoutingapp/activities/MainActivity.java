@@ -1,10 +1,16 @@
 package org.frc1732scoutingapp.activities;
 
+import android.Manifest;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,6 +30,10 @@ import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
 import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.fragments.HomeFragment;
+import org.frc1732scoutingapp.models.RequestCodes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        verifyPermissions();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,6 +78,27 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_navigate_up_description);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    public void verifyPermissions() {
+        Log.d("verifyPerms", "verifyPermissions is running.");
+        try {
+            List<String> ungrantedPerms = new ArrayList<String>();
+            PackageInfo requiredPerms = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
+            if (requiredPerms.requestedPermissions != null) {
+                for (int i = 0; i < requiredPerms.requestedPermissions.length; i++) {
+                    if((requiredPerms.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) == 0) {
+                        ungrantedPerms.add(requiredPerms.requestedPermissions[i]);
+                    }
+                }
+            }
+            String[] ungrantedPermsArr = new String[ungrantedPerms.size()];
+            ungrantedPermsArr = ungrantedPerms.toArray(ungrantedPermsArr);
+            ActivityCompat.requestPermissions(this, ungrantedPermsArr, RequestCodes.PERMISSION_REQUEST.getValue());
+        }
+        catch (PackageManager.NameNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override

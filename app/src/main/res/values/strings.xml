@@ -23,6 +23,8 @@
     <string name="button_fragment_syncsheets_sync">Sync</string>
     <string name="button_fragment_syncsheets_syncall">Sync All</string>
 
+    <string name="bluetooth_master_device_name">1732 Scouting Master</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
