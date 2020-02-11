@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +54,7 @@ public class SaveDialogBluetoothFragment extends Fragment {
 
                     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
                     Intent rec = getActivity().registerReceiver(receiver, filter);
-                    System.out.println(rec);
-                    System.out.println(bluetoothAdapter.startDiscovery());
+                    bluetoothAdapter.startDiscovery();
                 };
             }
         });
@@ -67,11 +65,12 @@ public class SaveDialogBluetoothFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                Toast.makeText(getActivity(), "Found Device", Toast.LENGTH_LONG).show();
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress();
-                Log.d("deviceName", deviceName);
+                if (deviceName != null) {
+                    System.out.println(deviceName);
+                }
             }
         }
     };

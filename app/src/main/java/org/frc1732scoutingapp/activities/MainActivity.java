@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void verifyPermissions() {
-        Log.d("verifyPerms", "verifyPermissions is running.");
         try {
             List<String> ungrantedPerms = new ArrayList<String>();
             PackageInfo requiredPerms = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
@@ -92,9 +91,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            String[] ungrantedPermsArr = new String[ungrantedPerms.size()];
-            ungrantedPermsArr = ungrantedPerms.toArray(ungrantedPermsArr);
-            ActivityCompat.requestPermissions(this, ungrantedPermsArr, RequestCodes.PERMISSION_REQUEST.getValue());
+            if (ungrantedPerms.size() > 0) {
+                String[] ungrantedPermsArr = new String[ungrantedPerms.size()];
+                ungrantedPermsArr = ungrantedPerms.toArray(ungrantedPermsArr);
+                ActivityCompat.requestPermissions(this, ungrantedPermsArr, RequestCodes.PERMISSION_REQUEST.getValue());
+            }
         }
         catch (PackageManager.NameNotFoundException ex) {
             ex.printStackTrace();
