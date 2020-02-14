@@ -13,13 +13,14 @@ import java.util.List;
 
 public class AsyncPushMatchInfoTask extends AsyncTask<Void, Void, Void> {
     private SheetService sheetService;
-    private List<Team> matchResults;
+    private List<Team> teams;
 
-    public AsyncPushMatchInfoTask(SheetService sheetService, List<Team> matchResults) {
+    public AsyncPushMatchInfoTask(SheetService sheetService, List<Team> teams) {
         this.sheetService = sheetService;
-        this.matchResults = matchResults;
+        this.teams = teams;
     }
 
+    //TODO: Maybe find a cleaner way than using a ssRow counter and several .get() methods to make new rows for each match
     protected Void doInBackground(Void... params) {
         try {
             ValueRange requestBody = new ValueRange();
@@ -27,24 +28,26 @@ public class AsyncPushMatchInfoTask extends AsyncTask<Void, Void, Void> {
 
             // Input needs to be a list of a list of objects (the outer list is a row, and the objects inside the inner list is each column)
             List<List<Object>> input = new ArrayList<List<Object>>();
-
-            for (int i = 0; i < matchResults.size(); i++) {
-                input.add(new ArrayList<Object>());
-                input.get(i).add(matchResults.get(i).getTeamNumber());
-                input.get(i).add(matchResults.get(i).getMatchNumber());
-                input.get(i).add(matchResults.get(i).getInitLine());
-                input.get(i).add(matchResults.get(i).getAutoLower());
-                input.get(i).add(matchResults.get(i).getAutoOuter());
-                input.get(i).add(matchResults.get(i).getAutoInner());
-                input.get(i).add(matchResults.get(i).getLower());
-                input.get(i).add(matchResults.get(i).getOuter());
-                input.get(i).add(matchResults.get(i).getInner());
-                input.get(i).add(matchResults.get(i).getPosition());
-                input.get(i).add(matchResults.get(i).getRotation());
-                input.get(i).add(matchResults.get(i).getPark());
-                input.get(i).add(matchResults.get(i).getHang());
-                input.get(i).add(matchResults.get(i).getLevel());
-                input.get(i).add(matchResults.get(i).getDisableTime());
+            int ssRow = 0;
+            for (int i = 0; i < teams.size(); i++) {
+                for (int j = 0; j < teams.get(i).getMatchResults().size(); j++, ssRow++) {
+                    input.add(new ArrayList<Object>());
+                    input.get(ssRow).add(teams.get(i).getTeamNumber());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getMatchNumber());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getInitLine());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getAutoLower());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getAutoOuter());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getAutoInner());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getLower());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getOuter());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getInner());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getPosition());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getRotation());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getPark());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getHang());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getLevel());
+                    input.get(ssRow).add(teams.get(i).getMatchResults().get(j).getDisableTime());
+                }
             }
             requestBody.setValues(input);
 
