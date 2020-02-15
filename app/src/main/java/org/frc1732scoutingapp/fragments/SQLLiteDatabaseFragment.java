@@ -38,6 +38,11 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     private FragmentSqliteDatabaseBinding fragmentBinding;
     private String TAG = "SqliteDatabaseActivity";
     private SQLiteDatabase database;
+    private boolean isMaster;
+
+    public SQLLiteDatabaseFragment(boolean isMaster) {
+        this.isMaster= isMaster;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,13 +71,18 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             }
         });
 
-        fragmentBinding.scanQRButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent QRIntent = new Intent(getActivity(), QRScannerActivity.class);
-                startActivityForResult(QRIntent, RequestCodes.QR_SCAN.getValue());
-            }
-        });
+        if (isMaster) {
+            fragmentBinding.scanQRButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent QRIntent = new Intent(getActivity(), QRScannerActivity.class);
+                    startActivityForResult(QRIntent, RequestCodes.QR_SCAN.getValue());
+                }
+            });
+        }
+        else {
+            fragmentBinding.scanQRButton.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -135,7 +145,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             }
             ft.addToBackStack(null);
 
-            SaveDataDialog saveDataDialog = new SaveDataDialog(this);
+            SaveDataDialog saveDataDialog = new SaveDataDialog(this, isMaster);
             saveDataDialog.setArguments(bundledCode);
             saveDataDialog.show(ft, "Save Data Dialog");
         } catch (IOException | WriterException ex) {

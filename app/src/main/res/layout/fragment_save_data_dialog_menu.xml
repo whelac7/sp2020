@@ -16,14 +16,17 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/save_qr_tab"
             android:layout_height="100dp"
             android:layout_width="100dp"
             android:text="QR"/>
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/sync_bluetooth_tab"
             android:layout_height="100dp"
             android:layout_width="100dp"
             android:text="Bluetooth"/>
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/save_to_database_tab"
             android:layout_height="100dp"
             android:layout_width="100dp"
             android:text="Database (MASTER)"/>

@@ -1,10 +1,13 @@
 package org.frc1732scoutingapp.activities;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -23,11 +26,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import android.view.Menu;
+import android.widget.Toast;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
+import org.frc1732scoutingapp.fragments.SettingsFragment;
 import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.fragments.HomeFragment;
 import org.frc1732scoutingapp.models.RequestCodes;
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isMaster = sharedPref.getBoolean("toggle_master", false);
         verifyPermissions();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -61,16 +69,18 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new HomeFragment()).commit();
                         break;
                     case R.id.nav_log_match:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SQLLiteDatabaseFragment()).commit();
-                        getSupportActionBar().setTitle("Log Match");
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SQLLiteDatabaseFragment(isMaster)).commit();
                         break;
                     case R.id.nav_sync:
                         getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SyncSheetsFragment()).commit();
                         break;
+                    case R.id.settings:
+                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(intent);
+                        break;
                 }
 
                 drawer.closeDrawers();
-
                 return true;
             }
         });

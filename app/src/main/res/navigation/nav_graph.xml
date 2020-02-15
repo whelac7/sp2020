@@ -19,4 +19,9 @@
         android:name="org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment"
         android:label="Log Match"
         tools:layout="@layout/fragment_sqlite_database" />
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="org.frc1732scoutingapp.activities.SettingsActivity"
+        android:label="activity_settings"
+        tools:layout="@layout/activity_settings" />
 </navigation>
