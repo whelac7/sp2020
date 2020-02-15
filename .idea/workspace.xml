@@ -9,22 +9,9 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d5903f4-42aa-4711-80d1-981181258ae9" name="Default Changelist" comment="Move SaveDataDialog to fragments package">
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_navigation_navigation_ui_2_1_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_navigation_navigation_ui_2_1_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_basement_17_0_0_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_android_gms_play_services_basement_17_0_0_aar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__me_dm7_barcodescanner_core_1_9_13_aar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__me_dm7_barcodescanner_core_1_9_13_aar.xml" afterDir="false" />
+    <list default="true" id="0d5903f4-42aa-4711-80d1-981181258ae9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <ignored path=".gradle/" />
     <ignored path=".gradle/5.4.1/executionHistory/executionHistory.bin" />
@@ -59,8 +46,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="96" column="33" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
+            <state relative-caret-position="537">
+              <caret line="317" column="83" selection-start-line="317" selection-start-column="83" selection-end-line="317" selection-end-column="83" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2210#2243#0" expanded="true" />
@@ -76,8 +63,8 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml">
           <provider editor-type-id="android-designer2" />
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="38" lean-forward="true" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
+            <state relative-caret-position="166">
+              <caret line="144" column="28" selection-start-line="144" selection-start-column="28" selection-end-line="144" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -243,6 +230,17 @@
               <item name="org" type="cbb59c9e:AndroidPsiDirectoryNode" />
               <item name="frc1732scoutingapp" type="462c0819:PsiDirectoryNode" />
               <item name="fragments" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+            </path>
+            <path>
+              <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="drawable" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
           </expand>
           <select />
@@ -435,7 +433,21 @@
       <option name="project" value="LOCAL" />
       <updated>1581184319299</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Built XML and Established Buttons">
+      <created>1581797218488</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1581797218488</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Specified SQLiteDatabaseFragment">
+      <created>1581799656217</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1581799656217</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -452,7 +464,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.32152778" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.32152778" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" />
@@ -461,16 +473,16 @@
       <window_info id="Resources Explorer" order="7" />
       <window_info id="Capture Tool" order="8" />
       <window_info anchor="bottom" id="Run" order="0" sideWeight="0.47805172" weight="0.32876712" />
-      <window_info anchor="bottom" id="Logcat" order="1" sideWeight="0.5273602" weight="0.32876712" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="1" sideWeight="0.5263889" visible="true" weight="0.3278496" />
       <window_info anchor="bottom" id="TODO" order="2" sideWeight="0.49549007" weight="0.32876712" />
       <window_info anchor="bottom" id="Find" order="3" sideWeight="0.49946696" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="4" sideWeight="0.49520257" weight="0.32936078" />
-      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.42430556" side_tool="true" visible="true" weight="0.26909518" />
+      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.47361112" side_tool="true" visible="true" weight="0.3278496" />
       <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.49573562" weight="0.32936078" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.57569444" visible="true" weight="0.26909518" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.57569444" weight="0.26909518" />
       <window_info anchor="bottom" id="Debug" order="8" sideWeight="0.49969932" weight="0.32876712" />
-      <window_info anchor="bottom" id="Android Profiler" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49946696" weight="0.32936078" />
+      <window_info anchor="bottom" id="Android Profiler" order="9" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49861112" weight="0.32902467" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Gradle" order="2" />
@@ -484,11 +496,13 @@
     <MESSAGE value="Change com to org" />
     <MESSAGE value="Merge hotfix/renamepackage and refactor code into respective packages" />
     <MESSAGE value="Merge branch 'hotfix/renamepackage' of https://github.com/whelac7/sp2020 into feature/QRToDB&#10;&#10;# Conflicts:&#10;#&#9;app/src/main/java/com/example/googlesheetstest/RequestCodes.java&#10;#&#9;app/src/main/java/com/example/googlesheetstest/objects/Team.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/MainActivity.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/RequestCodes.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/SQLiteDatabaseActivity.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/models/RequestCodes.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/models/Team.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/objects/Team.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/responses/GetMatchInfoResponse.java&#10;#&#9;app/src/main/java/org/frc1732scoutingapp/services/SheetService.java&#10;#&#9;app/src/main/res/values/strings.xml&#10;#&#9;local.properties" />
-    <MESSAGE value="Move SaveDataDialog to fragments package" />
     <MESSAGE value="Move ReadFromDB and MatchExists to SQLiteDBHelper for reuse" />
     <MESSAGE value="Move all match-related properties to a separate IndividualMatchResult object" />
     <MESSAGE value="Application prompts user to accept missing permissions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Application prompts user to accept missing permissions" />
+    <MESSAGE value="Move SaveDataDialog to fragments package" />
+    <MESSAGE value="Built XML and Established Buttons" />
+    <MESSAGE value="Specified SQLiteDatabaseFragment" />
+    <option name="LAST_COMMIT_MESSAGE" value="Specified SQLiteDatabaseFragment" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.fragment/fragment/1.1.0/b9ebb04df2cb0cad4419af3c658690bc82aa5706/fragment-1.1.0-sources.jar!/androidx/fragment/app/FragmentManager.java">
@@ -812,15 +826,15 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml">
       <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="38" lean-forward="true" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
+        <state relative-caret-position="166">
+          <caret line="144" column="28" selection-start-line="144" selection-start-column="28" selection-end-line="144" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="96" column="33" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
+        <state relative-caret-position="537">
+          <caret line="317" column="83" selection-start-line="317" selection-start-column="83" selection-end-line="317" selection-end-column="83" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2210#2243#0" expanded="true" />

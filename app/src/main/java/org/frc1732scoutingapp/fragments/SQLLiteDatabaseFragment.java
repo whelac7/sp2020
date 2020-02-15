@@ -63,7 +63,6 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
 
     public boolean toggleTeleopAuto = true;
 
-    public EditText disableTime = fragmentBinding.disTime;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sqlite_database, container, false);
@@ -91,7 +90,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         TextView outerPortOutputTeleop = fragmentBinding.outerPortOutputTeleop;
         TextView lowerPortOutputAuto = fragmentBinding.lowerPortOutputAuto;
         TextView lowerPortOutputTeleop = fragmentBinding.lowerPortOutputTeleop;
-
+;
         initLineCrossed = toggle(initLine);
         rotOut = toggle(rotationControl);
         posOut = toggle(positionControl);
@@ -226,7 +225,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         Integer.toString(parkOut);
         Integer.toString(hangOut);
         Integer.toString(levelOut);
-        this.disableTime.getText();
+        fragmentBinding.disTime.getText();
     }
 
     private void startSaveDialog() {
@@ -247,7 +246,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
                     Integer.toString(parkOut),
                     Integer.toString(hangOut),
                     Integer.toString(levelOut),
-                    this.disableTime.getText()
+                    fragmentBinding.disTime.getText()
             ));
 
             //activityBinding.QRCodeImage.setImageBitmap(code);
@@ -316,7 +315,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         values.put(SQLiteDBHelper.TEAM_COLUMN_PARK, parkOut);
         values.put(SQLiteDBHelper.TEAM_COLUMN_HANG, hangOut);
         values.put(SQLiteDBHelper.TEAM_COLUMN_LEVEL, levelOut);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME, disableTime.getText().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME, fragmentBinding.disTime.getText().toString());
         return values;
     }
 
