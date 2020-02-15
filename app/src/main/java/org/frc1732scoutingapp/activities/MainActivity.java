@@ -1,129 +1,104 @@
 package org.frc1732scoutingapp.activities;
 
-import android.content.Context;
+import android.Manifest;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.content.Intent;
-
-import androidx.annotation.Nullable;
 
 import android.util.Log;
+import android.view.MenuItem;
 
-import org.frc1732scoutingapp.R;
-import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
-import org.frc1732scoutingapp.models.RequestCodes;
-import org.frc1732scoutingapp.services.SheetService;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.common.api.ApiException;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import org.frc1732scoutingapp.R;
+import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
+import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
+import org.frc1732scoutingapp.fragments.HomeFragment;
+import org.frc1732scoutingapp.models.RequestCodes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private GoogleSignInOptions gso;
-    private GoogleSignInClient  mGoogleSignInClient;
-    private GoogleSignInAccount account;
-    private Context context;
-    private static final String TAG = "SignInActivity";
-    private static String SPREADSHEETS_SCOPE = "https://www.googleapis.com/auth/spreadsheets";
+
+    private AppBarConfiguration mAppBarConfiguration;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
+        verifyPermissions();
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(SPREADSHEETS_SCOPE))
-                .requestEmail()
-                .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                signIn();
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_home:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new HomeFragment()).commit();
+                        break;
+                    case R.id.nav_log_match:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SQLLiteDatabaseFragment()).commit();
+                        getSupportActionBar().setTitle("Log Match");
+                        break;
+                    case R.id.nav_sync:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SyncSheetsFragment()).commit();
+                        break;
+                }
+
+                drawer.closeDrawers();
+
+                return true;
             }
         });
 
-        Button logMatchButton = findViewById(R.id.logMatchButton);
-        logMatchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SQLiteDatabaseActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button syncSheetsButton = findViewById(R.id.syncSheetsButton);
-        syncSheetsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment syncSheetsFragment = new SyncSheetsFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.main_container, syncSheetsFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_navigate_up_description);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RequestCodes.RC_SIGN_IN.getValue());
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RequestCodes.RC_SIGN_IN.getValue()) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    }
-
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    public void verifyPermissions() {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            SheetService sheetService = new SheetService(account.getAccount(), context);
-            //sheetService.pushInformation();
-            //sheetService.getInformation();
-            //sheetService.createSheet("1732 - Test");
-
-            updateUI(account);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
+            List<String> ungrantedPerms = new ArrayList<String>();
+            PackageInfo requiredPerms = getPackageManager().getPackageInfo(this.getPackageName(), PackageManager.GET_PERMISSIONS);
+            if (requiredPerms.requestedPermissions != null) {
+                for (int i = 0; i < requiredPerms.requestedPermissions.length; i++) {
+                    if((requiredPerms.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) == 0) {
+                        ungrantedPerms.add(requiredPerms.requestedPermissions[i]);
+                    }
+                }
+            }
+            if (ungrantedPerms.size() > 0) {
+                String[] ungrantedPermsArr = new String[ungrantedPerms.size()];
+                ungrantedPermsArr = ungrantedPerms.toArray(ungrantedPermsArr);
+                ActivityCompat.requestPermissions(this, ungrantedPermsArr, RequestCodes.PERMISSION_REQUEST.getValue());
+            }
         }
-    }
-
-    private void updateUI(@Nullable GoogleSignInAccount account) {
-        if (account != null) {
-            findViewById(R.id.fab).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.fab).setVisibility(View.VISIBLE);
+        catch (PackageManager.NameNotFoundException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -135,17 +110,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.homeFragment);
+        if (fragment instanceof HomeFragment) {
+            super.onBackPressed();
         }
-
-        return super.onOptionsItemSelected(item);
+        else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new HomeFragment()).commit();
+        }
     }
 }
+

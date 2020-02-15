@@ -7,6 +7,14 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
+import org.frc1732scoutingapp.models.IndividualMatchResult;
+import org.frc1732scoutingapp.models.Team;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 2;
@@ -28,6 +36,9 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String TEAM_COLUMN_HANG = "hang";
     public static final String TEAM_COLUMN_LEVEL = "level";
     public static final String TEAM_COLUMN_DISABLE_TIME = "disable_time";
+
+    public static final String COMPETITION_TABLE_NAME = "competition_template";
+    public static final String COMPETITION_TEAM_NUMBER = "team_number";
 
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -51,16 +62,20 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 TEAM_COLUMN_HANG + " INT UNSIGNED, " +
                 TEAM_COLUMN_LEVEL + " INT UNSIGNED, " +
                 TEAM_COLUMN_DISABLE_TIME + " INT UNSIGNED" + ")");
+
+        sqLiteDatabase.execSQL("CREATE TABLE " + COMPETITION_TABLE_NAME + " (" +
+                COMPETITION_TEAM_NUMBER + " INT UNSIGNED" + ")");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TEAM_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
-    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String team_table_name) {
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + team_table_name + " (" +
+    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String table_name) {
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
                 TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
                 TEAM_COLUMN_COMPETITION_ID + " TEXT, " +
                 TEAM_COLUMN_INIT_LINE + " INT UNSIGNED, " +
@@ -181,6 +196,61 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 return null;
             }
             throw ex;
+        }
+    }
+
+    //TODO: Take competition code into account
+    public static Team parseTeamMatches(SQLiteDatabase database, String team) {
+        Cursor cursor = SQLiteDBHelper.readFromDB(database, team);
+
+        if (cursor.moveToFirst()) {
+            String result = "";
+            ArrayList<IndividualMatchResult> matchResults = new ArrayList<IndividualMatchResult>();
+            for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
+                matchResults.add(new IndividualMatchResult(
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_LOWER))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex((SQLiteDBHelper.TEAM_COLUMN_OUTER)))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INNER))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_POSITION))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_ROTATION))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_PARK))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_HANG))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_LEVEL))),
+                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME)))
+                ));
+            }
+            cursor.close();
+            return new Team(tryParseInt(team), matchResults);
+        }
+
+        return null;
+    }
+
+    public static String parseTeamInCompToJSON(SQLiteDatabase database, String compCode, String team) {
+        Cursor results = database.rawQuery("SELECT * FROM frc" + team + " WHERE " + TEAM_COLUMN_COMPETITION_ID + "='" + compCode + "'", null);
+        Team teamMatches = parseTeamMatches(database, team);
+
+        if (teamMatches != null) {
+            return new Gson().toJson(teamMatches);
+        }
+        return null;
+    }
+
+    public static Cursor getAllTeams(SQLiteDatabase database) {
+        return database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+    }
+
+    private static Integer tryParseInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        }
+        catch (NumberFormatException ex) {
+            return null;
         }
     }
 }

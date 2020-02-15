@@ -51,8 +51,8 @@ public class SheetService {
         new AsyncPushInformationTask(this).execute();
     }
 
-    public void pushMatchInfo(List<Team> matchResults) {
-        new AsyncPushMatchInfoTask(this, matchResults).execute();
+    public void pushMatchInfo(List<Team> teams) {
+        new AsyncPushMatchInfoTask(this, teams).execute();
     }
 
     public void createSheet(String name) {

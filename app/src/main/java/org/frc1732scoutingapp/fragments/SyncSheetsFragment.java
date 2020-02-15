@@ -1,7 +1,5 @@
 package org.frc1732scoutingapp.fragments;
 
-import androidx.fragment.app.Fragment;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -49,6 +50,7 @@ public class SyncSheetsFragment extends Fragment {
             teamNumberEditText = view.findViewById(R.id.teamNumberEditText);
             syncSheetsButton = view.findViewById(R.id.syncSheetsButton);
             syncAllSheetsButton = view.findViewById(R.id.syncAllSheetsButton);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_fragment_sync_sheets);
             signIntoGoogle();
 
             // TODO: Application breaks if the team number is not valid - fix.
@@ -80,58 +82,39 @@ public class SyncSheetsFragment extends Fragment {
         }
     }
 
+    //TODO: Need to find a way to keep team number associated with IndividualMatchResult
     private void syncAllToSheets() {
-        Cursor teams = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-        List<Team> allMatchResults = new ArrayList<Team>();
+        Cursor teams = SQLiteDBHelper.getAllTeams(database);
+        List<Team> teamList = new ArrayList<Team>();
         if (teams.moveToFirst()) {
-            for (int i = 0; i < teams.getCount(); i++, teams.moveToNext()) {
+            do {
                 String teamString = teams.getString(0);
                 String target = "frc";
                 if (teamString.startsWith(target)) {
                     String teamNumber = teamString.substring(3);
                     System.out.println(teamNumber);
-                    allMatchResults.addAll(parseMatches(teamNumber));
+                    teamList.add(parseTeam(teamNumber));
                 }
-            }
+            } while (teams.moveToNext());
         }
         teams.close();
 
         SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
-        sheetService.pushMatchInfo(allMatchResults);
+        sheetService.pushMatchInfo(teamList);
+
+        System.out.println("ParseTeamToJSON: " + SQLiteDBHelper.parseTeamInCompToJSON(database, "0", "1239"));
     }
 
-    private List<Team> parseMatches(String teamNumber) {
-        System.out.println(teamNumber);
-        Cursor cursor = SQLiteDBHelper.readFromDB(database, teamNumber);
-        if (cursor.getCount() == 0) {
+    private Team parseTeam(String team) {
+        Team teamObj = SQLiteDBHelper.parseTeamMatches(database, team);
+
+        if (teamObj != null) {
+            return teamObj;
+        }
+        else {
             Toast.makeText(getContext(), "No results found.", Toast.LENGTH_LONG).show();
             return null;
         }
-        cursor.moveToFirst();
-        String result = "";
-        ArrayList<Team> matchResults = new ArrayList<Team>();
-        for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
-            matchResults.add(new Team(
-                    tryParseInt(teamNumber),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_LOWER))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex((SQLiteDBHelper.TEAM_COLUMN_OUTER)))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INNER))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_POSITION))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_ROTATION))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_PARK))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_HANG))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_LEVEL))),
-                    tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME)))
-            ));
-        }
-        cursor.close();
-
-        return matchResults;
     }
 
     private void syncToSheets(String teamNumber, List<Team> matchResults) {
@@ -139,10 +122,13 @@ public class SyncSheetsFragment extends Fragment {
         sheetService.pushMatchInfo(matchResults);
     }
 
+    //TODO: Find a smoother way to sync a single team without using placeholderList
     private void syncToSheets(String teamNumber) {
-        List<Team> matchResults = parseMatches(teamNumber);
+        Team teamResults = parseTeam(teamNumber);
+        List<Team> placeholderList = new ArrayList<Team>();
+        placeholderList.add(teamResults);
         SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
-        sheetService.pushMatchInfo(matchResults);
+        sheetService.pushMatchInfo(placeholderList);
     }
 
     @Override

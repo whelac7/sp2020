@@ -9,16 +9,19 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import org.frc1732scoutingapp.fragments.SaveDialogBluetoothFragment;
 import org.frc1732scoutingapp.fragments.SaveDialogDatabaseFragment;
 import org.frc1732scoutingapp.fragments.SaveDialogQRFragment;
+import org.frc1732scoutingapp.responses.DismissDialogCallback;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
 
 public class SaveDialogPagerAdapter extends FragmentPagerAdapter {
     private byte[] codeInBytes;
     private SubmitToDBCallback DBListener;
+    private DismissDialogCallback dismissDialogCallback;
 
-    public SaveDialogPagerAdapter(FragmentManager fm, byte[] codeInBytes, SubmitToDBCallback DBListener) {
+    public SaveDialogPagerAdapter(FragmentManager fm, byte[] codeInBytes, SubmitToDBCallback DBListener, DismissDialogCallback dismissDialogCallback) {
         super(fm);
         this.codeInBytes = codeInBytes;
         this.DBListener = DBListener;
+        this.dismissDialogCallback = dismissDialogCallback;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class SaveDialogPagerAdapter extends FragmentPagerAdapter {
                 fragment = new SaveDialogBluetoothFragment();
                 break;
             case 2:
-                fragment = new SaveDialogDatabaseFragment(DBListener);
+                fragment = new SaveDialogDatabaseFragment(DBListener, dismissDialogCallback);
                 break;
         }
         return fragment;
