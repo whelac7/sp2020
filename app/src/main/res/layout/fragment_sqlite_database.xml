@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:clickable="true"
-        tools:context="org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment">
+        tools:context="org.frc1732scoutingapp.activities.SQLiteDatabaseActivity">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
@@ -15,22 +14,31 @@
             android:paddingLeft="16dp"
             android:paddingTop="16dp"
             android:paddingRight="16dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="16dp"
+            app:layout_anchor="@+id/relativeLayout"
+            app:layout_anchorGravity="center">
 
             <TextView
                 android:id="@+id/teamNumberLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingRight="8dp"
-                android:text="@string/label_fragment_sqlitedatabase_team_number"
-                android:textSize="18sp" />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="62dp"
+                android:text="Team Number"
+                android:textSize="20sp" />
+
 
             <EditText
                 android:id="@+id/teamNumberEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/teamNumberLabel"
+                android:layout_width="53dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/matchEditText"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="141dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="175dp"
+                android:layout_marginBottom="228dp"
                 android:layout_toRightOf="@id/teamNumberLabel"
                 android:inputType="number" />
 
@@ -38,130 +46,290 @@
                 android:id="@+id/matchLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/teamNumberLabel"
-                android:paddingTop="15dp"
-                android:text="@string/label_fragment_sqlitedatabase_match_number"
-                android:textSize="18sp" />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="24dp"
+                android:text="Match Number"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/matchEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
+                android:layout_width="53dp"
+                android:layout_height="40dp"
                 android:layout_alignBottom="@id/matchLabel"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="-10dp"
+                android:layout_toEndOf="@+id/matchLabel"
                 android:layout_toRightOf="@id/matchLabel"
-                android:inputType="number"/>
-
-            <TextView
-                android:id="@+id/initLineLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/matchLabel"
-                android:paddingTop="15dp"
-                android:text="@string/label_fragment_sqlitedatabase_init_line"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/initLineEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/initLineLabel"
-                android:layout_toRightOf="@id/initLineLabel"
                 android:inputType="number" />
 
-            <TextView
-                android:id="@+id/autoLowerLabel"
+
+            <ToggleButton
+                android:id="@+id/initLine"
+                android:layout_width="206dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="110dp"
+                android:textOff="Init Line is Crossed"
+                android:textOn="Init Line is Crossed"
+                android:textSize="15sp" />
+
+            <ToggleButton
+                android:id="@+id/positionControl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/initLineLabel"
-                android:paddingTop="15dp"
-                android:text="@string/label_fragment_sqlitedatabase_auto_lower"
-                android:textSize="18sp" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="333dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="163dp"
+                android:textOff="Position Control"
+                android:textOn="Position Control"
+                android:textSize="20dp" />
 
-            <EditText
-                android:id="@+id/autoLowerEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/autoLowerLabel"
-                android:layout_toRightOf="@id/autoLowerLabel"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/autoOuterLabel"
+            <ToggleButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autoLowerLabel"
-                android:paddingTop="15dp"
-                android:text="@string/label_fragment_sqlitedatabase_auto_outer"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/autoOuterEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/autoOuterLabel"
-                android:layout_toRightOf="@id/autoOuterLabel"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/autoInnerLabel"
+                android:id="@+id/rotationControl"
+                android:textOn="Rotation Control"
+                android:textOff= "Rotation Control"
+                android:textSize ="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="333dp"
+                android:layout_marginTop="270dp"/>
+            <ToggleButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autoOuterLabel"
-                android:paddingTop="15dp"
-                android:text="@string/label_fragment_sqlitedatabase_auto_inner"
-                android:textSize="18sp" />
+                android:id="@+id/park"
+                android:textOff="Successful Park"
+                android:textSize="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="390dp"
+                />
+            <ToggleButton
+                android:id="@+id/hang"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below = "@+id/park"
+                android:textOff="Successful Hang"
+                android:textOn="Successful Hang"
+                android:textSize="20dp"
+                />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/level"
+                android:textOn="Generator Switch Level"
+                android:textOff="Generator Switch Level"
+                android:textSize="20dp"
+                android:layout_below="@+id/hang"
+                />
+
+            <TextView
+                android:id="@+id/disableTimeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disable Time (Seconds):"
+                android:textSize="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="350dp" />
 
             <EditText
-                android:id="@+id/autoInnerEditText"
-                android:layout_width="match_parent"
+                android:id="@+id/disTime"
+                android:layout_width="62dp"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
-                android:layout_alignBottom="@id/autoInnerLabel"
-                android:layout_toRightOf="@id/autoInnerLabel"
-                android:inputType="number" />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="340dp"
+                android:layout_toRightOf="@+id/disableTimeLabel" />
+
+
+            <Button
+                android:id="@+id/autoToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="90dp"
+                android:text="Auto"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/teleopToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="39dp"
+                android:layout_marginTop="90dp"
+                android:layout_marginBottom="83dp"
+                android:layout_toRightOf="@+id/autoToggle"
+                android:text="Teleop"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/autoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="314dp"
+                android:layout_marginTop="0dp"
+                android:text="Auto"
+                android:textSize="30dp" />
+
+            <TextView
+                android:id="@+id/teleopLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/autoLabel"
+                android:text="Teleop"
+                android:textSize="30dp" />
+
+            <ImageButton
+                android:id="@+id/outerPortUp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="165dp"
+                android:layout_marginRight="-80dp"
+                android:layout_toLeftOf="@+id/textOuterPort"
+                android:src="@drawable/up_arrow_final" />
+
+            <ImageButton
+                android:id="@+id/outerPortDown"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="165dp"
+                android:layout_toRightOf="@+id/textOuterPort"
+                android:src="@drawable/down_arrow_final" />
+
+            <TextView
+                android:id="@+id/textOuterPort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="90dp"
+                android:layout_marginTop="185dp"
+                android:text="Outer Port"
+                android:textSize="30dp" />
+
+            <TextView
+                android:id="@+id/textLowerPort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="275dp"
+                android:text="Lower Port"
+                android:textSize="30dp" />
+
+            <ImageButton
+                android:id="@+id/lowerPortUp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="255dp"
+                android:layout_marginRight="-80dp"
+                android:layout_toLeftOf="@+id/textLowerPort"
+                android:src="@drawable/up_arrow_final" />
+
+            <ImageButton
+                android:id="@+id/lowerPortDown"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@+id/outerPortUp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="255dp"
+                android:layout_toRightOf="@+id/textLowerPort"
+                android:src="@drawable/down_arrow_final" />
 
             <Button
                 android:id="@+id/saveButton"
+                android:layout_width="96dp"
+                android:layout_height="67dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="421dp"
+                android:layout_marginTop="770dp"
+                android:text="Save" />
+
+            <TextView
+                android:id="@+id/outerPortOutputText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autoInnerLabel"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="30dp"
-                android:text="@string/button_fragment_sqlitedatabase_save" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="40dp"
+                android:textSize="20sp"
+                android:text="Outer Port" />
 
-            <Button
-                android:id="@+id/searchButton"
+            <TextView
+                android:id="@+id/outerPortOutputAuto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autoInnerLabel"
-                android:layout_alignParentLeft="true"
-                android:layout_marginBottom="30dp"
-                android:text="Search" />
+                android:layout_below="@+id/autoLabel"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@+id/outerPortOutputText" />
 
-            <Button
-                android:id="@+id/scanQRButton"
+            <TextView
+                android:id="@+id/outerPortOutputTeleop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="@string/button_fragment_sqlitedatabase_scan_qr"/>
+                android:layout_below="@+id/teleopLabel"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="1dp"
+                android:layout_toRightOf="@+id/outerPortOutputAuto" />
 
-            <ImageView
-                android:id="@+id/QRCodeImage"
-                android:layout_marginTop="50dp"
-                android:layout_width="235dp"
-                android:layout_height="228dp"
-                android:layout_below="@id/scanQRButton"
-                android:layout_centerHorizontal="true"
-                tools:srcCompat="@tools:sample/avatars" />
+            <TextView
+                android:id="@+id/lowerPortOutputText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/outerPortOutputText"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="13dp"
+                android:text="Lower Port"
+                android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/lowerPortOutputAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/outerPortOutputAuto"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="25dp"
+                android:layout_toRightOf="@+id/outerPortOutputText" />
+
+            <TextView
+                android:id="@+id/lowerPortOutputTeleop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/outerPortOutputTeleop"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="25dp"
+                android:layout_toRightOf="@+id/outerPortOutputAuto" />
+
+            <include
+                layout="@layout/content_sqlite_database"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content" />
         </RelativeLayout>
-
-        <include layout="@layout/content_sqlite_database" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
