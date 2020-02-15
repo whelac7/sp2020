@@ -14,22 +14,31 @@
             android:paddingLeft="16dp"
             android:paddingTop="16dp"
             android:paddingRight="16dp"
-            android:paddingBottom="16dp">
+            android:paddingBottom="16dp"
+            app:layout_anchor="@+id/relativeLayout"
+            app:layout_anchorGravity="center">
 
             <TextView
                 android:id="@+id/teamNumberLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="62dp"
                 android:text="Team Number"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
+
 
             <EditText
                 android:id="@+id/teamNumberEditText"
-                android:layout_width="61dp"
-                android:layout_height="28dp"
+                android:layout_width="53dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/matchEditText"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="137dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="141dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="175dp"
+                android:layout_marginBottom="228dp"
                 android:layout_toRightOf="@id/teamNumberLabel"
                 android:inputType="number" />
 
@@ -37,173 +46,290 @@
                 android:id="@+id/matchLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/searchButton"
-                android:layout_marginBottom="276dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="24dp"
                 android:text="Match Number"
-                android:textSize="18sp" />
-
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/matchEditText"
-                android:layout_width="64dp"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/teamNumberEditText"
+                android:layout_width="53dp"
+                android:layout_height="40dp"
                 android:layout_alignBottom="@id/matchLabel"
-                android:layout_marginLeft="-1dp"
-                android:layout_marginBottom="-4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="-10dp"
+                android:layout_toEndOf="@+id/matchLabel"
                 android:layout_toRightOf="@id/matchLabel"
                 android:inputType="number" />
 
+
+            <ToggleButton
+                android:id="@+id/initLine"
+                android:layout_width="206dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="110dp"
+                android:textOff="Init Line is Crossed"
+                android:textOn="Init Line is Crossed"
+                android:textSize="15sp" />
+
+            <ToggleButton
+                android:id="@+id/positionControl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="333dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="163dp"
+                android:textOff="Position Control"
+                android:textOn="Position Control"
+                android:textSize="20dp" />
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rotationControl"
+                android:textOn="Rotation Control"
+                android:textOff= "Rotation Control"
+                android:textSize ="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="333dp"
+                android:layout_marginTop="270dp"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/park"
+                android:textOff="Successful Park"
+                android:textSize="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="390dp"
+                />
+            <ToggleButton
+                android:id="@+id/hang"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below = "@+id/park"
+                android:textOff="Successful Hang"
+                android:textOn="Successful Hang"
+                android:textSize="20dp"
+                />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/level"
+                android:textOn="Generator Switch Level"
+                android:textOff="Generator Switch Level"
+                android:textSize="20dp"
+                android:layout_below="@+id/hang"
+                />
+
+            <TextView
+                android:id="@+id/disableTimeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Disable Time (Seconds):"
+                android:textSize="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="350dp" />
+
+            <EditText
+                android:id="@+id/disTime"
+                android:layout_width="62dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="340dp"
+                android:layout_toRightOf="@+id/disableTimeLabel" />
+
+
             <Button
                 android:id="@+id/autoToggle"
-                android:layout_width="77dp"
-                android:layout_height="34dp"
-                android:layout_above="@+id/saveButton"
-                android:layout_marginStart="28dp"
-                android:layout_marginBottom="150dp"
-                android:layout_toEndOf="@+id/teleopToggle"
-                android:text="Auto" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="90dp"
+                android:text="Auto"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/teleopToggle"
-                android:layout_width="77dp"
-                android:layout_height="34dp"
-                android:layout_above="@+id/saveButton"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="206dp"
-                android:layout_marginBottom="150dp"
-                android:text="Teleop" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="39dp"
+                android:layout_marginTop="90dp"
+                android:layout_marginBottom="83dp"
+                android:layout_toRightOf="@+id/autoToggle"
+                android:text="Teleop"
+                android:textSize="20dp" />
 
             <TextView
-                android:layout_width="49dp"
-                android:layout_height="18dp"
+                android:id="@+id/autoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="301dp"
-                android:layout_marginTop="-1dp"
-                android:layout_marginEnd="45dp"
-                android:text="Auto" />
+                android:layout_marginStart="314dp"
+                android:layout_marginTop="0dp"
+                android:text="Auto"
+                android:textSize="30dp" />
 
             <TextView
-                android:layout_width="1012dp"
-                android:layout_height="17dp"
-                android:layout_alignParentStart="true"
+                android:id="@+id/teleopLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="336dp"
-                android:layout_marginTop="-1dp"
-                android:text="Teleop" />
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="0dp"
+                android:layout_toEndOf="@+id/autoLabel"
+                android:text="Teleop"
+                android:textSize="30dp" />
 
             <ImageButton
                 android:id="@+id/outerPortUp"
-                android:layout_width="50dp"
-                android:layout_height="38dp"
-                android:layout_above="@+id/scanQRButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="78dp"
-                android:layout_marginEnd="209dp"
-                android:layout_marginBottom="210dp"
-                android:layout_toEndOf="@+id/textOuterPort"
+                android:layout_marginTop="165dp"
+                android:layout_marginRight="-80dp"
+                android:layout_toLeftOf="@+id/textOuterPort"
                 android:src="@drawable/up_arrow_final" />
-
 
             <ImageButton
                 android:id="@+id/outerPortDown"
-                android:layout_width="37dp"
-                android:layout_height="38dp"
-                android:layout_above="@+id/searchButton"
-                android:layout_marginBottom="210dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="165dp"
+                android:layout_toRightOf="@+id/textOuterPort"
                 android:src="@drawable/down_arrow_final" />
 
             <TextView
                 android:id="@+id/textOuterPort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/searchButton"
-                android:layout_marginStart="7dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginBottom="220dp"
-                android:layout_toEndOf="@+id/outerPortDown"
-                android:layout_toRightOf="@+id/outerPortDown"
-                android:layout_toLeftOf="@+id/outerPortUp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="90dp"
+                android:layout_marginTop="185dp"
                 android:text="Outer Port"
-                android:textSize="18dp" />
+                android:textSize="30dp" />
+
+            <TextView
+                android:id="@+id/textLowerPort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="275dp"
+                android:text="Lower Port"
+                android:textSize="30dp" />
+
+            <ImageButton
+                android:id="@+id/lowerPortUp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="255dp"
+                android:layout_marginRight="-80dp"
+                android:layout_toLeftOf="@+id/textLowerPort"
+                android:src="@drawable/up_arrow_final" />
+
+            <ImageButton
+                android:id="@+id/lowerPortDown"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@+id/outerPortUp"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="255dp"
+                android:layout_toRightOf="@+id/textLowerPort"
+                android:src="@drawable/down_arrow_final" />
 
             <Button
                 android:id="@+id/saveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/QRCodeImage"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginBottom="279dp"
-                android:layout_toEndOf="@+id/scanQRButton"
+                android:layout_width="96dp"
+                android:layout_height="67dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="421dp"
+                android:layout_marginTop="770dp"
                 android:text="Save" />
-
-            <Button
-                android:id="@+id/searchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/QRCodeImage"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="275dp"
-                android:layout_toStartOf="@+id/scanQRButton"
-                android:text="Search" />
-
-            <Button
-                android:id="@+id/scanQRButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="Scan QR"/>
-
-            <ImageView
-                android:id="@+id/QRCodeImage"
-                android:layout_marginTop="50dp"
-                android:layout_width="235dp"
-                android:layout_height="228dp"
-                android:layout_below="@id/scanQRButton"
-                android:layout_centerHorizontal="true"
-                tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/outerPortOutputText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/saveButton"
-                android:layout_marginStart="21dp"
-                android:layout_marginBottom="282dp"
-                android:layout_toEndOf="@+id/teamNumberEditText"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="40dp"
+                android:textSize="20sp"
                 android:text="Outer Port" />
 
             <TextView
                 android:id="@+id/outerPortOutputAuto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/saveButton"
-                android:layout_marginStart="29dp"
-                android:layout_marginBottom="283dp"
-                android:layout_toEndOf="@+id/outerPortOutputText" />
+                android:layout_below="@+id/autoLabel"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="3dp"
+                android:layout_toRightOf="@+id/outerPortOutputText" />
 
             <TextView
+                android:id="@+id/outerPortOutputTeleop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/saveButton"
-                android:layout_marginStart="43dp"
-                android:layout_marginBottom="283dp"
-                android:layout_toEndOf="@+id/outerPortOutputAuto" />
-        </RelativeLayout>
+                android:layout_below="@+id/teleopLabel"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="1dp"
+                android:layout_toRightOf="@+id/outerPortOutputAuto" />
 
-        <include
-            layout="@layout/content_sqlite_database"
-            app:layout_anchor="@+id/relativeLayout"
-            app:layout_anchorGravity="center" />
+            <TextView
+                android:id="@+id/lowerPortOutputText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/outerPortOutputText"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="210dp"
+                android:layout_marginTop="13dp"
+                android:text="Lower Port"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/lowerPortOutputAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/outerPortOutputAuto"
+                android:layout_marginLeft="42dp"
+                android:layout_marginTop="25dp"
+                android:layout_toRightOf="@+id/outerPortOutputText" />
+
+            <TextView
+                android:id="@+id/lowerPortOutputTeleop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/outerPortOutputTeleop"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="25dp"
+                android:layout_toRightOf="@+id/outerPortOutputAuto" />
+
+            <include
+                layout="@layout/content_sqlite_database"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
