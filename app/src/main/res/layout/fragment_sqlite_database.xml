@@ -106,6 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/park"
+                android:textOn="Successful Park"
                 android:textOff="Successful Park"
                 android:textSize="20dp"
                 android:layout_alignParentTop="true"
@@ -147,7 +148,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="340dp"
-                android:layout_toRightOf="@+id/disableTimeLabel" />
+                android:layout_toRightOf="@+id/disableTimeLabel"
+                android:inputType="number"/>
 
 
             <Button
