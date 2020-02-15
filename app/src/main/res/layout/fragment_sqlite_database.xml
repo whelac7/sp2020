@@ -147,7 +147,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="340dp"
-                android:layout_toRightOf="@+id/disableTimeLabel" />
+                android:layout_toRightOf="@+id/disableTimeLabel"
+                android:inputType="number"/>
 
 
             <Button
