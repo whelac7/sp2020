@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import org.frc1732scoutingapp.models.Alliance;
 import org.frc1732scoutingapp.models.IndividualMatchResult;
 import org.frc1732scoutingapp.models.Team;
 
@@ -23,6 +24,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String TEAM_TABLE_NAME = "template";
     public static final String TEAM_COLUMN_COMPETITION_ID = "competition_id";
     public static final String TEAM_COLUMN_MATCH_NUMBER = "match_number";
+    public static final String TEAM_COLUMN_ALLIANCE = "alliance";
     public static final String TEAM_COLUMN_INIT_LINE = "init_line";
     public static final String TEAM_COLUMN_AUTO_LOWER = "auto_lower";
     public static final String TEAM_COLUMN_AUTO_OUTER = "auto_outer";
@@ -48,6 +50,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + TEAM_TABLE_NAME + " (" +
                 TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
+                TEAM_COLUMN_ALLIANCE + " VARCHAR(255), " +
                 TEAM_COLUMN_COMPETITION_ID + " TEXT, " +
                 TEAM_COLUMN_INIT_LINE + " INT UNSIGNED, " +
                 TEAM_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
@@ -77,6 +80,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String table_name) {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
                 TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
+                TEAM_COLUMN_ALLIANCE + " VARCHAR(255), " +
                 TEAM_COLUMN_COMPETITION_ID + " TEXT, " +
                 TEAM_COLUMN_INIT_LINE + " INT UNSIGNED, " +
                 TEAM_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
@@ -113,6 +117,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         String[] projection = {
                 SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID,
                 SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER,
+                SQLiteDBHelper.TEAM_COLUMN_ALLIANCE,
                 SQLiteDBHelper.TEAM_COLUMN_INIT_LINE,
                 SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER,
                 SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER,
@@ -161,6 +166,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         String[] projection = {
                 SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID,
                 SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER,
+                SQLiteDBHelper.TEAM_COLUMN_ALLIANCE,
                 SQLiteDBHelper.TEAM_COLUMN_INIT_LINE,
                 SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER,
                 SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER,
@@ -209,6 +215,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
             for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
                 matchResults.add(new IndividualMatchResult(
                         tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER))),
+                        cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_ALLIANCE)),
                         tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE))),
                         tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER))),
                         tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER))),

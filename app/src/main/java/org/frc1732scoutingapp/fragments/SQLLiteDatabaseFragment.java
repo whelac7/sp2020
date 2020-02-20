@@ -1,7 +1,9 @@
 package org.frc1732scoutingapp.fragments;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import com.google.zxing.WriterException;
 
@@ -23,6 +26,7 @@ import org.frc1732scoutingapp.activities.QRScannerActivity;
 import org.frc1732scoutingapp.databinding.FragmentSqliteDatabaseBinding;
 import org.frc1732scoutingapp.helpers.QRCodeHelper;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
+import org.frc1732scoutingapp.models.Alliance;
 import org.frc1732scoutingapp.models.RequestCodes;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
 
@@ -39,16 +43,17 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     private String TAG = "SqliteDatabaseActivity";
     private SQLiteDatabase database;
     private boolean isMaster;
-
-    public SQLLiteDatabaseFragment(boolean isMaster) {
-        this.isMaster= isMaster;
-    }
+    private String alliance;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sqlite_database, container, false);
         View view = fragmentBinding.getRoot();
         database = new SQLiteDBHelper(getActivity()).getReadableDatabase();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        isMaster = sharedPref.getBoolean("toggle_master", false);
+        alliance = sharedPref.getString("alliance", null);
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_fragment_log_match);
 
@@ -145,7 +150,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             }
             ft.addToBackStack(null);
 
-            SaveDataDialog saveDataDialog = new SaveDataDialog(this, isMaster);
+            SaveDataDialog saveDataDialog = new SaveDataDialog(this);
             saveDataDialog.setArguments(bundledCode);
             saveDataDialog.show(ft, "Save Data Dialog");
         } catch (IOException | WriterException ex) {
@@ -185,6 +190,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         ContentValues values = new ContentValues();
         values.put(SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID, 0); // Have to figure out how to get the COMPETITION_ID
         values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, fragmentBinding.matchEditText.getText().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_ALLIANCE, alliance);
         values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, fragmentBinding.initLineEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER, fragmentBinding.autoLowerEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER, fragmentBinding.autoOuterEditText.getText().toString());

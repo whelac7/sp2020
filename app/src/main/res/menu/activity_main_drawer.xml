@@ -14,7 +14,7 @@
             android:id="@+id/nav_sync"
             android:title="Sync to Sheets" />
         <item
-            android:id="@+id/settings"
+            android:id="@+id/nav_settings"
             android:title="Settings" />
     </group>
 

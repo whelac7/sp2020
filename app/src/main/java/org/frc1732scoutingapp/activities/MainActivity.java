@@ -16,7 +16,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -36,6 +39,7 @@ import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
 import org.frc1732scoutingapp.fragments.SettingsFragment;
 import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.fragments.HomeFragment;
+import org.frc1732scoutingapp.models.Alliance;
 import org.frc1732scoutingapp.models.RequestCodes;
 
 import java.util.ArrayList;
@@ -45,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
+    private boolean isMaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isMaster = sharedPref.getBoolean("toggle_master", false);
+        isMaster = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("toggle_master", false);
         verifyPermissions();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -60,21 +64,33 @@ public class MainActivity extends AppCompatActivity {
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController controller = navHostFragment.getNavController();
+        NavInflater inflater = controller.getNavInflater();
+        NavGraph graph = inflater.inflate(R.navigation.nav_graph);
+
+//        if (!isMaster) {
+//            Menu nav_menu = navigationView.getMenu();
+//            nav_menu.findItem(R.id.nav_sync).setVisible(false);
+//            graph.setStartDestination(R.id.SQLLiteDatabaseFragment);
+//            controller.setGraph(graph);
+//        }
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new HomeFragment()).commit();
+                        System.out.println("Doing stuff: " + graph.getStartDestination());
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment()).commit();
                         break;
                     case R.id.nav_log_match:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SQLLiteDatabaseFragment(isMaster)).commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment()).commit();
                         break;
                     case R.id.nav_sync:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SyncSheetsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment()).commit();
                         break;
-                    case R.id.settings:
+                    case R.id.nav_settings:
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(intent);
                         break;

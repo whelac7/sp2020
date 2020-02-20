@@ -1,5 +1,6 @@
 package org.frc1732scoutingapp.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabItem;
@@ -23,14 +25,14 @@ public class SaveDataDialog extends DialogFragment implements DismissDialogCallb
     private SubmitToDBCallback DBListener;
     private boolean isMaster;
 
-    public SaveDataDialog(SubmitToDBCallback DBListener, boolean isMaster) {
+    public SaveDataDialog(SubmitToDBCallback DBListener) {
         this.DBListener = DBListener;
-        this.isMaster = isMaster;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_save_data_dialog_menu, container, false);
+        isMaster = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("toggle_master", false);
         if (!isMaster) {
             TabLayout tabLayout = view.findViewById(R.id.tabLayout);
             ViewPager viewPager = view.findViewById(R.id.viewpager);

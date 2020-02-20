@@ -22,6 +22,5 @@
     <activity
         android:id="@+id/settingsActivity"
         android:name="org.frc1732scoutingapp.activities.SettingsActivity"
-        android:label="activity_settings"
-        tools:layout="@layout/activity_settings" />
+        android:label="activity_settings"/>
 </navigation>

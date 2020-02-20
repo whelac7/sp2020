@@ -101,8 +101,6 @@ public class SyncSheetsFragment extends Fragment {
 
         SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
         sheetService.pushMatchInfo(teamList);
-
-        System.out.println("ParseTeamToJSON: " + SQLiteDBHelper.parseTeamInCompToJSON(database, "0", "1239"));
     }
 
     private Team parseTeam(String team) {

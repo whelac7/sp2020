@@ -3,6 +3,7 @@ package org.frc1732scoutingapp.models;
 //TODO: Competition Code
 public class IndividualMatchResult {
     private Integer matchNumber;
+    private String alliance;
     private Integer initLine;
     private Integer autoLower;
     private Integer autoOuter;
@@ -17,8 +18,9 @@ public class IndividualMatchResult {
     private Integer level;
     private Integer disableTime;
 
-    public IndividualMatchResult(Integer matchNumber, Integer initLine, Integer autoLower, Integer autoOuter, Integer autoInner, Integer lower, Integer outer, Integer inner, Integer rotation, Integer position, Integer park, Integer hang, Integer level, Integer disableTime) {
+    public IndividualMatchResult(Integer matchNumber, String alliance, Integer initLine, Integer autoLower, Integer autoOuter, Integer autoInner, Integer lower, Integer outer, Integer inner, Integer rotation, Integer position, Integer park, Integer hang, Integer level, Integer disableTime) {
         this.matchNumber = matchNumber;
+        this.alliance = alliance;
         this.initLine = initLine;
         this.autoLower = autoLower;
         this.autoOuter = autoOuter;
@@ -36,6 +38,10 @@ public class IndividualMatchResult {
 
     public Integer getMatchNumber() {
         return matchNumber;
+    }
+
+    public String getAlliance() {
+        return alliance;
     }
 
     public Integer getInitLine() {
