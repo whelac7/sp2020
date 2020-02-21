@@ -20,12 +20,12 @@ import org.frc1732scoutingapp.adapters.SaveDialogPagerAdapter;
 import org.frc1732scoutingapp.responses.DismissDialogCallback;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
 
-public class SaveDataDialog extends DialogFragment implements DismissDialogCallback {
+public class SaveDataDialog extends DialogFragment {
     private byte[] codeInBytes;
     private SubmitToDBCallback DBListener;
     private boolean isMaster;
 
-    public SaveDataDialog(SubmitToDBCallback DBListener) {
+    public void setDBListener(SubmitToDBCallback DBListener) {
         this.DBListener = DBListener;
     }
 
@@ -46,14 +46,12 @@ public class SaveDataDialog extends DialogFragment implements DismissDialogCallb
         }
         codeInBytes = getArguments().getByteArray("codeInBytes");
         ViewPager viewPager = view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new SaveDialogPagerAdapter(getChildFragmentManager(), codeInBytes, DBListener, this));
+        SaveDialogPagerAdapter adapter = new SaveDialogPagerAdapter(getChildFragmentManager());
+        adapter.setDBListener(DBListener);
+        adapter.setCodeInBytes(codeInBytes);
+        viewPager.setAdapter(adapter);
         TabLayout dialogTabLayout = view.findViewById(R.id.tabLayout);
         dialogTabLayout.setupWithViewPager(viewPager);
         return view;
-    }
-
-    @Override
-    public void dismissDialog() {
-        dismiss();
     }
 }

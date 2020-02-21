@@ -6,20 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 
 import org.frc1732scoutingapp.R;
-import org.frc1732scoutingapp.responses.DismissDialogCallback;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
 
-public class SaveDialogDatabaseFragment extends Fragment {
+public class SaveDialogDatabaseFragment extends DialogFragment {
     private Button pushToDBButton;
-    private SubmitToDBCallback DBCallback;
-    private DismissDialogCallback dismissDialogCallback;
+    private SubmitToDBCallback DBListener;
 
-    public SaveDialogDatabaseFragment(SubmitToDBCallback DBListener, DismissDialogCallback dismissDialogCallback) {
-        this.DBCallback = DBListener;
-        this.dismissDialogCallback = dismissDialogCallback;
+    public void setDBListener(SubmitToDBCallback DBListener) {
+        this.DBListener = DBListener;
     }
 
     @Override
@@ -28,11 +25,12 @@ public class SaveDialogDatabaseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_save_dialog_database, container, false);
         pushToDBButton = view.findViewById(R.id.pushToDBButton);
 
+        System.out.println("DBListener: " + DBListener);
+
         pushToDBButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBCallback.saveToDB();
-                dismissDialogCallback.dismissDialog();
+                DBListener.saveToDB((DialogFragment)SaveDialogDatabaseFragment.this.getParentFragment());
             }
         });
 
