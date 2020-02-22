@@ -32,14 +32,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
 import android.view.Menu;
-import android.widget.Toast;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
-import org.frc1732scoutingapp.fragments.SettingsFragment;
 import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.fragments.HomeFragment;
-import org.frc1732scoutingapp.models.Alliance;
 import org.frc1732scoutingapp.models.RequestCodes;
 
 import java.util.ArrayList;
@@ -69,25 +66,25 @@ public class MainActivity extends AppCompatActivity {
         NavInflater inflater = controller.getNavInflater();
         NavGraph graph = inflater.inflate(R.navigation.nav_graph);
 
-//        if (!isMaster) {
-//            Menu nav_menu = navigationView.getMenu();
-//            nav_menu.findItem(R.id.nav_sync).setVisible(false);
-//            graph.setStartDestination(R.id.SQLLiteDatabaseFragment);
-//            controller.setGraph(graph);
-//        }
+        if (!isMaster) {
+            Menu nav_menu = navigationView.getMenu();
+            nav_menu.findItem(R.id.nav_home).setVisible(false);
+            nav_menu.findItem(R.id.nav_sync).setVisible(false);
+            getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
+        }
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment(), "HomeFragment").commit();
                         break;
                     case R.id.nav_log_match:
                         getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
                         break;
                     case R.id.nav_sync:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment(), "SyncSheetsFragment").commit();
                         break;
                     case R.id.nav_settings:
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -144,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.homeFragment);
-        if (fragment instanceof HomeFragment) {
+        if (fragment instanceof HomeFragment || !isMaster) {
             super.onBackPressed();
         }
         else {

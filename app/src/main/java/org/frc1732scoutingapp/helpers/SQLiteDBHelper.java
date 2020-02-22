@@ -7,12 +7,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import org.frc1732scoutingapp.models.Alliance;
-import org.frc1732scoutingapp.models.IndividualMatchResult;
 import org.frc1732scoutingapp.models.MatchResult;
-import org.frc1732scoutingapp.models.Team;
 
 import java.util.ArrayList;
 import java.util.List;
