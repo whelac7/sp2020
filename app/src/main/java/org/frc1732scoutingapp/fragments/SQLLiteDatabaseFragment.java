@@ -1,21 +1,17 @@
 package org.frc1732scoutingapp.fragments;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -36,6 +32,7 @@ import org.frc1732scoutingapp.activities.QRScannerActivity;
 import org.frc1732scoutingapp.databinding.FragmentSqliteDatabaseBinding;
 import org.frc1732scoutingapp.helpers.QRCodeHelper;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
+import org.frc1732scoutingapp.helpers.ScoutingUtils;
 import org.frc1732scoutingapp.models.Alliance;
 import org.frc1732scoutingapp.models.RequestCodes;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
@@ -53,7 +50,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     private String TAG = "SqliteDatabaseActivity";
     private SQLiteDatabase database;
     private boolean isMaster;
-    private String alliance;
+    private String defaultAlliance;
 
     public int outerPortAuto = 0;
     public int outerPortTeleop = 0;
@@ -69,16 +66,6 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
 
     public int placeholder;
 
-    public static final Parcelable.Creator<SQLLiteDatabaseFragment> CREATOR = new Parcelable.Creator<SQLLiteDatabaseFragment>() {
-        public SQLLiteDatabaseFragment createFromParcel(Parcel in) {
-            return new SQLLiteDatabaseFragment();
-        }
-
-        public SQLLiteDatabaseFragment[] newArray(int size) {
-            return new SQLLiteDatabaseFragment[size];
-        }
-    };
-
     public boolean toggleTeleopAuto = true;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,10 +75,17 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         isMaster = sharedPref.getBoolean("toggle_master", false);
-        alliance = sharedPref.getString("alliance", null);
+        defaultAlliance = sharedPref.getString("defaultAlliance", "BLUE");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Alliance, android.R.layout.simple_spinner_dropdown_item);
         fragmentBinding.allianceSpinner.setAdapter(adapter);
+
+        if (defaultAlliance.toUpperCase().equals("BLUE")) {
+            fragmentBinding.allianceSpinner.setSelection(Alliance.BLUE.getValue());
+        }
+        else {
+            fragmentBinding.allianceSpinner.setSelection(Alliance.RED.getValue());
+        }
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_fragment_log_match);
 
@@ -120,6 +114,10 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             outerPortTeleop = savedInstanceState.getInt("outerPortTeleop");
             lowerPortAuto = savedInstanceState.getInt("lowerPortAuto");
             lowerPortTeleop = savedInstanceState.getInt("lowerPortTeleop");
+            fragmentBinding.outerPortOutputAuto.setText("" + outerPortAuto);
+            fragmentBinding.outerPortOutputTeleop.setText("" + outerPortTeleop);
+            fragmentBinding.lowerPortOutputAuto.setText("" + lowerPortAuto);
+            fragmentBinding.lowerPortOutputTeleop.setText("" + lowerPortTeleop);
 
             SaveDataDialog saveDataDialog = (SaveDataDialog)getChildFragmentManager().findFragmentByTag("SaveDataDialog");
             if (saveDataDialog != null) {
@@ -127,11 +125,6 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             }
         }
 
-        fragmentBinding.lowerPortOutputAuto.setText(Integer.toString(lowerPortAuto));
-        fragmentBinding.outerPortOutputAuto.setText(Integer.toString(outerPortAuto));
-        fragmentBinding.lowerPortOutputTeleop.setText(Integer.toString(lowerPortTeleop));
-        fragmentBinding.outerPortOutputTeleop.setText(Integer.toString(outerPortTeleop));
-;
         initLineCrossed = toggle(initLine);
         rotOut = toggle(rotationControl);
         posOut = toggle(positionControl);
@@ -140,6 +133,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         levelOut = toggle(level);
 
         toggleAuto.setOnClickListener(v -> {
+            Toast.makeText(getActivity(), "Inputting for auto!", Toast.LENGTH_LONG).show();
             outerPortUp.setOnClickListener(v1 -> {
                 outerPortAuto++;
                 outerPortOutputAuto.setText("" + outerPortAuto);
@@ -160,6 +154,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             });
         });
         toggleTeleop.setOnClickListener(v -> {
+            Toast.makeText(getActivity(), "Inputting for teleop!", Toast.LENGTH_LONG).show();
             outerPortUp.setOnClickListener(v1 -> {
                 outerPortTeleop++;
                 outerPortOutputTeleop.setText("" + outerPortTeleop);
@@ -242,13 +237,19 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
                 properties.put(nameToValue[0], nameToValue[1]);
                 System.out.println(propertyString);
             }
-            populateFields(properties.get("teamNumber"), properties.get("matchNumber"), properties.get("initLine"), properties.get("autoLower"), properties.get("autoOuter"), properties.get("autoInner"), properties.get("teleopLower"), properties.get("teleopOuter"), properties.get("rotation"), properties.get("position"), properties.get("parked"), properties.get("hung"), properties.get("leveled"), properties.get("disableTime"));
+            populateFields(properties.get("teamNumber"), properties.get("matchNumber"), properties.get("alliance"), properties.get("initLine"), properties.get("autoLower"), properties.get("autoOuter"), properties.get("autoInner"), properties.get("teleopLower"), properties.get("teleopOuter"), properties.get("rotation"), properties.get("position"), properties.get("parked"), properties.get("hung"), properties.get("leveled"), properties.get("disableTime"));
         }
     }
 
-    private void populateFields(String teamNumber, String matchNumber, String initLine, String autoLower, String autoOuter, String autoInner, String teleopLower, String teleopOuter, String rotationOut, String positionOut, String parked, String hanging, String leveled, String disableTime) {
+    private void populateFields(String teamNumber, String matchNumber, String alliance, String initLine, String autoLower, String autoOuter, String autoInner, String teleopLower, String teleopOuter, String rotationOut, String positionOut, String parked, String hanging, String leveled, String disableTime) {
         fragmentBinding.teamNumberEditText.setText(teamNumber);
         fragmentBinding.matchEditText.setText(matchNumber);
+        if (alliance.toUpperCase().equals("BLUE")) {
+            fragmentBinding.allianceSpinner.setSelection(Alliance.BLUE.getValue());
+        }
+        else {
+            fragmentBinding.allianceSpinner.setSelection(Alliance.RED.getValue());
+        }
         fragmentBinding.initLine.setChecked(stringToBool(initLine));
         fragmentBinding.lowerPortOutputAuto.setText(autoLower);
         fragmentBinding.outerPortOutputAuto.setText(autoOuter);
@@ -276,9 +277,10 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     private void startSaveDialog() {
         try {
             processInputs();
-            Bitmap code = QRCodeHelper.createQRCode(String.format("app=1732ScoutingApp,teamNumber=%s,matchNumber=%s,initLine=%s,autoLower=%s,autoOuter=%s,autoInner=%s,teleopLower=%s,teleopOuter=%s,teleopInner=%s,rotation=%s,position=%s,parked=%s,hung=%s,leveled=%s,disableTime=%s,notes=%s",
+            Bitmap code = QRCodeHelper.createQRCode(String.format("app=1732ScoutingApp,teamNumber=%s,matchNumber=%s,alliance=%s,initLine=%s,autoLower=%s,autoOuter=%s,autoInner=%s,teleopLower=%s,teleopOuter=%s,teleopInner=%s,rotation=%s,position=%s,parked=%s,hung=%s,leveled=%s,disableTime=%s,notes=%s",
                     fragmentBinding.teamNumberEditText.getText().toString(),
                     fragmentBinding.matchEditText.getText().toString(),
+                    fragmentBinding.allianceSpinner.getSelectedItem().toString(),
                     fragmentBinding.initLine.isChecked(),
                     lowerPortAuto,
                     outerPortAuto,
@@ -345,20 +347,21 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
 
         ContentValues values = new ContentValues();
         values.put(SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID, 0); // Have to figure out how to get the COMPETITION_ID
+        values.put(SQLiteDBHelper.TEAM_COLUMN_NUMBER, fragmentBinding.teamNumberEditText.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, fragmentBinding.matchEditText.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_ALLIANCE, alliance);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, initLineCrossed);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER, lowerPortAuto);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER, outerPortAuto);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_ALLIANCE, fragmentBinding.allianceSpinner.getSelectedItem().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, ScoutingUtils.boolToInt(fragmentBinding.initLine.isChecked()));
+        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER, fragmentBinding.lowerPortOutputAuto.getText().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER, fragmentBinding.outerPortOutputAuto.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER, 0);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_LOWER, lowerPortTeleop);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_OUTER, outerPortTeleop);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_LOWER, fragmentBinding.lowerPortOutputTeleop.getText().toString());
+        values.put(SQLiteDBHelper.TEAM_COLUMN_OUTER, fragmentBinding.outerPortOutputTeleop.getText().toString());
         values.put(SQLiteDBHelper.TEAM_COLUMN_INNER, 0);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_ROTATION, rotOut);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_POSITION, posOut);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_PARK, parkOut);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_HANG, hangOut);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_LEVEL, levelOut);
+        values.put(SQLiteDBHelper.TEAM_COLUMN_ROTATION, ScoutingUtils.boolToInt(fragmentBinding.rotationControl.isChecked()));
+        values.put(SQLiteDBHelper.TEAM_COLUMN_POSITION, ScoutingUtils.boolToInt(fragmentBinding.positionControl.isChecked()));
+        values.put(SQLiteDBHelper.TEAM_COLUMN_PARK, ScoutingUtils.boolToInt(fragmentBinding.park.isChecked()));
+        values.put(SQLiteDBHelper.TEAM_COLUMN_HANG, ScoutingUtils.boolToInt(fragmentBinding.hang.isChecked()));
+        values.put(SQLiteDBHelper.TEAM_COLUMN_LEVEL, ScoutingUtils.boolToInt(fragmentBinding.level.isChecked()));
         values.put(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME, fragmentBinding.disTime.getText().toString());
         return values;
     }

@@ -3,6 +3,7 @@ package org.frc1732scoutingapp.services;
 import android.accounts.Account;
 import android.content.Context;
 
+import org.frc1732scoutingapp.models.MatchResult;
 import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.tasks.AsyncConnectToSheetsTask;
 import org.frc1732scoutingapp.tasks.AsyncCreateSheetTask;
@@ -10,6 +11,7 @@ import org.frc1732scoutingapp.tasks.AsyncGetInformationTask;
 import org.frc1732scoutingapp.tasks.AsyncGetMatchInfoTask;
 import org.frc1732scoutingapp.tasks.AsyncPushInformationTask;
 import org.frc1732scoutingapp.tasks.AsyncPushMatchInfoTask;
+import org.frc1732scoutingapp.tasks.AsyncPushTeamInfoTask;
 
 import com.google.api.services.sheets.v4.Sheets;
 
@@ -51,8 +53,8 @@ public class SheetService {
         new AsyncPushInformationTask(this).execute();
     }
 
-    public void pushMatchInfo(List<Team> teams) {
-        new AsyncPushMatchInfoTask(this, teams).execute();
+    public void pushMatchInfo(List<MatchResult> matchResults) {
+        new AsyncPushMatchInfoTask(this, matchResults).execute();
     }
 
     public void createSheet(String name) {

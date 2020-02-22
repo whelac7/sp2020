@@ -5,8 +5,9 @@
         app:key="toggle_master"
         app:title="Toggle Master Mode"/>
     <ListPreference
-        app:key="alliance"
-        app:title="Alliance"
+        app:key="defaultAlliance"
+        app:title="Default Alliance"
         app:entries="@array/Alliance"
-        app:entryValues="@array/Alliance"></ListPreference>
+        app:entryValues="@array/Alliance">
+    </ListPreference>
 </PreferenceScreen>

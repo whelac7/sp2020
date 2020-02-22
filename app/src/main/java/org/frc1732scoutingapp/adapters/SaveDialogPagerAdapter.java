@@ -59,6 +59,7 @@ public class SaveDialogPagerAdapter extends FragmentPagerAdapter {
                 break;
             case 2:
                 fragment = new SaveDialogDatabaseFragment();
+                System.out.println("Adapter DB: " + DBListener);
                 ((SaveDialogDatabaseFragment)fragment).setDBListener(DBListener);
                 break;
         }

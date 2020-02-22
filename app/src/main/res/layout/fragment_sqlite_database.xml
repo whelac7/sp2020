@@ -78,7 +78,7 @@
                 android:id="@+id/alliance_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/allianceSpinnerLabel"
+                android:layout_alignTop="@id/allianceSpinnerLabel"
                 android:layout_toRightOf="@id/allianceSpinnerLabel">
             </Spinner>
 
@@ -302,7 +302,8 @@
                 android:layout_below="@+id/autoLabel"
                 android:layout_marginLeft="42dp"
                 android:layout_marginTop="3dp"
-                android:layout_toRightOf="@+id/outerPortOutputText" />
+                android:layout_toRightOf="@+id/outerPortOutputText"
+                android:text="0"/>
 
             <TextView
                 android:id="@+id/outerPortOutputTeleop"
@@ -311,7 +312,8 @@
                 android:layout_below="@+id/teleopLabel"
                 android:layout_marginLeft="100dp"
                 android:layout_marginTop="1dp"
-                android:layout_toRightOf="@+id/outerPortOutputAuto" />
+                android:layout_toRightOf="@+id/outerPortOutputAuto"
+                android:text="0"/>
 
             <TextView
                 android:id="@+id/lowerPortOutputText"
@@ -331,7 +333,8 @@
                 android:layout_below="@+id/outerPortOutputAuto"
                 android:layout_marginLeft="42dp"
                 android:layout_marginTop="25dp"
-                android:layout_toRightOf="@+id/outerPortOutputText" />
+                android:layout_toRightOf="@+id/outerPortOutputText"
+                android:text="0"/>
 
             <TextView
                 android:id="@+id/lowerPortOutputTeleop"
@@ -340,7 +343,8 @@
                 android:layout_below="@+id/outerPortOutputTeleop"
                 android:layout_marginLeft="100dp"
                 android:layout_marginTop="25dp"
-                android:layout_toRightOf="@+id/outerPortOutputAuto" />
+                android:layout_toRightOf="@+id/outerPortOutputAuto"
+                android:text="0"/>
 
             <include
                 layout="@layout/content_sqlite_database"

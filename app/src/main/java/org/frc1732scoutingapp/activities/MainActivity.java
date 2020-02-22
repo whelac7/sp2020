@@ -81,11 +81,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        System.out.println("Doing stuff: " + graph.getStartDestination());
                         getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment()).commit();
                         break;
                     case R.id.nav_log_match:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
                         break;
                     case R.id.nav_sync:
                         getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment()).commit();

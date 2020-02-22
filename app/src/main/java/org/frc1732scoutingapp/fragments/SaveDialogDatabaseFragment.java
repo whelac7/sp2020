@@ -25,6 +25,13 @@ public class SaveDialogDatabaseFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_save_dialog_database, container, false);
         pushToDBButton = view.findViewById(R.id.pushToDBButton);
 
+        if (savedInstanceState != null) {
+            SaveDataDialog sdd = (SaveDataDialog)getParentFragment();
+            if (sdd != null) {
+                setDBListener(sdd.getDBListener());
+            }
+        }
+
         System.out.println("DBListener: " + DBListener);
 
         pushToDBButton.setOnClickListener(new View.OnClickListener() {

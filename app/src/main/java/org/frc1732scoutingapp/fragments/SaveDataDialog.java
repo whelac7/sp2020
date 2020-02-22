@@ -1,23 +1,19 @@
 package org.frc1732scoutingapp.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TabHost;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.adapters.SaveDialogPagerAdapter;
-import org.frc1732scoutingapp.responses.DismissDialogCallback;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
 
 public class SaveDataDialog extends DialogFragment {
@@ -27,6 +23,10 @@ public class SaveDataDialog extends DialogFragment {
 
     public void setDBListener(SubmitToDBCallback DBListener) {
         this.DBListener = DBListener;
+    }
+
+    protected SubmitToDBCallback getDBListener() {
+        return DBListener;
     }
 
     @Override
@@ -47,6 +47,7 @@ public class SaveDataDialog extends DialogFragment {
         codeInBytes = getArguments().getByteArray("codeInBytes");
         ViewPager viewPager = view.findViewById(R.id.viewpager);
         SaveDialogPagerAdapter adapter = new SaveDialogPagerAdapter(getChildFragmentManager());
+        System.out.println("SDD DB: " + DBListener);
         adapter.setDBListener(DBListener);
         adapter.setCodeInBytes(codeInBytes);
         viewPager.setAdapter(adapter);
