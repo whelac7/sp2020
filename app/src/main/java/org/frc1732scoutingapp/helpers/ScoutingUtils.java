@@ -19,6 +19,15 @@ public class ScoutingUtils {
         }
     }
 
+    public static boolean stringToBool(String str) {
+        if (str.toUpperCase().trim().equals("TRUE")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     public static Integer tryParseInt(String value) {
         try {
             return Integer.parseInt(value);

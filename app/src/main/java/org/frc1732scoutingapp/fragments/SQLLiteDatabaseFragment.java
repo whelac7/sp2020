@@ -33,6 +33,7 @@ import org.frc1732scoutingapp.databinding.FragmentSqliteDatabaseBinding;
 import org.frc1732scoutingapp.helpers.QRCodeHelper;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
 import org.frc1732scoutingapp.helpers.ScoutingUtils;
+import org.frc1732scoutingapp.helpers.SingleToast;
 import org.frc1732scoutingapp.models.Alliance;
 import org.frc1732scoutingapp.models.RequestCodes;
 import org.frc1732scoutingapp.responses.SubmitToDBCallback;
@@ -133,7 +134,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         levelOut = toggle(level);
 
         toggleAuto.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Inputting for auto!", Toast.LENGTH_LONG).show();
+            SingleToast.show(getActivity(), "Inputting for auto!", Toast.LENGTH_SHORT);
             outerPortUp.setOnClickListener(v1 -> {
                 outerPortAuto++;
                 outerPortOutputAuto.setText("" + outerPortAuto);
@@ -154,7 +155,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             });
         });
         toggleTeleop.setOnClickListener(v -> {
-            Toast.makeText(getActivity(), "Inputting for teleop!", Toast.LENGTH_LONG).show();
+            SingleToast.show(getActivity(), "Inputting for teleop!", Toast.LENGTH_SHORT);
             outerPortUp.setOnClickListener(v1 -> {
                 outerPortTeleop++;
                 outerPortOutputTeleop.setText("" + outerPortTeleop);
@@ -250,28 +251,19 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         else {
             fragmentBinding.allianceSpinner.setSelection(Alliance.RED.getValue());
         }
-        fragmentBinding.initLine.setChecked(stringToBool(initLine));
+        fragmentBinding.initLine.setChecked(ScoutingUtils.stringToBool(initLine));
         fragmentBinding.lowerPortOutputAuto.setText(autoLower);
         fragmentBinding.outerPortOutputAuto.setText(autoOuter);
         Integer.toString(0); // autoInner?
         fragmentBinding.lowerPortOutputTeleop.setText(teleopLower);
         fragmentBinding.outerPortOutputTeleop.setText(teleopOuter);
         Integer.toString(0); // teleopInner?
-        fragmentBinding.rotationControl.setChecked(stringToBool(rotationOut));
-        fragmentBinding.positionControl.setChecked(stringToBool(positionOut));
-        fragmentBinding.park.setChecked(stringToBool(parked));
-        fragmentBinding.hang.setChecked(stringToBool(hanging));
-        fragmentBinding.level.setChecked(stringToBool(leveled));
+        fragmentBinding.rotationControl.setChecked(ScoutingUtils.stringToBool(rotationOut));
+        fragmentBinding.positionControl.setChecked(ScoutingUtils.stringToBool(positionOut));
+        fragmentBinding.park.setChecked(ScoutingUtils.stringToBool(parked));
+        fragmentBinding.hang.setChecked(ScoutingUtils.stringToBool(hanging));
+        fragmentBinding.level.setChecked(ScoutingUtils.stringToBool(leveled));
         fragmentBinding.disTime.setText(disableTime);
-    }
-
-    private boolean stringToBool(String str) {
-        if (str.toUpperCase().trim().equals("TRUE")) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     private void startSaveDialog() {
@@ -318,15 +310,15 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             System.out.println(ex);
         } catch (IllegalArgumentException ex) {
             if (ex.getMessage().startsWith("no team specified")) {
-                Toast.makeText(getActivity(), "You must specify a team number.", Toast.LENGTH_LONG).show();
+                SingleToast.show(getActivity(), "You must specify a team number.", Toast.LENGTH_LONG);
             } else if (ex.getMessage().startsWith("match exists")) {
-                Toast.makeText(getActivity(), "Match " + fragmentBinding.matchEditText.getText().toString() + " already exists.", Toast.LENGTH_LONG).show();
+                SingleToast.show(getActivity(), "Match " + fragmentBinding.matchEditText.getText().toString() + " already exists.", Toast.LENGTH_LONG);
             } else if (ex.getMessage().startsWith("no match specified")) {
-                Toast.makeText(getActivity(), "You must specify a match number.", Toast.LENGTH_LONG).show();
+                SingleToast.show(getActivity(), "You must specify a match number.", Toast.LENGTH_LONG);
             } else if (ex.getMessage().startsWith("empty parameter")) {
                 String msg = ex.getMessage();
                 int reasonIndex = msg.indexOf(":") + 2;
-                Toast.makeText(getActivity(), "You left a field empty: " + msg.substring(reasonIndex, msg.length()), Toast.LENGTH_LONG).show();
+                SingleToast.show(getActivity(), "You left a field empty: " + msg.substring(reasonIndex, msg.length()), Toast.LENGTH_LONG);
             }
             else {
                 throw ex;
@@ -368,15 +360,16 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
 
     public void saveToDB(DialogFragment dialog) {
         SQLiteDBHelper.createTableIfNotExists(database, "frc" + fragmentBinding.teamNumberEditText.getText().toString());
-        long newRowId = database.insert("frc" + fragmentBinding.teamNumberEditText.getText().toString(), null, processInputs());
-        Toast.makeText(getActivity(), "The new Row Id is " + newRowId, Toast.LENGTH_LONG).show();
+        ContentValues values = processInputs();
+        long newRowId = database.insert("frc" + fragmentBinding.teamNumberEditText.getText().toString(), null, values);
+        SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.TEAM_COLUMN_NUMBER), Toast.LENGTH_LONG);
         dialog.dismiss();
     }
 
     private void displayQueryResult(Cursor cursor) {
         if (cursor != null) {
             if (cursor.getCount() == 0) {
-                Toast.makeText(getActivity(), "No results found.", Toast.LENGTH_LONG).show();
+                SingleToast.show(getActivity(), "No results found.", Toast.LENGTH_LONG);
                 return;
             }
             cursor.moveToFirst();
@@ -385,7 +378,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
                 result += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE)) + "\n";
             }
             cursor.close();
-            Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+            SingleToast.show(getActivity(), result, Toast.LENGTH_LONG);
         }
     }
 

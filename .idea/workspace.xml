@@ -17,9 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0d5903f4-42aa-4711-80d1-981181258ae9" name="Default Changelist" comment="Merge branch 'master' into 'toggleMaster'">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/ScoutingUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/models/MatchResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/tasks/AsyncPushTeamInfoTask.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SingleToast.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -31,18 +29,9 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/adapters/SaveDialogPagerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/adapters/SaveDialogPagerAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDataDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDataDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDialogDatabaseFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDialogDatabaseFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SyncSheetsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SyncSheetsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/services/SheetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/services/SheetService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/tasks/AsyncPushMatchInfoTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/tasks/AsyncPushMatchInfoTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/ScoutingUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/ScoutingUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/preferences.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/xml/preferences.xml" afterDir="false" />
     </list>
     <ignored path=".gradle/" />
     <ignored path=".gradle/5.4.1/executionHistory/executionHistory.bin" />
@@ -113,10 +102,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="609">
-              <caret line="82" column="39" selection-start-line="82" selection-start-column="39" selection-end-line="82" selection-end-column="39" />
+            <state relative-caret-position="290">
+              <caret line="121" column="45" selection-start-line="121" selection-start-column="45" selection-end-line="121" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#4351#4395#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -125,8 +115,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1203">
-              <caret line="311" selection-start-line="311" selection-end-line="311" />
+            <state relative-caret-position="-145">
+              <caret line="49" column="58" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -135,11 +125,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml">
-          <provider editor-type-id="android-designer2" />
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="744">
-              <caret line="80" column="66" selection-start-line="80" selection-start-column="66" selection-end-line="80" selection-end-column="66" />
+            <state relative-caret-position="6873">
+              <caret line="237" column="57" lean-forward="true" selection-start-line="237" selection-start-column="57" selection-end-line="237" selection-end-column="57" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -147,33 +139,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/ScoutingUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="60" column="60" selection-start-line="60" selection-start-column="60" selection-end-line="60" selection-end-column="60" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#12675#12688#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SyncSheetsFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="98" column="11" selection-start-line="98" selection-start-column="11" selection-end-line="98" selection-end-column="11" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="609">
+              <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -195,13 +162,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>init line</find>
-      <find>autoToggle</find>
-      <find>savetoDb</find>
-      <find>QR_SCAN</find>
-      <find>populateFields</find>
-      <find>lowerPortDown</find>
-      <find>output</find>
       <find>match exists</find>
       <find>disTime</find>
       <find>outer</find>
@@ -225,6 +185,13 @@
       <find>boolToInt</find>
       <find>intToBool</find>
       <find>parseTeam</find>
+      <find>Tried</find>
+      <find>Tried to get</find>
+      <find>ran</find>
+      <find>input</find>
+      <find>new row id</find>
+      <find>Toast.make</find>
+      <find>.show();</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -238,7 +205,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/SQLiteDatabaseActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/SQLLiteDatabaseFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDialogQRFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/responses/DialogDismissCallback.java" />
@@ -266,7 +232,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_save_data_dialog_menu.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDialogBluetoothFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/activity_main_drawer.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/models/Alliance.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/models/IndividualMatchResult.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/arrays.xml" />
@@ -275,7 +240,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/adapters/SaveDialogPagerAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDialogDatabaseFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/xml/preferences.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDataDialog.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/QRCodeHelper.java" />
@@ -284,11 +248,14 @@
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/tasks/AsyncPushMatchInfoTask.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/services/SheetService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/Utils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/ScoutingUtils.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SyncSheetsFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/ScoutingUtils.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SingleToast.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java" />
       </list>
     </option>
   </component>
@@ -338,27 +305,6 @@
             <path>
               <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="frc1732scoutingapp" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="frc1732scoutingapp" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="services" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="frc1732scoutingapp" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="tasks" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
             </path>
             <path>
@@ -366,6 +312,12 @@
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
               <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
+            </path>
+            <path>
+              <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="navigation" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
             <path>
               <item name="FRC1732ScoutingApp" type="1abcf292:AndroidViewProjectNode" />
@@ -607,7 +559,21 @@
       <option name="project" value="LOCAL" />
       <updated>1582303363195</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Join all team tables into one table and sync to sheets">
+      <created>1582399440169</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1582399440170</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Hide 'Home' and 'Sync to Sheets' tabs from non-master users">
+      <created>1582400840204</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1582400840204</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView">
@@ -621,10 +587,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="96" y="42" width="3744" height="2118" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.7431611" visible="true" weight="0.3414701" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.7431611" visible="true" weight="0.3414701" />
       <window_info id="Structure" order="2" sideWeight="0.25683892" side_tool="true" weight="0.3414701" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" />
@@ -632,14 +597,14 @@
       <window_info id="Designer" order="6" />
       <window_info id="Resources Explorer" order="7" />
       <window_info id="Capture Tool" order="8" />
-      <window_info anchor="bottom" id="Run" order="0" sideWeight="0.5115195" weight="0.32862574" />
-      <window_info anchor="bottom" id="Logcat" order="1" sideWeight="0.5183763" weight="0.326453" />
+      <window_info anchor="bottom" id="Run" order="0" sideWeight="0.51097095" weight="0.32862574" />
+      <window_info anchor="bottom" id="Logcat" order="1" sideWeight="0.51782775" visible="true" weight="0.326453" />
       <window_info anchor="bottom" id="TODO" order="2" sideWeight="0.4950631" weight="0.32862574" />
       <window_info anchor="bottom" id="Find" order="3" sideWeight="0.49946696" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="4" sideWeight="0.4950631" weight="0.32916892" />
-      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.42896324" side_tool="true" visible="true" weight="0.2851711" />
+      <window_info anchor="bottom" id="Event Log" order="5" sideWeight="0.48217225" side_tool="true" visible="true" weight="0.326453" />
       <window_info anchor="bottom" id="Version Control" order="6" sideWeight="0.49573562" weight="0.32936078" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.57103676" visible="true" weight="0.2851711" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.57103676" weight="0.2851711" />
       <window_info anchor="bottom" id="Debug" order="8" sideWeight="0.49945146" weight="0.32862574" />
       <window_info anchor="bottom" id="Android Profiler" order="9" />
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49946696" weight="0.32936078" />
@@ -647,7 +612,7 @@
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Gradle" order="2" weight="0.32995063" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info active="true" anchor="right" id="Preview" order="4" visible="true" weight="0.22078991" />
+      <window_info anchor="right" id="Preview" order="4" weight="0.22078991" />
       <window_info anchor="right" id="Palette&#9;" order="5" />
     </layout>
   </component>
@@ -662,33 +627,11 @@
     <MESSAGE value="Application prompts user to accept missing permissions" />
     <MESSAGE value="Add toggle_master setting to hide some tabs and buttons" />
     <MESSAGE value="Merge branch 'master' into 'toggleMaster'" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'master' into 'toggleMaster'" />
+    <MESSAGE value="Join all team tables into one table and sync to sheets" />
+    <MESSAGE value="Hide 'Home' and 'Sync to Sheets' tabs from non-master users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Hide 'Home' and 'Sync to Sheets' tabs from non-master users" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDialogQRFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/SettingsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="25" column="29" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SaveDialogBluetoothFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="141" column="13" selection-start-line="141" selection-start-column="13" selection-end-line="141" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Android/Sdk/sources/android-29/android/content/Context.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -705,28 +648,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="18" column="33" lean-forward="true" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.navigation/navigation-common/2.1.0/effb6f26806b1ecc6af7cd8ebe6a30c592a0c356/navigation-common-2.1.0-sources.jar!/androidx/navigation/NavGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
-          <folding>
-            <element signature="e#9690#9691#0" expanded="true" />
-            <element signature="e#9725#9726#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/HomeFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1461#1489#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -775,27 +696,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml">
-      <provider editor-type-id="nav-designer" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
       <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="290">
           <caret line="10" column="36" selection-start-line="10" selection-start-column="36" selection-end-line="10" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
-      <provider editor-type-id="android-designer2" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="12" column="43" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="43" />
         </state>
       </provider>
     </entry>
@@ -1042,10 +947,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/HomeFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1203">
-          <caret line="311" selection-start-line="311" selection-end-line="311" />
+        <state relative-caret-position="597">
+          <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.navigation/navigation-common/2.1.0/effb6f26806b1ecc6af7cd8ebe6a30c592a0c356/navigation-common-2.1.0-sources.jar!/androidx/navigation/NavGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="274" column="22" selection-start-line="274" selection-start-column="22" selection-end-line="274" selection-end-column="22" />
+          <folding>
+            <element signature="e#9690#9691#0" expanded="true" />
+            <element signature="e#9725#9726#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="12" column="43" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_save_dialog_database.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml">
+      <provider selected="true" editor-type-id="nav-designer" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SyncSheetsFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="93" column="43" lean-forward="true" selection-start-line="93" selection-start-column="43" selection-end-line="93" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Android/Sdk/sources/android-29/android/widget/Toast.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-739">
+          <caret line="70" column="13" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SingleToast.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1054,38 +1017,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/ScoutingUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="60" column="60" selection-start-line="60" selection-start-column="60" selection-end-line="60" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#12675#12688#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="609">
+          <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/activities/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="82" column="39" selection-start-line="82" selection-start-column="39" selection-end-line="82" selection-end-column="39" />
+        <state relative-caret-position="290">
+          <caret line="121" column="45" selection-start-line="121" selection-start-column="45" selection-end-line="121" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SyncSheetsFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="98" column="11" selection-start-line="98" selection-start-column="11" selection-end-line="98" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4351#4395#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1093,8 +1036,28 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_sqlite_database.xml">
       <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="744">
-          <caret line="80" column="66" selection-start-line="80" selection-start-column="66" selection-end-line="80" selection-end-column="66" />
+        <state relative-caret-position="580">
+          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/fragments/SQLLiteDatabaseFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-145">
+          <caret line="49" column="58" selection-start-line="49" selection-start-column="58" selection-end-line="49" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/org/frc1732scoutingapp/helpers/SQLiteDBHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6873">
+          <caret line="237" column="57" lean-forward="true" selection-start-line="237" selection-start-column="57" selection-end-line="237" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
