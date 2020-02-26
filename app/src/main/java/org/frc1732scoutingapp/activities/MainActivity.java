@@ -1,10 +1,13 @@
 package org.frc1732scoutingapp.activities;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -13,7 +16,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.NavInflater;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -23,6 +29,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import android.view.Menu;
 
@@ -39,10 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
+    private boolean isMaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isMaster = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("toggle_master", false);
         verifyPermissions();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -52,25 +61,38 @@ public class MainActivity extends AppCompatActivity {
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController controller = navHostFragment.getNavController();
+        NavInflater inflater = controller.getNavInflater();
+        NavGraph graph = inflater.inflate(R.navigation.nav_graph);
+
+        if (!isMaster) {
+            Menu nav_menu = navigationView.getMenu();
+            nav_menu.findItem(R.id.nav_home).setVisible(false);
+            nav_menu.findItem(R.id.nav_sync).setVisible(false);
+            getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
+        }
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new HomeFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment(), "HomeFragment").commit();
                         break;
                     case R.id.nav_log_match:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SQLLiteDatabaseFragment()).commit();
-                        getSupportActionBar().setTitle("Log Match");
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
                         break;
                     case R.id.nav_sync:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.homeFragment, new SyncSheetsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment(), "SyncSheetsFragment").commit();
+                        break;
+                    case R.id.nav_settings:
+                        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(intent);
                         break;
                 }
 
                 drawer.closeDrawers();
-
                 return true;
             }
         });
@@ -119,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.homeFragment);
-        if (fragment instanceof HomeFragment) {
+        if (fragment instanceof HomeFragment || !isMaster) {
             super.onBackPressed();
         }
         else {

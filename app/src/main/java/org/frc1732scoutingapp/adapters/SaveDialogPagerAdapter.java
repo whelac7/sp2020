@@ -17,11 +17,17 @@ public class SaveDialogPagerAdapter extends FragmentPagerAdapter {
     private SubmitToDBCallback DBListener;
     private DismissDialogCallback dismissDialogCallback;
 
-    public SaveDialogPagerAdapter(FragmentManager fm, byte[] codeInBytes, SubmitToDBCallback DBListener, DismissDialogCallback dismissDialogCallback) {
+    public SaveDialogPagerAdapter(FragmentManager fm) {
         super(fm);
         this.codeInBytes = codeInBytes;
+    }
+
+    public void setDBListener(SubmitToDBCallback DBListener) {
         this.DBListener = DBListener;
-        this.dismissDialogCallback = dismissDialogCallback;
+    }
+
+    public void setCodeInBytes(byte[] codeInBytes) {
+        this.codeInBytes = codeInBytes;
     }
 
     @Override
@@ -52,7 +58,9 @@ public class SaveDialogPagerAdapter extends FragmentPagerAdapter {
                 fragment = new SaveDialogBluetoothFragment();
                 break;
             case 2:
-                fragment = new SaveDialogDatabaseFragment(DBListener, dismissDialogCallback);
+                fragment = new SaveDialogDatabaseFragment();
+                System.out.println("Adapter DB: " + DBListener);
+                ((SaveDialogDatabaseFragment)fragment).setDBListener(DBListener);
                 break;
         }
         return fragment;

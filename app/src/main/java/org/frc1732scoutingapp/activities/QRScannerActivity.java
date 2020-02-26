@@ -13,8 +13,8 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     private ZXingScannerView mScannerView;
 
     @Override
-    public void onCreate(Bundle state) {
-        super.onCreate(state);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mScannerView = new ZXingScannerView(this);
         setContentView(mScannerView);
     }

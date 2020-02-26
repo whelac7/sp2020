@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.Scope;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
+import org.frc1732scoutingapp.models.MatchResult;
 import org.frc1732scoutingapp.models.RequestCodes;
 import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.services.SheetService;
@@ -60,7 +61,7 @@ public class SyncSheetsFragment extends Fragment {
                     if (database == null) {
                         database = new SQLiteDBHelper(getContext()).getReadableDatabase();
                     }
-                    syncToSheets(teamNumberEditText.getText().toString());
+                    //syncToSheets(teamNumberEditText.getText().toString());
                 }
             });
 
@@ -84,52 +85,37 @@ public class SyncSheetsFragment extends Fragment {
 
     //TODO: Need to find a way to keep team number associated with IndividualMatchResult
     private void syncAllToSheets() {
-        Cursor teams = SQLiteDBHelper.getAllTeams(database);
-        List<Team> teamList = new ArrayList<Team>();
-        if (teams.moveToFirst()) {
-            do {
-                String teamString = teams.getString(0);
-                String target = "frc";
-                if (teamString.startsWith(target)) {
-                    String teamNumber = teamString.substring(3);
-                    System.out.println(teamNumber);
-                    teamList.add(parseTeam(teamNumber));
-                }
-            } while (teams.moveToNext());
-        }
-        teams.close();
-
-        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
-        sheetService.pushMatchInfo(teamList);
-
-        System.out.println("ParseTeamToJSON: " + SQLiteDBHelper.parseTeamInCompToJSON(database, "0", "1239"));
-    }
-
-    private Team parseTeam(String team) {
-        Team teamObj = SQLiteDBHelper.parseTeamMatches(database, team);
-
-        if (teamObj != null) {
-            return teamObj;
-        }
-        else {
-            Toast.makeText(getContext(), "No results found.", Toast.LENGTH_LONG).show();
-            return null;
-        }
-    }
-
-    private void syncToSheets(String teamNumber, List<Team> matchResults) {
+        List<MatchResult> matchResults = SQLiteDBHelper.getAllTeamResults(database);
         SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
         sheetService.pushMatchInfo(matchResults);
+
     }
 
-    //TODO: Find a smoother way to sync a single team without using placeholderList
-    private void syncToSheets(String teamNumber) {
-        Team teamResults = parseTeam(teamNumber);
-        List<Team> placeholderList = new ArrayList<Team>();
-        placeholderList.add(teamResults);
-        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
-        sheetService.pushMatchInfo(placeholderList);
-    }
+//    private Team parseTeam(String team) {
+//        Team teamObj = SQLiteDBHelper.parseTeamMatches(database, team);
+//
+//        if (teamObj != null) {
+//            return teamObj;
+//        }
+//        else {
+//            Toast.makeText(getContext(), "No results found.", Toast.LENGTH_LONG).show();
+//            return null;
+//        }
+//    }
+
+//    private void syncToSheets(String teamNumber, List<Team> matchResults) {
+//        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
+//        sheetService.pushMatchInfo(matchResults);
+//    }
+
+//    //TODO: Find a smoother way to sync a single team without using placeholderList
+//    private void syncToSheets(String teamNumber) {
+//        Team teamResults = parseTeam(teamNumber);
+//        List<Team> placeholderList = new ArrayList<Team>();
+//        placeholderList.add(teamResults);
+//        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
+//        sheetService.pushMatchInfo(placeholderList);
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -151,15 +137,6 @@ public class SyncSheetsFragment extends Fragment {
         mGoogleSignInClient = GoogleSignIn.getClient(getContext(), mGoogleSignInOptions);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RequestCodes.RC_SIGN_IN.getValue());
-    }
-
-    private Integer tryParseInt(String value) {
-        try {
-            return Integer.parseInt(value);
-        }
-        catch (NumberFormatException ex) {
-            return null;
-        }
     }
 
     private boolean isNetworkAvailable() {

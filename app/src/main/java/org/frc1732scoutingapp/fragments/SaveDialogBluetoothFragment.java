@@ -31,6 +31,8 @@ import java.util.Set;
 import static android.app.Activity.RESULT_OK;
 
 public class SaveDialogBluetoothFragment extends Fragment {
+    private Intent bluetoothReceiver;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_save_dialog_bluetooth, container, false);
@@ -39,7 +41,7 @@ public class SaveDialogBluetoothFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-                Intent rec = getActivity().registerReceiver(receiver, filter);
+                bluetoothReceiver = getActivity().registerReceiver(receiver, filter);
                 BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (bluetoothAdapter == null) {
                     Toast.makeText(getActivity(), "This device does not support bluetooth.", Toast.LENGTH_LONG).show();
@@ -151,6 +153,8 @@ public class SaveDialogBluetoothFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().unregisterReceiver(receiver);
+        if (bluetoothReceiver != null) {
+            getActivity().unregisterReceiver(receiver);
+        }
     }
 }

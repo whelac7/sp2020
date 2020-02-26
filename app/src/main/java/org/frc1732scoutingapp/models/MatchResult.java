@@ -1,24 +1,28 @@
 package org.frc1732scoutingapp.models;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 //TODO: Competition Code
-public class IndividualMatchResult {
+public class MatchResult {
+    private Integer teamNumber;
     private Integer matchNumber;
     private String alliance;
-    private Integer initLine;
+    private boolean initLine;
     private Integer autoLower;
     private Integer autoOuter;
     private Integer autoInner;
     private Integer lower;
     private Integer outer;
     private Integer inner;
-    private Integer rotation;
-    private Integer position;
-    private Integer park;
-    private Integer hang;
-    private Integer level;
+    private boolean rotation;
+    private boolean position;
+    private boolean park;
+    private boolean hang;
+    private boolean level;
     private Integer disableTime;
 
-    public IndividualMatchResult(Integer matchNumber, String alliance, Integer initLine, Integer autoLower, Integer autoOuter, Integer autoInner, Integer lower, Integer outer, Integer inner, Integer rotation, Integer position, Integer park, Integer hang, Integer level, Integer disableTime) {
+    public MatchResult(Integer teamNumber, Integer matchNumber, String alliance, Boolean initLine, Integer autoLower, Integer autoOuter, Integer autoInner, Integer lower, Integer outer, Integer inner, Boolean rotation, Boolean position, Boolean park, Boolean hang, Boolean level, Integer disableTime) {
+        this.teamNumber = teamNumber;
         this.matchNumber = matchNumber;
         this.alliance = alliance;
         this.initLine = initLine;
@@ -36,6 +40,23 @@ public class IndividualMatchResult {
         this.disableTime = disableTime;
     }
 
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Team) {
+            return teamNumber == ((MatchResult)obj).teamNumber;
+        }
+        return false;
+    }
+
+    public Integer getTeamNumber() {
+        return teamNumber;
+    }
+
     public Integer getMatchNumber() {
         return matchNumber;
     }
@@ -44,7 +65,7 @@ public class IndividualMatchResult {
         return alliance;
     }
 
-    public Integer getInitLine() {
+    public boolean getInitLine() {
         return initLine;
     }
 
@@ -72,23 +93,23 @@ public class IndividualMatchResult {
         return inner;
     }
 
-    public Integer getRotation() {
+    public boolean getRotation() {
         return rotation;
     }
 
-    public Integer getPosition() {
+    public boolean getPosition() {
         return position;
     }
 
-    public Integer getPark() {
+    public boolean getPark() {
         return park;
     }
 
-    public Integer getHang() {
+    public boolean getHang() {
         return hang;
     }
 
-    public Integer getLevel() {
+    public boolean getLevel() {
         return level;
     }
 
