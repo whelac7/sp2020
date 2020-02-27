@@ -7,6 +7,11 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.frc1732scoutingapp.models.MatchResult;
 
 import java.util.ArrayList;
@@ -17,27 +22,24 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "1732scouting";
-    public static final String TEAM_TABLE_NAME = "template";
-    public static final String TEAM_COLUMN_COMPETITION_ID = "competition_id";
-    public static final String TEAM_COLUMN_NUMBER = "team_number";
-    public static final String TEAM_COLUMN_MATCH_NUMBER = "match_number";
-    public static final String TEAM_COLUMN_ALLIANCE = "alliance";
-    public static final String TEAM_COLUMN_INIT_LINE = "init_line";
-    public static final String TEAM_COLUMN_AUTO_LOWER = "auto_lower";
-    public static final String TEAM_COLUMN_AUTO_OUTER = "auto_outer";
-    public static final String TEAM_COLUMN_AUTO_INNER = "auto_inner";
-    public static final String TEAM_COLUMN_LOWER = "lower";
-    public static final String TEAM_COLUMN_OUTER = "outer";
-    public static final String TEAM_COLUMN_INNER = "inner";
-    public static final String TEAM_COLUMN_ROTATION = "rotation";
-    public static final String TEAM_COLUMN_POSITION = "position";
-    public static final String TEAM_COLUMN_PARK = "park";
-    public static final String TEAM_COLUMN_HANG = "hang";
-    public static final String TEAM_COLUMN_LEVEL = "level";
-    public static final String TEAM_COLUMN_DISABLE_TIME = "disable_time";
-
-    public static final String COMPETITION_TABLE_NAME = "competition_template";
-    public static final String COMPETITION_TEAM_NUMBER = "team_number";
+    public static final String COMPETITION_TABLE_NAME = "template";
+    public static final String COMPETITION_COLUMN_ID = "competition_id";
+    public static final String COMPETITION_COLUMN_TEAM_NUMBER = "team_number";
+    public static final String COMPETITION_COLUMN_MATCH_NUMBER = "match_number";
+    public static final String COMPETITION_COLUMN_ALLIANCE = "alliance";
+    public static final String COMPETITION_COLUMN_INIT_LINE = "init_line";
+    public static final String COMPETITION_COLUMN_AUTO_LOWER = "auto_lower";
+    public static final String COMPETITION_COLUMN_AUTO_OUTER = "auto_outer";
+    public static final String COMPETITION_COLUMN_AUTO_INNER = "auto_inner";
+    public static final String COMPETITION_COLUMN_TELEOP_LOWER = "teleop_lower";
+    public static final String COMPETITION_COLUMN_TELEOP_OUTER = "teleop_outer";
+    public static final String COMPETITION_COLUMN_TELEOP_INNER = "inner";
+    public static final String COMPETITION_COLUMN_ROTATION = "rotation";
+    public static final String COMPETITION_COLUMN_POSITION = "position";
+    public static final String COMPETITION_COLUMN_PARK = "park";
+    public static final String COMPETITION_COLUMN_HANG = "hang";
+    public static final String COMPETITION_COLUMN_LEVEL = "level";
+    public static final String COMPETITION_COLUMN_DISABLE_TIME = "disable_time";
 
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,35 +47,54 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE " + TEAM_TABLE_NAME + " (" +
-                TEAM_COLUMN_NUMBER + " INT UNSIGNED, " +
-                TEAM_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
-                TEAM_COLUMN_ALLIANCE + " VARCHAR(255), " +
-                TEAM_COLUMN_COMPETITION_ID + " VARCHAR(255), " +
-                TEAM_COLUMN_INIT_LINE + " BOOLEAN, " +
-                TEAM_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
-                TEAM_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +
-                TEAM_COLUMN_AUTO_INNER + " INT UNSIGNED, " +
-                TEAM_COLUMN_LOWER + " INT UNSIGNED, " +
-                TEAM_COLUMN_OUTER + " INT UNSIGNED, " +
-                TEAM_COLUMN_INNER + " INT UNSIGNED, " +
-                TEAM_COLUMN_ROTATION + " BOOLEAN, " +
-                TEAM_COLUMN_POSITION + " BOOLEAN, " +
-                TEAM_COLUMN_PARK + " BOOLEAN, " +
-                TEAM_COLUMN_HANG + " BOOLEAN, " +
-                TEAM_COLUMN_LEVEL + " BOOLEAN, " +
-                TEAM_COLUMN_DISABLE_TIME + " INT UNSIGNED" + ")");
+        sqLiteDatabase.execSQL("CREATE TABLE " + COMPETITION_TABLE_NAME + " (" +
+                COMPETITION_COLUMN_TEAM_NUMBER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_ALLIANCE + " VARCHAR(255), " +
+                COMPETITION_COLUMN_ID + " VARCHAR(255), " +
+                COMPETITION_COLUMN_INIT_LINE + " BOOLEAN, " +
+                COMPETITION_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_AUTO_INNER + " INT UNSIGNED," +
+                COMPETITION_COLUMN_TELEOP_LOWER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_TELEOP_OUTER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_TELEOP_INNER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_ROTATION + " BOOLEAN, " +
+                COMPETITION_COLUMN_POSITION + " BOOLEAN, " +
+                COMPETITION_COLUMN_PARK + " BOOLEAN, " +
+                COMPETITION_COLUMN_HANG + " BOOLEAN, " +
+                COMPETITION_COLUMN_LEVEL + " BOOLEAN, " +
+                COMPETITION_COLUMN_DISABLE_TIME + " INT UNSIGNED, " +
+                "UNIQUE(" + COMPETITION_COLUMN_TEAM_NUMBER + ", " + COMPETITION_COLUMN_MATCH_NUMBER + "))");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TEAM_TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + COMPETITION_TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
     public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String table_name) {
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " AS SELECT * FROM " + TEAM_TABLE_NAME + " WHERE 0");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
+                COMPETITION_COLUMN_TEAM_NUMBER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_ALLIANCE + " VARCHAR(255), " +
+                COMPETITION_COLUMN_ID + " VARCHAR(255), " +
+                COMPETITION_COLUMN_INIT_LINE + " BOOLEAN, " +
+                COMPETITION_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_AUTO_INNER + " INT UNSIGNED," +
+                COMPETITION_COLUMN_TELEOP_LOWER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_TELEOP_OUTER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_TELEOP_INNER + " INT UNSIGNED, " +
+                COMPETITION_COLUMN_ROTATION + " BOOLEAN, " +
+                COMPETITION_COLUMN_POSITION + " BOOLEAN, " +
+                COMPETITION_COLUMN_PARK + " BOOLEAN, " +
+                COMPETITION_COLUMN_HANG + " BOOLEAN, " +
+                COMPETITION_COLUMN_LEVEL + " BOOLEAN, " +
+                COMPETITION_COLUMN_DISABLE_TIME + " INT UNSIGNED, " +
+                "UNIQUE(" + COMPETITION_COLUMN_TEAM_NUMBER + ", " + COMPETITION_COLUMN_MATCH_NUMBER + "))");
     }
 
     public static boolean matchExists(SQLiteDatabase database, String teamNumber, String match) {
@@ -90,31 +111,29 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      * @return null if no such team exists
      * @throws SQLiteException
      */
-    public static Cursor readFromDB(SQLiteDatabase database, String teamNumber) throws SQLiteException {
-        String team = "frc" + teamNumber;
-
+    public static Cursor readFromDB(SQLiteDatabase database, String compCode) throws SQLiteException {
         String[] projection = {
-                SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID,
-                SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER,
-                SQLiteDBHelper.TEAM_COLUMN_ALLIANCE,
-                SQLiteDBHelper.TEAM_COLUMN_INIT_LINE,
-                SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER,
-                SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER,
-                SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER,
-                SQLiteDBHelper.TEAM_COLUMN_LOWER,
-                SQLiteDBHelper.TEAM_COLUMN_OUTER,
-                SQLiteDBHelper.TEAM_COLUMN_INNER,
-                SQLiteDBHelper.TEAM_COLUMN_ROTATION,
-                SQLiteDBHelper.TEAM_COLUMN_POSITION,
-                SQLiteDBHelper.TEAM_COLUMN_PARK,
-                SQLiteDBHelper.TEAM_COLUMN_HANG,
-                SQLiteDBHelper.TEAM_COLUMN_LEVEL,
-                SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME
+                SQLiteDBHelper.COMPETITION_COLUMN_ID,
+                SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER,
+                SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE,
+                SQLiteDBHelper.COMPETITION_COLUMN_INIT_LINE,
+                SQLiteDBHelper.COMPETITION_COLUMN_AUTO_LOWER,
+                SQLiteDBHelper.COMPETITION_COLUMN_AUTO_OUTER,
+                SQLiteDBHelper.COMPETITION_COLUMN_AUTO_INNER,
+                SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_LOWER,
+                SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_OUTER,
+                SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_INNER,
+                SQLiteDBHelper.COMPETITION_COLUMN_ROTATION,
+                SQLiteDBHelper.COMPETITION_COLUMN_POSITION,
+                SQLiteDBHelper.COMPETITION_COLUMN_PARK,
+                SQLiteDBHelper.COMPETITION_COLUMN_HANG,
+                SQLiteDBHelper.COMPETITION_COLUMN_LEVEL,
+                SQLiteDBHelper.COMPETITION_COLUMN_DISABLE_TIME
         };
 
         try {
             Cursor cursor = database.query(
-                    team,   // The table to query
+                    "_" + compCode,   // The table to query
                     projection,                               // The columns to return
                     null,                                // The columns for the WHERE clause
                     null,                            // The values for the WHERE clause
@@ -139,34 +158,32 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      * @return null if no such team exists
      * @throws SQLiteException
      */
-    public static Cursor readFromDB(SQLiteDatabase database, String teamNumber, String match) throws SQLiteException {
-        String team = "frc" + teamNumber;
-
+    public static Cursor readFromDB(SQLiteDatabase database, String compCode, String match) throws SQLiteException {
         String[] projection = {
-                SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID,
-                SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER,
-                SQLiteDBHelper.TEAM_COLUMN_ALLIANCE,
-                SQLiteDBHelper.TEAM_COLUMN_INIT_LINE,
-                SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER,
-                SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER,
-                SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER,
-                SQLiteDBHelper.TEAM_COLUMN_LOWER,
-                SQLiteDBHelper.TEAM_COLUMN_OUTER,
-                SQLiteDBHelper.TEAM_COLUMN_INNER,
-                SQLiteDBHelper.TEAM_COLUMN_ROTATION,
-                SQLiteDBHelper.TEAM_COLUMN_POSITION,
-                SQLiteDBHelper.TEAM_COLUMN_PARK,
-                SQLiteDBHelper.TEAM_COLUMN_HANG,
-                SQLiteDBHelper.TEAM_COLUMN_LEVEL,
-                SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME
+                SQLiteDBHelper.COMPETITION_COLUMN_ID,
+                SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER,
+                SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE,
+                SQLiteDBHelper.COMPETITION_COLUMN_INIT_LINE,
+                SQLiteDBHelper.COMPETITION_COLUMN_AUTO_LOWER,
+                SQLiteDBHelper.COMPETITION_COLUMN_AUTO_OUTER,
+                SQLiteDBHelper.COMPETITION_COLUMN_AUTO_INNER,
+                SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_LOWER,
+                SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_OUTER,
+                SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_INNER,
+                SQLiteDBHelper.COMPETITION_COLUMN_ROTATION,
+                SQLiteDBHelper.COMPETITION_COLUMN_POSITION,
+                SQLiteDBHelper.COMPETITION_COLUMN_PARK,
+                SQLiteDBHelper.COMPETITION_COLUMN_HANG,
+                SQLiteDBHelper.COMPETITION_COLUMN_LEVEL,
+                SQLiteDBHelper.COMPETITION_COLUMN_DISABLE_TIME
         };
 
-        String selection = SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER + " = ?";
+        String selection = SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER + " = ?";
         String[] selectionArgs = new String[]{match};
 
         try {
             Cursor cursor = database.query(
-                    team,   // The table to query
+                    "_" + compCode,   // The table to query
                     projection,                               // The columns to return
                     selection,                                // The columns for the WHERE clause
                     selectionArgs,                            // The values for the WHERE clause
@@ -184,94 +201,61 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
     }
 
-//    //TODO: Take competition code into account
-//    public static Team parseTeamMatches(SQLiteDatabase database, String team) {
-//        Cursor cursor = SQLiteDBHelper.readFromDB(database, team);
-//
-//        if (cursor.moveToFirst()) {
-//            String result = "";
-//            ArrayList<IndividualMatchResult> matchResults = new ArrayList<IndividualMatchResult>();
-//            for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
-//                matchResults.add(new IndividualMatchResult(
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER))),
-//                        cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_ALLIANCE)),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_LOWER))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex((SQLiteDBHelper.TEAM_COLUMN_OUTER)))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INNER))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_POSITION))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_ROTATION))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_PARK))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_HANG))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_LEVEL))),
-//                        tryParseInt(cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME)))
-//                ));
-//            }
-//            cursor.close();
-//            return new Team(tryParseInt(team), matchResults);
-//        }
-//
-//        return null;
-//    }
+    public static String parseMatchToJSON(SQLiteDatabase database, String compCode, String team, String match) {
+        Cursor result = database.rawQuery(String.format("SELECT * FROM %s WHERE %s=%s AND %s=%s", compCode, COMPETITION_COLUMN_TEAM_NUMBER, team, COMPETITION_COLUMN_MATCH_NUMBER, match), null);
+        if (result.moveToFirst()) {
+            MatchResult matchResult = new MatchResult(
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_TEAM_NUMBER))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_MATCH_NUMBER))),
+                    result.getString(result.getColumnIndex(COMPETITION_COLUMN_ALLIANCE)),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_INIT_LINE)))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_AUTO_LOWER))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_AUTO_OUTER))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_AUTO_INNER))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_TELEOP_LOWER))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_TELEOP_OUTER))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_TELEOP_INNER))),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_ROTATION)))),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_POSITION)))),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_PARK)))),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_HANG)))),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_LEVEL)))),
+                    ScoutingUtils.tryParseInt(result.getString(result.getColumnIndex(COMPETITION_COLUMN_DISABLE_TIME))));
+            String jsonText = new Gson().toJson(matchResult);
+            JsonObject jsonObject = JsonParser.parseString(jsonText).getAsJsonObject();
+        }
+        return null;
+    }
 
-//    public static String parseTeamInCompToJSON(SQLiteDatabase database, String compCode, String team) {
-//        Cursor results = database.rawQuery("SELECT * FROM frc" + team + " WHERE " + TEAM_COLUMN_COMPETITION_ID + "='" + compCode + "'", null);
-//        Team teamMatches = parseTeamMatches(database, team);
-//
-//        if (teamMatches != null) {
-//            return new Gson().toJson(teamMatches);
-//        }
-//        return null;
-//    }
-
-    public static Cursor getAllTeams(SQLiteDatabase database) {
+    public static Cursor getCompetitions(SQLiteDatabase database) {
         return database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
     }
 
-    public static List<MatchResult> getAllTeamResults(SQLiteDatabase database) {
-        System.out.println("Running...");
-        database.execSQL("CREATE TEMP TABLE temp_table AS SELECT * FROM " + TEAM_TABLE_NAME + " WHERE 0");
-        Cursor teams = getAllTeams(database);
-        System.out.println("teams: " + teams.getCount());
-        if (teams.moveToFirst()) {
-            do {
-                String teamString = teams.getString(0);
-                String target = "frc";
-                if (teamString.startsWith(target)) {
-                    String teamNumber = teamString.substring(3);
-                    database.execSQL("INSERT INTO temp_table SELECT * FROM frc" + teamNumber);
-                }
-            } while (teams.moveToNext());
-        }
-        teams.close();
-        Cursor results = database.rawQuery("SELECT * FROM temp_table ORDER BY " + TEAM_COLUMN_MATCH_NUMBER, null);
+    public static List<MatchResult> getMatchResults(SQLiteDatabase database, String compCode) {
+        Cursor results = database.rawQuery("SELECT * FROM " + compCode + " ORDER BY " + COMPETITION_COLUMN_MATCH_NUMBER, null);
         List<MatchResult> matchResults = new ArrayList<MatchResult>();
         if (results.moveToFirst()) {
             do {
                 matchResults.add(new MatchResult(
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_NUMBER))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_MATCH_NUMBER))),
-                        results.getString(results.getColumnIndex(TEAM_COLUMN_ALLIANCE)),
-                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_INIT_LINE)))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_AUTO_LOWER))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_AUTO_OUTER))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_AUTO_INNER))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_LOWER))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_OUTER))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_INNER))),
-                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_ROTATION)))),
-                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_POSITION)))),
-                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_PARK)))),
-                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_HANG)))),
-                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_LEVEL)))),
-                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(TEAM_COLUMN_DISABLE_TIME)))
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_TEAM_NUMBER))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_MATCH_NUMBER))),
+                        results.getString(results.getColumnIndex(COMPETITION_COLUMN_ALLIANCE)),
+                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_INIT_LINE)))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_AUTO_LOWER))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_AUTO_OUTER))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_AUTO_INNER))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_TELEOP_LOWER))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_TELEOP_OUTER))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_TELEOP_INNER))),
+                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_ROTATION)))),
+                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_POSITION)))),
+                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_PARK)))),
+                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_HANG)))),
+                        ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_LEVEL)))),
+                        ScoutingUtils.tryParseInt(results.getString(results.getColumnIndex(COMPETITION_COLUMN_DISABLE_TIME)))
                 ));
             } while (results.moveToNext());
         }
-        database.execSQL("DROP TABLE temp_table");
         return matchResults;
     }
 }
