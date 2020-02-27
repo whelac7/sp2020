@@ -52,6 +52,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     private SQLiteDatabase database;
     private boolean isMaster;
     private String defaultAlliance;
+    private String competitionCode;
 
     public int outerPortAuto = 0;
     public int outerPortTeleop = 0;
@@ -77,6 +78,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         isMaster = sharedPref.getBoolean("toggle_master", false);
         defaultAlliance = sharedPref.getString("defaultAlliance", "BLUE");
+        competitionCode = sharedPref.getString("compCode", null);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Alliance, android.R.layout.simple_spinner_dropdown_item);
         fragmentBinding.allianceSpinner.setAdapter(adapter);
@@ -338,31 +340,31 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         }
 
         ContentValues values = new ContentValues();
-        values.put(SQLiteDBHelper.TEAM_COLUMN_COMPETITION_ID, 0); // Have to figure out how to get the COMPETITION_ID
-        values.put(SQLiteDBHelper.TEAM_COLUMN_NUMBER, fragmentBinding.teamNumberEditText.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER, fragmentBinding.matchEditText.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_ALLIANCE, fragmentBinding.allianceSpinner.getSelectedItem().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE, ScoutingUtils.boolToInt(fragmentBinding.initLine.isChecked()));
-        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_LOWER, fragmentBinding.lowerPortOutputAuto.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_OUTER, fragmentBinding.outerPortOutputAuto.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_AUTO_INNER, 0);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_LOWER, fragmentBinding.lowerPortOutputTeleop.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_OUTER, fragmentBinding.outerPortOutputTeleop.getText().toString());
-        values.put(SQLiteDBHelper.TEAM_COLUMN_INNER, 0);
-        values.put(SQLiteDBHelper.TEAM_COLUMN_ROTATION, ScoutingUtils.boolToInt(fragmentBinding.rotationControl.isChecked()));
-        values.put(SQLiteDBHelper.TEAM_COLUMN_POSITION, ScoutingUtils.boolToInt(fragmentBinding.positionControl.isChecked()));
-        values.put(SQLiteDBHelper.TEAM_COLUMN_PARK, ScoutingUtils.boolToInt(fragmentBinding.park.isChecked()));
-        values.put(SQLiteDBHelper.TEAM_COLUMN_HANG, ScoutingUtils.boolToInt(fragmentBinding.hang.isChecked()));
-        values.put(SQLiteDBHelper.TEAM_COLUMN_LEVEL, ScoutingUtils.boolToInt(fragmentBinding.level.isChecked()));
-        values.put(SQLiteDBHelper.TEAM_COLUMN_DISABLE_TIME, fragmentBinding.disTime.getText().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_ID, 0); // Have to figure out how to get the COMPETITION_ID
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER, fragmentBinding.teamNumberEditText.getText().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER, fragmentBinding.matchEditText.getText().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE, fragmentBinding.allianceSpinner.getSelectedItem().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_INIT_LINE, ScoutingUtils.boolToInt(fragmentBinding.initLine.isChecked()));
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_AUTO_LOWER, fragmentBinding.lowerPortOutputAuto.getText().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_AUTO_OUTER, fragmentBinding.outerPortOutputAuto.getText().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_AUTO_INNER, 0);
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_LOWER, fragmentBinding.lowerPortOutputTeleop.getText().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_OUTER, fragmentBinding.outerPortOutputTeleop.getText().toString());
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_INNER, 0);
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_ROTATION, ScoutingUtils.boolToInt(fragmentBinding.rotationControl.isChecked()));
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_POSITION, ScoutingUtils.boolToInt(fragmentBinding.positionControl.isChecked()));
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_PARK, ScoutingUtils.boolToInt(fragmentBinding.park.isChecked()));
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_HANG, ScoutingUtils.boolToInt(fragmentBinding.hang.isChecked()));
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_LEVEL, ScoutingUtils.boolToInt(fragmentBinding.level.isChecked()));
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_DISABLE_TIME, fragmentBinding.disTime.getText().toString());
         return values;
     }
 
     public void saveToDB(DialogFragment dialog) {
-        SQLiteDBHelper.createTableIfNotExists(database, "frc" + fragmentBinding.teamNumberEditText.getText().toString());
+        SQLiteDBHelper.createTableIfNotExists(database, "_" + competitionCode);
         ContentValues values = processInputs();
-        long newRowId = database.insert("frc" + fragmentBinding.teamNumberEditText.getText().toString(), null, values);
-        SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.TEAM_COLUMN_NUMBER), Toast.LENGTH_LONG);
+        long newRowId = database.insert("_" + competitionCode, null, values);
+        SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER), Toast.LENGTH_LONG);
         dialog.dismiss();
     }
 
@@ -375,7 +377,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             cursor.moveToFirst();
             String result = "";
             for (int i = 0; i < cursor.getCount(); i++, cursor.moveToNext()) {
-                result += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.TEAM_COLUMN_INIT_LINE)) + "\n";
+                result += cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER)) + ": " + cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COMPETITION_COLUMN_INIT_LINE)) + "\n";
             }
             cursor.close();
             SingleToast.show(getActivity(), result, Toast.LENGTH_LONG);

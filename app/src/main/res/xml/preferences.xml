@@ -10,4 +10,8 @@
         app:entries="@array/Alliance"
         app:entryValues="@array/Alliance">
     </ListPreference>
+    <EditTextPreference
+        app:key="compCode"
+        app:title="Competition Code">
+    </EditTextPreference>
 </PreferenceScreen>
