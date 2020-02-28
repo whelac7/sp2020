@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +28,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
+import com.google.gson.JsonObject;
 import com.google.zxing.WriterException;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.activities.QRScannerActivity;
 import org.frc1732scoutingapp.databinding.FragmentSqliteDatabaseBinding;
+import org.frc1732scoutingapp.helpers.JsonHelper;
 import org.frc1732scoutingapp.helpers.QRCodeHelper;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
 import org.frc1732scoutingapp.helpers.ScoutingUtils;
@@ -333,14 +338,11 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
             throw new IllegalArgumentException("no team specified: You must specify a team number.");
         } else if (fragmentBinding.matchEditText.getText().toString().trim().isEmpty()) {
             throw new IllegalArgumentException("no match specified: You must specify a match number.");
-        } else if (SQLiteDBHelper.matchExists(database, fragmentBinding.teamNumberEditText.getText().toString(), fragmentBinding.matchEditText.getText().toString())) {
-            throw new IllegalArgumentException("match exists: Match " + fragmentBinding.matchEditText.getText().toString() + " already exists.");
         } else if (fragmentBinding.disTime.getText().toString().isEmpty()) {
             throw new IllegalArgumentException("empty parameter: Disable Time");
         }
 
         ContentValues values = new ContentValues();
-        values.put(SQLiteDBHelper.COMPETITION_COLUMN_ID, 0); // Have to figure out how to get the COMPETITION_ID
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER, fragmentBinding.teamNumberEditText.getText().toString());
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER, fragmentBinding.matchEditText.getText().toString());
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE, fragmentBinding.allianceSpinner.getSelectedItem().toString());
@@ -363,9 +365,41 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     public void saveToDB(DialogFragment dialog) {
         SQLiteDBHelper.createTableIfNotExists(database, "_" + competitionCode);
         ContentValues values = processInputs();
-        long newRowId = database.insert("_" + competitionCode, null, values);
-        SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER), Toast.LENGTH_LONG);
-        dialog.dismiss();
+        try {
+            long newRowId = database.insertOrThrow("_" + competitionCode, null, values);
+            JsonHelper.saveMatchToJson(
+                    getActivity(),
+                    competitionCode,
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER).toString()),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER).toString()),
+                    values.get(SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE).toString(),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_INIT_LINE).toString())),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_AUTO_LOWER).toString()),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_AUTO_OUTER).toString()),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_AUTO_INNER).toString()),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_LOWER).toString()),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_OUTER).toString()),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_TELEOP_INNER).toString()),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_ROTATION).toString())),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_POSITION).toString())),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_PARK).toString())),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_HANG).toString())),
+                    ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_LEVEL).toString())),
+                    ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_DISABLE_TIME).toString()));
+            SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER), Toast.LENGTH_LONG);
+        }
+        catch (SQLiteConstraintException ex) {
+            if (ex.getMessage().toUpperCase().contains("UNIQUE CONSTRAINT FAILED")) {
+                SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " already exists for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER), Toast.LENGTH_LONG);
+            }
+            else {
+                SingleToast.show(getActivity(), "An unknown error occurred.", Toast.LENGTH_LONG);
+            }
+            ScoutingUtils.logException(ex, "saveToDB");
+        }
+        finally {
+            dialog.dismiss();
+        }
     }
 
     private void displayQueryResult(Cursor cursor) {

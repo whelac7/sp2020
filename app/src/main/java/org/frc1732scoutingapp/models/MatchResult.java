@@ -2,7 +2,6 @@ package org.frc1732scoutingapp.models;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-//TODO: Competition Code
 public class MatchResult {
     private Integer teamNumber;
     private Integer matchNumber;

@@ -16,28 +16,25 @@
             android:id="@+id/competitionCodeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingRight="8dp"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:text="Competition Code"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/competitionCodeEditText"
+        <Spinner
+            android:id="@+id/competitionCodeSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/competitionCodeLabel"
-            android:gravity="center"/>
+            android:textAlignment="center"/>
 
         <Button
             android:id="@+id/syncSheetsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/competitionCodeEditText"
+            android:layout_below="@id/competitionCodeSpinner"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="30dp"
             android:text="@string/button_fragment_syncsheets_sync" />
 
     </RelativeLayout>
