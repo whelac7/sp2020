@@ -1,6 +1,7 @@
 package org.frc1732scoutingapp.helpers;
 
 import android.util.Log;
+import android.widget.Spinner;
 
 public class ScoutingUtils {
     public static void logException(Exception ex, String tag) {
@@ -46,5 +47,17 @@ public class ScoutingUtils {
         catch (NumberFormatException ex) {
             return null;
         }
+    }
+
+    public static int getDefaultSpinnerSetting(Spinner spinner, String setting) {
+        if (setting != null) {
+            for (int i = 0; i < spinner.getCount(); i++) {
+                String currentItem = spinner.getItemAtPosition(i).toString();
+                if (currentItem.equals(setting)) {
+                    return i;
+                }
+            }
+        }
+        return 0;
     }
 }

@@ -348,7 +348,7 @@
                 android:text="0"/>
 
             <include
-                layout="@layout/content_sqlite_database"
+                layout="@layout/content_log_match"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

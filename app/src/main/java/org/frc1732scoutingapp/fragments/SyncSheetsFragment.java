@@ -2,6 +2,7 @@ package org.frc1732scoutingapp.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
@@ -13,12 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -29,6 +30,7 @@ import com.google.android.gms.common.api.Scope;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
+import org.frc1732scoutingapp.helpers.ScoutingUtils;
 import org.frc1732scoutingapp.helpers.SingleToast;
 import org.frc1732scoutingapp.models.MatchResult;
 import org.frc1732scoutingapp.models.RequestCodes;
@@ -40,6 +42,7 @@ public class SyncSheetsFragment extends Fragment {
     private Spinner competitionCodeSpinner;
     private Button syncSheetsButton;
     private SQLiteDatabase database;
+    private String compCode;
     private GoogleSignInOptions mGoogleSignInOptions;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount mGoogleSignInAccount;
@@ -50,6 +53,10 @@ public class SyncSheetsFragment extends Fragment {
         if (isNetworkAvailable()) {
             syncSheetsButton = view.findViewById(R.id.syncSheetsButton);
             database = new SQLiteDBHelper(getContext()).getReadableDatabase();
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            compCode = sharedPref.getString("compCode", null);
+
             ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_fragment_sync_sheets);
             signIntoGoogle();
 
@@ -61,6 +68,7 @@ public class SyncSheetsFragment extends Fragment {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.competition_spinner_dropdown, competitions);
             adapter.setDropDownViewResource(R.layout.competition_spinner_dropdown);
             competitionCodeSpinner.setAdapter(adapter);
+            competitionCodeSpinner.setSelection(ScoutingUtils.getDefaultSpinnerSetting(competitionCodeSpinner, compCode));
 
             syncSheetsButton.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -79,7 +87,7 @@ public class SyncSheetsFragment extends Fragment {
 
     private void syncToSheets() {
         try {
-            List<MatchResult> matchResults = SQLiteDBHelper.getMatchResults(database, "_" + competitionCodeSpinner.getSelectedItem().toString());
+            List<MatchResult> matchResults = SQLiteDBHelper.getMatchResults(database, competitionCodeSpinner.getSelectedItem().toString());
             SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
             sheetService.pushMatchInfo(matchResults);
             SingleToast.show(getActivity(), "Data pushed to sheets.", Toast.LENGTH_SHORT);

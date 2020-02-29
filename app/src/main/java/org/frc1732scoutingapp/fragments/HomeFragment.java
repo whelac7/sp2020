@@ -5,21 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.material.navigation.NavigationView;
 
 import org.frc1732scoutingapp.R;
-import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
-import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 
 public class HomeFragment extends Fragment {
     private GoogleSignInOptions gso;

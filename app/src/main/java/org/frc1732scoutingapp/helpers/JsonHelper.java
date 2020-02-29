@@ -15,7 +15,6 @@ import org.frc1732scoutingapp.models.MatchResult;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class JsonHelper {
@@ -31,7 +30,7 @@ public class JsonHelper {
                 .setPrettyPrinting()
                 .create();
         String jsonString = gson.toJson(matchResult);
-        File saveDir = new File(IOHelper.getCompetitionPath(context, compCode));
+        File saveDir = new File(IOHelper.getCompetitionDirectoryPath(context, compCode));
         if (!saveDir.exists()) {
             saveDir.mkdirs();
         }
@@ -40,7 +39,7 @@ public class JsonHelper {
     }
 
     public static JsonObject readCompetitionFromJson(Context context, String compCode) {
-        return readFromJson(context, compCode, new File(IOHelper.getCompetitionPath(context, compCode) + compCode));
+        return readFromJson(context, compCode, new File(IOHelper.getCompetitionJsonPath(context, compCode)));
     }
 
     public static JsonObject readTeamMatchFromJson(Context context, String compCode, int teamNumber, int matchNumber) {
@@ -56,16 +55,16 @@ public class JsonHelper {
             return readJson;
         }
         catch (IOException ex) {
-            System.out.println(ex);
+            ScoutingUtils.logException(ex, "JsonHelper.readFromJson()");
             return null;
         }
     }
 
     public static JsonObject buildCompetitionJson(Context context, String compCode) {
         try {
-            File compFolder = new File(IOHelper.getCompetitionPath(context, compCode));
+            File compFolder = new File(IOHelper.getCompetitionDirectoryPath(context, compCode));
             if (compFolder == null) {
-                throw new IOException("Could not find directory: " + IOHelper.getCompetitionPath(context, compCode));
+                throw new IOException("Could not find directory: " + IOHelper.getCompetitionDirectoryPath(context, compCode));
             }
             else {
                 JsonObject competitionJson = new JsonObject();
@@ -73,7 +72,7 @@ public class JsonHelper {
                 File[] files = compFolder.listFiles();
 
                 for (File file : files) {
-                    if (file.isFile() && !file.getName().equals(compCode + ".json")) {
+                    if (file.isFile() && file.getName().contains(compCode) && !file.getName().equals(compCode + ".json")) {
                         JsonObject match = readFromJson(context, compCode, file);
                         matchJsons.add(match);
                     }
@@ -84,12 +83,12 @@ public class JsonHelper {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .create();
-                IOHelper.writeToFile(IOHelper.getCompetitionPath(context, compCode) + compCode + ".json", gson.toJson(competitionJson));
+                IOHelper.writeToFile(IOHelper.getCompetitionJsonPath(context, compCode), gson.toJson(competitionJson));
                 return competitionJson;
             }
         }
         catch (IOException ex) {
-            System.out.println(ex);
+            ScoutingUtils.logException(ex, "JsonHelper.buildCompetitionJson()");
             return null;
         }
     }

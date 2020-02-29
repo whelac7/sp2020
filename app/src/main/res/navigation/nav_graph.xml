@@ -16,9 +16,9 @@
         tools:layout="@layout/fragment_sync_sheets" />
     <fragment
         android:id="@+id/SQLLiteDatabaseFragment"
-        android:name="org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment"
+        android:name="org.frc1732scoutingapp.fragments.LogMatchFragment"
         android:label="Log Match"
-        tools:layout="@layout/fragment_sqlite_database" />
+        tools:layout="@layout/fragment_log_match" />
     <fragment
         android:id="@+id/jsonToDBFragment"
         android:name="org.frc1732scoutingapp.fragments.JsonToDBFragment"

@@ -53,6 +53,7 @@ public class SaveDialogPagerAdapter extends FragmentPagerAdapter {
                 Bundle bundledQRCode = new Bundle();
                 bundledQRCode.putByteArray("codeInBytes", codeInBytes);
                 fragment.setArguments(bundledQRCode);
+                ((SaveDialogQRFragment)fragment).setDBListener(DBListener);
                 break;
             case 1:
                 fragment = new SaveDialogBluetoothFragment();
