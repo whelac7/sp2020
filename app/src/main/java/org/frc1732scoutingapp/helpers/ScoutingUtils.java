@@ -1,6 +1,17 @@
 package org.frc1732scoutingapp.helpers;
 
+import android.util.Log;
+
 public class ScoutingUtils {
+    public static void logException(Exception ex, String tag) {
+        StackTraceElement[] stackTrace = ex.getStackTrace();
+        String message = ex.toString();
+        for (StackTraceElement element : stackTrace) {
+            message += "\n" + element.toString();
+        }
+        Log.e(tag, message);
+    }
+
     public static int boolToInt(Boolean b) {
         if (b) {
             return 1;

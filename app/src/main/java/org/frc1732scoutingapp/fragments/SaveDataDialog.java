@@ -47,7 +47,6 @@ public class SaveDataDialog extends DialogFragment {
         codeInBytes = getArguments().getByteArray("codeInBytes");
         ViewPager viewPager = view.findViewById(R.id.viewpager);
         SaveDialogPagerAdapter adapter = new SaveDialogPagerAdapter(getChildFragmentManager());
-        System.out.println("SDD DB: " + DBListener);
         adapter.setDBListener(DBListener);
         adapter.setCodeInBytes(codeInBytes);
         viewPager.setAdapter(adapter);

@@ -32,13 +32,17 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="jsonToDBFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="settingsActivity">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-451" />
-                            <option name="y" value="600" />
+                            <option name="y" value="560" />
                           </Point>
                         </option>
                       </LayoutPositions>

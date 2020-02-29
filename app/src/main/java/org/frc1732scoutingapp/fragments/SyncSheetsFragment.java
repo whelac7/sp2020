@@ -2,8 +2,6 @@ package org.frc1732scoutingapp.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
@@ -13,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,14 +32,12 @@ import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
 import org.frc1732scoutingapp.helpers.SingleToast;
 import org.frc1732scoutingapp.models.MatchResult;
 import org.frc1732scoutingapp.models.RequestCodes;
-import org.frc1732scoutingapp.models.Team;
 import org.frc1732scoutingapp.services.SheetService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SyncSheetsFragment extends Fragment {
-    private EditText competitionCodeEditText;
+    private Spinner competitionCodeSpinner;
     private Button syncSheetsButton;
     private SQLiteDatabase database;
     private GoogleSignInOptions mGoogleSignInOptions;
@@ -50,17 +48,23 @@ public class SyncSheetsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sync_sheets, container, false);
         if (isNetworkAvailable()) {
-            competitionCodeEditText = view.findViewById(R.id.competitionCodeEditText);
             syncSheetsButton = view.findViewById(R.id.syncSheetsButton);
+            database = new SQLiteDBHelper(getContext()).getReadableDatabase();
             ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_fragment_sync_sheets);
             signIntoGoogle();
+
+            List<String> competitions = SQLiteDBHelper.getCompetitions(database);
+            competitionCodeSpinner = view.findViewById(R.id.competitionCodeSpinner);
+            if (competitions.size() == 0) {
+                competitions.add("No competitions saved.");
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.competition_spinner_dropdown, competitions);
+            adapter.setDropDownViewResource(R.layout.competition_spinner_dropdown);
+            competitionCodeSpinner.setAdapter(adapter);
 
             syncSheetsButton.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
-                   if (database == null) {
-                       database = new SQLiteDBHelper(getContext()).getReadableDatabase();
-                   }
                    syncToSheets();
                }
             });
@@ -75,19 +79,16 @@ public class SyncSheetsFragment extends Fragment {
 
     private void syncToSheets() {
         try {
-            List<MatchResult> matchResults = SQLiteDBHelper.getMatchResults(database, "_" + competitionCodeEditText.getText().toString());
+            List<MatchResult> matchResults = SQLiteDBHelper.getMatchResults(database, "_" + competitionCodeSpinner.getSelectedItem().toString());
             SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
             sheetService.pushMatchInfo(matchResults);
             SingleToast.show(getActivity(), "Data pushed to sheets.", Toast.LENGTH_SHORT);
-
-            SQLiteDBHelper.parseMatchToJSON(database, "_2020Test", "23", "23");
         }
         catch (SQLiteException ex) {
             if (ex.getMessage().indexOf("no such table") >= 0) {
                 SingleToast.show(getActivity(), "You entered an invalid competition code.", Toast.LENGTH_SHORT);
             }
         }
-
     }
 
     @Override

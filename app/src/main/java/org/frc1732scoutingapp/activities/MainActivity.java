@@ -1,19 +1,14 @@
 package org.frc1732scoutingapp.activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import android.provider.Settings;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavGraph;
@@ -34,11 +29,15 @@ import androidx.preference.PreferenceManager;
 import android.view.Menu;
 
 import org.frc1732scoutingapp.R;
+import org.frc1732scoutingapp.fragments.JsonToDBFragment;
 import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
 import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.fragments.HomeFragment;
+import org.frc1732scoutingapp.helpers.IOHelper;
+import org.frc1732scoutingapp.helpers.JsonHelper;
 import org.frc1732scoutingapp.models.RequestCodes;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +46,26 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private DrawerLayout drawer;
     private boolean isMaster;
+    private String compCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isMaster = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("toggle_master", false);
+        compCode = PreferenceManager.getDefaultSharedPreferences(this).getString("compCode", null);
+
+        File rootCompDataDirectory = new File(IOHelper.getRootCompDataPath(getApplicationContext()));
+        if (!rootCompDataDirectory.exists()) {
+            rootCompDataDirectory.mkdir();
+        }
+
+        if (!compCode.trim().isEmpty() || compCode != null) {
+            File compDataDirectory = new File(IOHelper.getCompetitionPath(getApplicationContext(), compCode));
+            if (!compDataDirectory.exists()) {
+                compDataDirectory.mkdir();
+            }
+        }
+
         verifyPermissions();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -70,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             Menu nav_menu = navigationView.getMenu();
             nav_menu.findItem(R.id.nav_home).setVisible(false);
             nav_menu.findItem(R.id.nav_sync).setVisible(false);
+            nav_menu.findItem(R.id.nav_json_to_db).setVisible(false);
             getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
         }
 
@@ -85,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_sync:
                         getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment(), "SyncSheetsFragment").commit();
+                        break;
+                    case R.id.nav_json_to_db:
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new JsonToDBFragment(), "JsonToDBFragment").commit();
                         break;
                     case R.id.nav_settings:
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);

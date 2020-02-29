@@ -19,6 +19,11 @@
         android:name="org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment"
         android:label="Log Match"
         tools:layout="@layout/fragment_sqlite_database" />
+    <fragment
+        android:id="@+id/jsonToDBFragment"
+        android:name="org.frc1732scoutingapp.fragments.JsonToDBFragment"
+        android:label="fragment_json_to_db"
+        tools:layout="@layout/fragment_json_to_db" />
     <activity
         android:id="@+id/settingsActivity"
         android:name="org.frc1732scoutingapp.activities.SettingsActivity"

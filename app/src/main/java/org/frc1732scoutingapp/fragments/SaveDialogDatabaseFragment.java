@@ -32,8 +32,6 @@ public class SaveDialogDatabaseFragment extends DialogFragment {
             }
         }
 
-        System.out.println("DBListener: " + DBListener);
-
         pushToDBButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
