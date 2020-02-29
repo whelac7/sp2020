@@ -30,11 +30,10 @@ import android.view.Menu;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.fragments.JsonToDBFragment;
-import org.frc1732scoutingapp.fragments.SQLLiteDatabaseFragment;
+import org.frc1732scoutingapp.fragments.LogMatchFragment;
 import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.fragments.HomeFragment;
 import org.frc1732scoutingapp.helpers.IOHelper;
-import org.frc1732scoutingapp.helpers.JsonHelper;
 import org.frc1732scoutingapp.models.RequestCodes;
 
 import java.io.File;
@@ -59,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
             rootCompDataDirectory.mkdir();
         }
 
-        if (!compCode.trim().isEmpty() || compCode != null) {
-            File compDataDirectory = new File(IOHelper.getCompetitionPath(getApplicationContext(), compCode));
+        if (compCode != null && !compCode.trim().isEmpty()) {
+            File compDataDirectory = new File(IOHelper.getCompetitionDirectoryPath(getApplicationContext(), compCode));
             if (!compDataDirectory.exists()) {
                 compDataDirectory.mkdir();
             }
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             nav_menu.findItem(R.id.nav_home).setVisible(false);
             nav_menu.findItem(R.id.nav_sync).setVisible(false);
             nav_menu.findItem(R.id.nav_json_to_db).setVisible(false);
-            getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
+            getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new LogMatchFragment(), "LogMatchFragment").commit();
         }
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment(), "HomeFragment").commit();
                         break;
                     case R.id.nav_log_match:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SQLLiteDatabaseFragment(), "SQLLiteDatabaseFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new LogMatchFragment(), "LogMatchFragment").commit();
                         break;
                     case R.id.nav_sync:
                         getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment(), "SyncSheetsFragment").commit();

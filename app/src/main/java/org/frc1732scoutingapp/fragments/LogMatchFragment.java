@@ -6,19 +6,17 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +26,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
-import com.google.gson.JsonObject;
 import com.google.zxing.WriterException;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.activities.QRScannerActivity;
-import org.frc1732scoutingapp.databinding.FragmentSqliteDatabaseBinding;
+import org.frc1732scoutingapp.databinding.FragmentLogMatchBinding;
 import org.frc1732scoutingapp.helpers.JsonHelper;
 import org.frc1732scoutingapp.helpers.QRCodeHelper;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
@@ -50,12 +47,13 @@ import java.util.Hashtable;
 
 import static android.app.Activity.RESULT_OK;
 
-public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallback {
+public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
 
-    private FragmentSqliteDatabaseBinding fragmentBinding;
-    private String TAG = "SqliteDatabaseActivity";
+    private FragmentLogMatchBinding fragmentBinding;
     private SQLiteDatabase database;
+
     private boolean isMaster;
+    private boolean autoBuildJson;
     private String defaultAlliance;
     private String competitionCode;
 
@@ -76,24 +74,19 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     public boolean toggleTeleopAuto = true;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sqlite_database, container, false);
+        fragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_log_match, container, false);
         View view = fragmentBinding.getRoot();
         database = new SQLiteDBHelper(getActivity()).getReadableDatabase();
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         isMaster = sharedPref.getBoolean("toggle_master", false);
+        autoBuildJson = sharedPref.getBoolean("auto_build_json", false);
         defaultAlliance = sharedPref.getString("defaultAlliance", "BLUE");
         competitionCode = sharedPref.getString("compCode", null);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Alliance, android.R.layout.simple_spinner_dropdown_item);
         fragmentBinding.allianceSpinner.setAdapter(adapter);
-
-        if (defaultAlliance.toUpperCase().equals("BLUE")) {
-            fragmentBinding.allianceSpinner.setSelection(Alliance.BLUE.getValue());
-        }
-        else {
-            fragmentBinding.allianceSpinner.setSelection(Alliance.RED.getValue());
-        }
+        fragmentBinding.allianceSpinner.setSelection(ScoutingUtils.getDefaultSpinnerSetting(fragmentBinding.allianceSpinner, defaultAlliance));
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.title_fragment_log_match);
 
@@ -343,6 +336,7 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
         }
 
         ContentValues values = new ContentValues();
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_CODE, competitionCode);
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER, fragmentBinding.teamNumberEditText.getText().toString());
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER, fragmentBinding.matchEditText.getText().toString());
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE, fragmentBinding.allianceSpinner.getSelectedItem().toString());
@@ -363,10 +357,9 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
     }
 
     public void saveToDB(DialogFragment dialog) {
-        SQLiteDBHelper.createTableIfNotExists(database, "_" + competitionCode);
         ContentValues values = processInputs();
         try {
-            long newRowId = database.insertOrThrow("_" + competitionCode, null, values);
+            long newRowId = database.insertOrThrow(SQLiteDBHelper.COMPETITION_TABLE_NAME, null, values);
             JsonHelper.saveMatchToJson(
                     getActivity(),
                     competitionCode,
@@ -386,6 +379,9 @@ public class SQLLiteDatabaseFragment extends Fragment implements SubmitToDBCallb
                     ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_HANG).toString())),
                     ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_LEVEL).toString())),
                     ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_DISABLE_TIME).toString()));
+            if (autoBuildJson) {
+                JsonHelper.buildCompetitionJson(getActivity(), competitionCode);
+            }
             SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER), Toast.LENGTH_LONG);
         }
         catch (SQLiteConstraintException ex) {

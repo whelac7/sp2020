@@ -3,7 +3,6 @@ package org.frc1732scoutingapp.helpers;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,10 +11,10 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.frc1732scoutingapp.models.MatchResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,8 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
 
     public static final String DATABASE_NAME = "1732scouting";
-    public static final String COMPETITION_TABLE_NAME = "template";
+    public static final String COMPETITION_TABLE_NAME = "matches";
+    public static final String COMPETITION_COLUMN_CODE = "competition_code";
     public static final String COMPETITION_COLUMN_TEAM_NUMBER = "team_number";
     public static final String COMPETITION_COLUMN_MATCH_NUMBER = "match_number";
     public static final String COMPETITION_COLUMN_ALLIANCE = "alliance";
@@ -49,6 +49,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + COMPETITION_TABLE_NAME + " (" +
+                COMPETITION_COLUMN_CODE + " VARCHAR(255), " +
                 COMPETITION_COLUMN_TEAM_NUMBER + " INT UNSIGNED, " +
                 COMPETITION_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
                 COMPETITION_COLUMN_ALLIANCE + " VARCHAR(255), " +
@@ -65,7 +66,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 COMPETITION_COLUMN_HANG + " BOOLEAN, " +
                 COMPETITION_COLUMN_LEVEL + " BOOLEAN, " +
                 COMPETITION_COLUMN_DISABLE_TIME + " INT UNSIGNED, " +
-                "UNIQUE(" + COMPETITION_COLUMN_TEAM_NUMBER + ", " + COMPETITION_COLUMN_MATCH_NUMBER + "))");
+                "UNIQUE(" + COMPETITION_COLUMN_CODE + ", " + COMPETITION_COLUMN_TEAM_NUMBER + ", " + COMPETITION_COLUMN_MATCH_NUMBER + "))");
     }
 
     @Override
@@ -74,26 +75,26 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String table_name) {
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
-                COMPETITION_COLUMN_TEAM_NUMBER + " INT UNSIGNED, " +
-                COMPETITION_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
-                COMPETITION_COLUMN_ALLIANCE + " VARCHAR(255), " +
-                COMPETITION_COLUMN_INIT_LINE + " BOOLEAN, " +
-                COMPETITION_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
-                COMPETITION_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +
-                COMPETITION_COLUMN_AUTO_INNER + " INT UNSIGNED," +
-                COMPETITION_COLUMN_TELEOP_LOWER + " INT UNSIGNED, " +
-                COMPETITION_COLUMN_TELEOP_OUTER + " INT UNSIGNED, " +
-                COMPETITION_COLUMN_TELEOP_INNER + " INT UNSIGNED, " +
-                COMPETITION_COLUMN_ROTATION + " BOOLEAN, " +
-                COMPETITION_COLUMN_POSITION + " BOOLEAN, " +
-                COMPETITION_COLUMN_PARK + " BOOLEAN, " +
-                COMPETITION_COLUMN_HANG + " BOOLEAN, " +
-                COMPETITION_COLUMN_LEVEL + " BOOLEAN, " +
-                COMPETITION_COLUMN_DISABLE_TIME + " INT UNSIGNED, " +
-                "UNIQUE(" + COMPETITION_COLUMN_TEAM_NUMBER + ", " + COMPETITION_COLUMN_MATCH_NUMBER + "))");
-    }
+//    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String table_name) {
+//        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
+//                COMPETITION_COLUMN_TEAM_NUMBER + " INT UNSIGNED, " +
+//                COMPETITION_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
+//                COMPETITION_COLUMN_ALLIANCE + " VARCHAR(255), " +
+//                COMPETITION_COLUMN_INIT_LINE + " BOOLEAN, " +
+//                COMPETITION_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
+//                COMPETITION_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +
+//                COMPETITION_COLUMN_AUTO_INNER + " INT UNSIGNED," +
+//                COMPETITION_COLUMN_TELEOP_LOWER + " INT UNSIGNED, " +
+//                COMPETITION_COLUMN_TELEOP_OUTER + " INT UNSIGNED, " +
+//                COMPETITION_COLUMN_TELEOP_INNER + " INT UNSIGNED, " +
+//                COMPETITION_COLUMN_ROTATION + " BOOLEAN, " +
+//                COMPETITION_COLUMN_POSITION + " BOOLEAN, " +
+//                COMPETITION_COLUMN_PARK + " BOOLEAN, " +
+//                COMPETITION_COLUMN_HANG + " BOOLEAN, " +
+//                COMPETITION_COLUMN_LEVEL + " BOOLEAN, " +
+//                COMPETITION_COLUMN_DISABLE_TIME + " INT UNSIGNED, " +
+//                "UNIQUE(" + COMPETITION_COLUMN_CODE + ", " + COMPETITION_COLUMN_TEAM_NUMBER + ", " + COMPETITION_COLUMN_MATCH_NUMBER + "))");
+//    }
 
     /**
      *
@@ -103,6 +104,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      */
     public static Cursor readFromDB(SQLiteDatabase database, String compCode) throws SQLiteException {
         String[] projection = {
+                SQLiteDBHelper.COMPETITION_COLUMN_CODE,
                 SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER,
                 SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE,
                 SQLiteDBHelper.COMPETITION_COLUMN_INIT_LINE,
@@ -122,7 +124,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         try {
             Cursor cursor = database.query(
-                    "_" + compCode,   // The table to query
+                    SQLiteDBHelper.COMPETITION_TABLE_NAME,   // The table to query
                     projection,                               // The columns to return
                     null,                                // The columns for the WHERE clause
                     null,                            // The values for the WHERE clause
@@ -149,6 +151,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
      */
     public static Cursor readFromDB(SQLiteDatabase database, String compCode, String match) throws SQLiteException {
         String[] projection = {
+                SQLiteDBHelper.COMPETITION_COLUMN_CODE,
                 SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER,
                 SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE,
                 SQLiteDBHelper.COMPETITION_COLUMN_INIT_LINE,
@@ -171,7 +174,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
 
         try {
             Cursor cursor = database.query(
-                    "_" + compCode,   // The table to query
+                    SQLiteDBHelper.COMPETITION_TABLE_NAME,   // The table to query
                     projection,                               // The columns to return
                     selection,                                // The columns for the WHERE clause
                     selectionArgs,                            // The values for the WHERE clause
@@ -190,7 +193,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     public static JsonObject saveDBMatchToJson(SQLiteDatabase database, Context context, String compCode, String teamNumber, String matchNumber) {
-        Cursor result = database.rawQuery(String.format("SELECT * FROM %s WHERE %s=%s AND %s=%s", compCode, COMPETITION_COLUMN_TEAM_NUMBER, teamNumber, COMPETITION_COLUMN_MATCH_NUMBER, matchNumber), null);
+        Cursor result = database.rawQuery(String.format("SELECT * FROM %s WHERE %s=%s AND %s=%s AND %s=%s", COMPETITION_TABLE_NAME, COMPETITION_COLUMN_CODE, compCode, COMPETITION_COLUMN_TEAM_NUMBER, teamNumber, COMPETITION_COLUMN_MATCH_NUMBER, matchNumber), null);
         if (result.moveToFirst()) {
             JsonObject match = JsonHelper.saveMatchToJson(
                     context,
@@ -216,9 +219,10 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    private static ContentValues putMatchValues(MatchResult matchResult) {
+    private static ContentValues putMatchValues(String compCode, MatchResult matchResult) {
         ContentValues values = new ContentValues();
 
+        values.put(SQLiteDBHelper.COMPETITION_COLUMN_CODE, compCode);
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER, matchResult.getTeamNumber());
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER, matchResult.getMatchNumber());
         values.put(SQLiteDBHelper.COMPETITION_COLUMN_ALLIANCE, matchResult.getAlliance());
@@ -239,48 +243,53 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         return values;
     }
 
+    //TODO: Test with new schema
     public static void insertTeamMatchJsonToDB(SQLiteDatabase database, Context context, String compCode, int teamNumber, int matchNumber) {
         JsonObject match = JsonHelper.readTeamMatchFromJson(context, compCode, teamNumber, matchNumber);
         MatchResult matchResult = new Gson().fromJson(match, MatchResult.class);
-        ContentValues values = putMatchValues(matchResult);
-        SQLiteDBHelper.createTableIfNotExists(database, "_" + compCode);
-        database.insert("_" + compCode, null, values);
+        ContentValues values = putMatchValues(compCode, matchResult);
+        database.insert(COMPETITION_TABLE_NAME, null, values);
     }
 
-    public static void insertCompetitionJsonToDB(SQLiteDatabase database, Context context, String compCode) {
+    //TODO: Test with new schema
+    public static void insertCompetitionJsonToDB(SQLiteDatabase database, Context context, String compCode) throws IOException {
         JsonObject competition = JsonHelper.readCompetitionFromJson(context, compCode);
+
+        if (competition == null) {
+            throw new IOException("There is no competition JSON with the name: " + compCode);
+        }
+
         Gson gson = new Gson();
         JsonArray matches = competition.get("matches").getAsJsonArray();
-        SQLiteDBHelper.createTableIfNotExists(database, "_" + compCode);
         database.beginTransaction();
         for (int i = 0; i < matches.size(); i++) {
             JsonObject match = matches.get(i).getAsJsonObject();
             MatchResult matchResult = gson.fromJson(match, MatchResult.class);
-            ContentValues values = putMatchValues(matchResult);
-            database.insert("_" + compCode, null, values);
+            ContentValues values = putMatchValues(compCode, matchResult);
+            database.insert(COMPETITION_TABLE_NAME, null, values);
         }
         database.setTransactionSuccessful();
         database.endTransaction();
     }
 
+    //TODO: Test with new schema
     public static List<String> getCompetitions(SQLiteDatabase database) {
-        Cursor competitions = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        Cursor competitions = database.rawQuery("SELECT DISTINCT " + COMPETITION_COLUMN_CODE + " FROM " + COMPETITION_TABLE_NAME, null);
         List<String> competitionList = new ArrayList<String>();
         if (competitions.moveToFirst()) {
             do {
                 String table = competitions.getString(0);
-                if (table.startsWith("_")) {
-                    table = table.substring(1, table.length());
-                    competitionList.add(table);
-                }
+                competitionList.add(table);
             } while (competitions.moveToNext());
         }
         return competitionList;
     }
 
+    //TODO: Test with new Schema
     public static List<MatchResult> getMatchResults(SQLiteDatabase database, String compCode) {
-        Cursor results = database.rawQuery("SELECT * FROM " + compCode + " ORDER BY " + COMPETITION_COLUMN_MATCH_NUMBER, null);
+        Cursor results = database.rawQuery("SELECT * FROM " + COMPETITION_TABLE_NAME + " WHERE " + COMPETITION_COLUMN_CODE + "=" + "'" + compCode + "'" +  " ORDER BY " + COMPETITION_COLUMN_MATCH_NUMBER, null);
         List<MatchResult> matchResults = new ArrayList<MatchResult>();
+        System.out.println("Results count: " + results.getCount());
         if (results.moveToFirst()) {
             do {
                 matchResults.add(new MatchResult(

@@ -1,11 +1,13 @@
 package org.frc1732scoutingapp.fragments;
 
 
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +21,11 @@ import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.helpers.IOHelper;
 import org.frc1732scoutingapp.helpers.JsonHelper;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
+import org.frc1732scoutingapp.helpers.ScoutingUtils;
 import org.frc1732scoutingapp.helpers.SingleToast;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +35,7 @@ public class JsonToDBFragment extends Fragment {
     private Button syncJsonToDBButton;
     private Button buildAndSyncButton;
     private SQLiteDatabase database;
+    private String compCode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +44,9 @@ public class JsonToDBFragment extends Fragment {
         buildJsonButton = view.findViewById(R.id.buildJsonButton);
         syncJsonToDBButton = view.findViewById(R.id.syncJsonToDb);
         buildAndSyncButton = view.findViewById(R.id.buildAndSyncButton);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        compCode = sharedPref.getString("compCode", null);
 
         File competitionData = new File(IOHelper.getRootCompDataPath(getActivity()));
         if (competitionData.exists()) {
@@ -59,6 +67,7 @@ public class JsonToDBFragment extends Fragment {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.competition_spinner_dropdown, competitionList);
             adapter.setDropDownViewResource(R.layout.competition_spinner_dropdown);
             competitionCodeSpinner.setAdapter(adapter);
+            competitionCodeSpinner.setSelection(ScoutingUtils.getDefaultSpinnerSetting(competitionCodeSpinner, compCode));
 
             buildJsonButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -71,18 +80,30 @@ public class JsonToDBFragment extends Fragment {
             syncJsonToDBButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SQLiteDBHelper.insertCompetitionJsonToDB(database, getActivity(), competitionCodeSpinner.getSelectedItem().toString());
-                    SingleToast.show(getActivity(), "Competition JSON: " + competitionCodeSpinner.getSelectedItem().toString() + " merged into database.", Toast.LENGTH_SHORT);
+                    try {
+                        SQLiteDBHelper.insertCompetitionJsonToDB(database, getActivity(), competitionCodeSpinner.getSelectedItem().toString());
+                        SingleToast.show(getActivity(), "Competition JSON: " + competitionCodeSpinner.getSelectedItem().toString() + " merged into database.", Toast.LENGTH_SHORT);
+                    }
+                    catch (IOException ex) {
+                        ScoutingUtils.logException(ex, "JsonToDBFragment.syncJsonToDB");
+                        SingleToast.show(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT);
+                    }
                 }
             });
 
             buildAndSyncButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String competition = competitionCodeSpinner.getSelectedItem().toString();
-                    JsonHelper.buildCompetitionJson(getActivity(), competition);
-                    SQLiteDBHelper.insertCompetitionJsonToDB(database, getActivity(), competition);
-                    SingleToast.show(getActivity(), "Competition JSON: " + competition + " built and merged into database.", Toast.LENGTH_SHORT);
+                    try {
+                        String competition = competitionCodeSpinner.getSelectedItem().toString();
+                        JsonHelper.buildCompetitionJson(getActivity(), competition);
+                        SQLiteDBHelper.insertCompetitionJsonToDB(database, getActivity(), competition);
+                        SingleToast.show(getActivity(), "Competition JSON: " + competition + " built and merged into database.", Toast.LENGTH_SHORT);
+                    }
+                    catch (IOException ex) {
+                        ScoutingUtils.logException(ex, "JsonToDBFragment.buildAndSyncJsonToDB");
+                        SingleToast.show(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT);
+                    }
                 }
             });
 
