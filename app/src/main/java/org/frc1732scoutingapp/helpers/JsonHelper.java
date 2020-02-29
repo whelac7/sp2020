@@ -26,34 +26,25 @@ public class JsonHelper {
     }
 
     public static JsonObject saveMatchToJson(Context context, String compCode, int teamNumber, int matchNumber, String alliance, boolean initLine, int autoLower, int autoOuter, int autoInner, int teleopLower, int teleopOuter, int teleopInner, boolean rotationOut, boolean positionOut, boolean parked, boolean hanging, boolean leveled, int disableTime) {
-        try {
-            MatchResult matchResult = new MatchResult(teamNumber, matchNumber, alliance, initLine, autoLower, autoOuter, autoInner, teleopLower, teleopOuter, teleopInner, rotationOut, positionOut, parked, hanging, leveled, disableTime);
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create();
-            String jsonString = gson.toJson(matchResult);
-            File saveDir = new File(getCompetitionPath(context, compCode));
-            if (!saveDir.exists()) {
-                saveDir.mkdirs();
-            }
-            FileWriter fw = new FileWriter(getMatchFilePath(context, compCode, teamNumber, matchNumber));
-            fw.write(jsonString);
-            fw.flush();
-            fw.close();
-            return gson.fromJson(jsonString, JsonObject.class);
+        MatchResult matchResult = new MatchResult(teamNumber, matchNumber, alliance, initLine, autoLower, autoOuter, autoInner, teleopLower, teleopOuter, teleopInner, rotationOut, positionOut, parked, hanging, leveled, disableTime);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        String jsonString = gson.toJson(matchResult);
+        File saveDir = new File(IOHelper.getCompetitionPath(context, compCode));
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
         }
-        catch (IOException ex) {
-            System.out.println(ex);
-            return null;
-        }
+        IOHelper.writeToFile(IOHelper.getMatchFilePath(context, compCode, teamNumber, matchNumber) + ".json", jsonString);
+        return gson.fromJson(jsonString, JsonObject.class);
     }
 
     public static JsonObject readCompetitionFromJson(Context context, String compCode) {
-        return readFromJson(context, compCode, new File(getCompetitionPath(context, compCode) + compCode + ".json"));
+        return readFromJson(context, compCode, new File(IOHelper.getCompetitionPath(context, compCode) + compCode));
     }
 
     public static JsonObject readTeamMatchFromJson(Context context, String compCode, int teamNumber, int matchNumber) {
-        return readFromJson(context, compCode, new File(getMatchFilePath(context, compCode, teamNumber, matchNumber)));
+        return readFromJson(context, compCode, new File(IOHelper.getMatchFilePath(context, compCode, teamNumber, matchNumber)));
     }
 
     public static JsonObject readFromJson(Context context, String compCode, File json) {
@@ -72,9 +63,9 @@ public class JsonHelper {
 
     public static JsonObject buildCompetitionJson(Context context, String compCode) {
         try {
-            File compFolder = new File(getCompetitionPath(context, compCode));
+            File compFolder = new File(IOHelper.getCompetitionPath(context, compCode));
             if (compFolder == null) {
-                throw new IOException("Could not find directory: " + getCompetitionPath(context, compCode));
+                throw new IOException("Could not find directory: " + IOHelper.getCompetitionPath(context, compCode));
             }
             else {
                 JsonObject competitionJson = new JsonObject();
@@ -93,11 +84,7 @@ public class JsonHelper {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .create();
-                FileWriter fw = new FileWriter(getCompetitionPath(context, compCode) + compCode + ".json");
-                fw.write(gson.toJson(competitionJson));
-                fw.flush();
-                fw.close();
-
+                IOHelper.writeToFile(IOHelper.getCompetitionPath(context, compCode) + compCode + ".json", gson.toJson(competitionJson));
                 return competitionJson;
             }
         }
@@ -105,13 +92,5 @@ public class JsonHelper {
             System.out.println(ex);
             return null;
         }
-    }
-
-    private static String getCompetitionPath(Context context, String compCode) {
-        return context.getFilesDir() + String.format("/matchdata/%s/", compCode);
-    }
-
-    private static String getMatchFilePath(Context context, String compCode, int teamNumber, int matchNumber) {
-        return context.getFilesDir() + String.format("/matchdata/%s/%s_%s_%s.json", compCode, compCode, teamNumber, matchNumber);
     }
 }

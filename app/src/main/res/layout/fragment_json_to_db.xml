@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#FFFFFF"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.JsonToDBFragment">
+
+    <Spinner
+        android:id="@+id/competitionCodeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/buildJsonButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/competitionCodeSpinner"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Build Competition JSON" />
+
+    <Button
+        android:id="@+id/syncJsonToDb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buildJsonButton"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Sync Competition JSON into DB" />
+
+    <Button
+        android:id="@+id/buildAndSyncButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/syncJsonToDb"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="Build Competition JSON and Sync into DB" />
+
+</RelativeLayout>
