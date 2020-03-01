@@ -34,6 +34,7 @@ import org.frc1732scoutingapp.fragments.LogMatchFragment;
 import org.frc1732scoutingapp.fragments.SyncSheetsFragment;
 import org.frc1732scoutingapp.fragments.HomeFragment;
 import org.frc1732scoutingapp.helpers.IOHelper;
+import org.frc1732scoutingapp.helpers.ScoutingUtils;
 import org.frc1732scoutingapp.models.RequestCodes;
 
 import java.io.File;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ScoutingUtils.logAction(getApplicationContext(), "MainActivity", "Application Startup");
+
         isMaster = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("toggle_master", false);
         compCode = PreferenceManager.getDefaultSharedPreferences(this).getString("compCode", null);
 
@@ -92,16 +95,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment(), "HomeFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new HomeFragment(), "HomeFragment").addToBackStack("HomeFragment").commit();
                         break;
                     case R.id.nav_log_match:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new LogMatchFragment(), "LogMatchFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new LogMatchFragment(), "LogMatchFragment").addToBackStack("LogMatchFragment").commit();
                         break;
                     case R.id.nav_sync:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment(), "SyncSheetsFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new SyncSheetsFragment(), "SyncSheetsFragment").addToBackStack("SyncSheetsFragment").commit();
                         break;
                     case R.id.nav_json_to_db:
-                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new JsonToDBFragment(), "JsonToDBFragment").commit();
+                        getSupportFragmentManager().beginTransaction().replace(graph.getStartDestination(), new JsonToDBFragment(), "JsonToDBFragment").addToBackStack("JsonToDBFragment").commit();
                         break;
                     case R.id.nav_settings:
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -143,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }

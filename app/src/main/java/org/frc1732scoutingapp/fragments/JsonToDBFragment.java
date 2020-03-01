@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.helpers.IOHelper;
 import org.frc1732scoutingapp.helpers.JsonHelper;
@@ -72,8 +75,9 @@ public class JsonToDBFragment extends Fragment {
             buildJsonButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    JsonHelper.buildCompetitionJson(getActivity(), competitionCodeSpinner.getSelectedItem().toString());
+                    JsonObject competition = JsonHelper.buildCompetitionJson(getActivity(), competitionCodeSpinner.getSelectedItem().toString());
                     SingleToast.show(getActivity(), "Competition JSON built.", Toast.LENGTH_SHORT);
+                    ScoutingUtils.logAction(getActivity(), "JsonToDBFragment", "Building Competition JSON (" + competitionCodeSpinner.getSelectedItem().toString() + "): " + competition);
                 }
             });
 
@@ -81,11 +85,12 @@ public class JsonToDBFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     try {
-                        SQLiteDBHelper.insertCompetitionJsonToDB(database, getActivity(), competitionCodeSpinner.getSelectedItem().toString());
+                        JsonArray competition = SQLiteDBHelper.insertCompetitionJsonToDB(database, getActivity(), competitionCodeSpinner.getSelectedItem().toString());
                         SingleToast.show(getActivity(), "Competition JSON: " + competitionCodeSpinner.getSelectedItem().toString() + " merged into database.", Toast.LENGTH_SHORT);
+                        ScoutingUtils.logAction(getActivity(), "JsonToDBFragment", "Inserting Competition JSON into database (" + competitionCodeSpinner.getSelectedItem().toString() + "): " + competition);
                     }
                     catch (IOException ex) {
-                        ScoutingUtils.logException(ex, "JsonToDBFragment.syncJsonToDB");
+                        ScoutingUtils.logException(getActivity(), ex, "JsonToDBFragment.syncJsonToDB");
                         SingleToast.show(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT);
                     }
                 }
@@ -96,12 +101,13 @@ public class JsonToDBFragment extends Fragment {
                 public void onClick(View view) {
                     try {
                         String competition = competitionCodeSpinner.getSelectedItem().toString();
-                        JsonHelper.buildCompetitionJson(getActivity(), competition);
+                        JsonObject competitionJson = JsonHelper.buildCompetitionJson(getActivity(), competition);
                         SQLiteDBHelper.insertCompetitionJsonToDB(database, getActivity(), competition);
                         SingleToast.show(getActivity(), "Competition JSON: " + competition + " built and merged into database.", Toast.LENGTH_SHORT);
+                        ScoutingUtils.logAction(getActivity(), "JsonToDBFragment", "Building and inserting Competition JSON into database (" + competitionCodeSpinner.getSelectedItem().toString() + "): " + competitionJson);
                     }
                     catch (IOException ex) {
-                        ScoutingUtils.logException(ex, "JsonToDBFragment.buildAndSyncJsonToDB");
+                        ScoutingUtils.logException(getActivity(), ex, "JsonToDBFragment.buildAndSyncJsonToDB");
                         SingleToast.show(getActivity(), ex.getMessage(), Toast.LENGTH_SHORT);
                     }
                 }

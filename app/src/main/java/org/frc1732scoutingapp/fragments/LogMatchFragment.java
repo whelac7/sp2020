@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonObject;
 import com.google.zxing.WriterException;
 
 import org.frc1732scoutingapp.R;
@@ -83,6 +86,16 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
         autoBuildJson = sharedPref.getBoolean("auto_build_json", false);
         defaultAlliance = sharedPref.getString("defaultAlliance", "BLUE");
         competitionCode = sharedPref.getString("compCode", null);
+
+        if (competitionCode == null || competitionCode.trim().isEmpty()) {
+            SingleToast.show(getActivity(), "competitionCode is null or empty: Make sure you set the code in settings.", Toast.LENGTH_LONG);
+            NavigationView navView = getActivity().findViewById(R.id.nav_view);
+            Menu navMenu = navView.getMenu();
+            navView.getCheckedItem().setChecked(false);
+            getFragmentManager().popBackStack();
+            ScoutingUtils.logException(getActivity(), "LogMatchFragment", "competitionCode is null or empty.");
+            return null;
+        }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Alliance, android.R.layout.simple_spinner_dropdown_item);
         fragmentBinding.allianceSpinner.setAdapter(adapter);
@@ -239,6 +252,7 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
                 System.out.println(propertyString);
             }
             populateFields(properties.get("teamNumber"), properties.get("matchNumber"), properties.get("alliance"), properties.get("initLine"), properties.get("autoLower"), properties.get("autoOuter"), properties.get("autoInner"), properties.get("teleopLower"), properties.get("teleopOuter"), properties.get("rotation"), properties.get("position"), properties.get("parked"), properties.get("hung"), properties.get("leveled"), properties.get("disableTime"));
+            ScoutingUtils.logAction(getActivity(), "LogMatchFragment", "QR Code Scanned (" + competitionCode + "): " + properties);
         }
     }
 
@@ -269,7 +283,7 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
     private void startSaveDialog() {
         try {
             processInputs();
-            Bitmap code = QRCodeHelper.createQRCode(String.format("app=1732ScoutingApp,teamNumber=%s,matchNumber=%s,alliance=%s,initLine=%s,autoLower=%s,autoOuter=%s,autoInner=%s,teleopLower=%s,teleopOuter=%s,teleopInner=%s,rotation=%s,position=%s,parked=%s,hung=%s,leveled=%s,disableTime=%s,notes=%s",
+            String codeString = String.format("app=1732ScoutingApp,teamNumber=%s,matchNumber=%s,alliance=%s,initLine=%s,autoLower=%s,autoOuter=%s,autoInner=%s,teleopLower=%s,teleopOuter=%s,teleopInner=%s,rotation=%s,position=%s,parked=%s,hung=%s,leveled=%s,disableTime=%s,notes=%s",
                     fragmentBinding.teamNumberEditText.getText().toString(),
                     fragmentBinding.matchEditText.getText().toString(),
                     fragmentBinding.allianceSpinner.getSelectedItem().toString(),
@@ -286,14 +300,15 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
                     fragmentBinding.hang.isChecked(),
                     fragmentBinding.level.isChecked(),
                     fragmentBinding.disTime.getText(),
-                    "Blank"
-            ));
-
+                    "Blank");
+            Bitmap code = QRCodeHelper.createQRCode(codeString);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             code.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] codeInBytes = stream.toByteArray();
             Bundle bundledCode = new Bundle();
             bundledCode.putByteArray("codeInBytes", codeInBytes);
+
+            ScoutingUtils.logAction(getActivity(), "LogMatchFragment", "QR Code Created (" + competitionCode + "): " + codeString);
 
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             Fragment prev = getChildFragmentManager().findFragmentByTag("SaveDataDialog");
@@ -311,8 +326,6 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
         } catch (IllegalArgumentException ex) {
             if (ex.getMessage().startsWith("no team specified")) {
                 SingleToast.show(getActivity(), "You must specify a team number.", Toast.LENGTH_LONG);
-            } else if (ex.getMessage().startsWith("match exists")) {
-                SingleToast.show(getActivity(), "Match " + fragmentBinding.matchEditText.getText().toString() + " already exists.", Toast.LENGTH_LONG);
             } else if (ex.getMessage().startsWith("no match specified")) {
                 SingleToast.show(getActivity(), "You must specify a match number.", Toast.LENGTH_LONG);
             } else if (ex.getMessage().startsWith("empty parameter")) {
@@ -360,7 +373,7 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
         ContentValues values = processInputs();
         try {
             long newRowId = database.insertOrThrow(SQLiteDBHelper.COMPETITION_TABLE_NAME, null, values);
-            JsonHelper.saveMatchToJson(
+            JsonObject match = JsonHelper.saveMatchToJson(
                     getActivity(),
                     competitionCode,
                     ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER).toString()),
@@ -379,19 +392,23 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
                     ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_HANG).toString())),
                     ScoutingUtils.intToBool(ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_LEVEL).toString())),
                     ScoutingUtils.tryParseInt(values.get(SQLiteDBHelper.COMPETITION_COLUMN_DISABLE_TIME).toString()));
+            ScoutingUtils.logAction(getActivity(), "LogMatchFragment", "Logging match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER).toString() + " for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER).toString() +  " (" + competitionCode + ")" + ": " + match);
             if (autoBuildJson) {
                 JsonHelper.buildCompetitionJson(getActivity(), competitionCode);
             }
-            SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER), Toast.LENGTH_LONG);
+            SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " entered for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER) + " (" + competitionCode + ")", Toast.LENGTH_LONG);
         }
         catch (SQLiteConstraintException ex) {
+            String cause = "";
             if (ex.getMessage().toUpperCase().contains("UNIQUE CONSTRAINT FAILED")) {
-                SingleToast.show(getActivity(), "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " already exists for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER), Toast.LENGTH_LONG);
+                cause = "Match " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_MATCH_NUMBER) + " already exists for Team " + values.get(SQLiteDBHelper.COMPETITION_COLUMN_TEAM_NUMBER) + " (" + competitionCode + ")";
+                SingleToast.show(getActivity(), cause, Toast.LENGTH_LONG);
             }
             else {
-                SingleToast.show(getActivity(), "An unknown error occurred.", Toast.LENGTH_LONG);
+                cause = "An unknown error occurred.";
+                SingleToast.show(getActivity(), cause, Toast.LENGTH_LONG);
             }
-            ScoutingUtils.logException(ex, "saveToDB");
+            ScoutingUtils.logException(getActivity(), ex, "LogMatchFragment: " + cause);
         }
         finally {
             dialog.dismiss();
