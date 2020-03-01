@@ -13,9 +13,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/hilltopperrobotics"
+        android:icon="@mipmap/hilltopper"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/hilltopperrobotics"
+        android:roundIcon="@mipmap/hilltopper"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
