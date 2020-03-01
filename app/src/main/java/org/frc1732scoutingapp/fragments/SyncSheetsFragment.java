@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.material.navigation.NavigationView;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.helpers.SQLiteDBHelper;
@@ -74,6 +76,7 @@ public class SyncSheetsFragment extends Fragment {
                @Override
                public void onClick(View view) {
                    syncToSheets();
+                   ScoutingUtils.logAction(getActivity(), "SyncSheetsFragment", "Synced competition " + competitionCodeSpinner.getSelectedItem().toString() + " to sheets.");
                }
             });
 
@@ -81,22 +84,20 @@ public class SyncSheetsFragment extends Fragment {
         }
         else {
             SingleToast.show(getActivity(), "You must be connected to the internet to sync to Google Sheets.", Toast.LENGTH_LONG);
+            NavigationView navView = getActivity().findViewById(R.id.nav_view);
+            Menu navMenu = navView.getMenu();
+            navView.getCheckedItem().setChecked(false);
+            getFragmentManager().popBackStack();
+            ScoutingUtils.logException(getActivity(), "SyncSheetsFragment", "No internet.");
             return null;
         }
     }
 
     private void syncToSheets() {
-        try {
-            List<MatchResult> matchResults = SQLiteDBHelper.getMatchResults(database, competitionCodeSpinner.getSelectedItem().toString());
-            SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
-            sheetService.pushMatchInfo(matchResults);
-            SingleToast.show(getActivity(), "Data pushed to sheets.", Toast.LENGTH_SHORT);
-        }
-        catch (SQLiteException ex) {
-            if (ex.getMessage().indexOf("no such table") >= 0) {
-                SingleToast.show(getActivity(), "You entered an invalid competition code.", Toast.LENGTH_SHORT);
-            }
-        }
+        List<MatchResult> matchResults = SQLiteDBHelper.getMatchResults(database, competitionCodeSpinner.getSelectedItem().toString());
+        SheetService sheetService = new SheetService(mGoogleSignInAccount.getAccount(), getContext());
+        sheetService.pushMatchInfo(matchResults);
+        SingleToast.show(getActivity(), "Data pushed to sheets.", Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -107,6 +108,7 @@ public class SyncSheetsFragment extends Fragment {
             }
             catch (ApiException ex) {
                 Log.w("App", "signInResult:failed code=" + ex.getStatusCode());
+                ScoutingUtils.logException(getActivity(), "SyncSheetsFragment", "signInResult: failed code = " + ex.getStatusCode());
             }
         }
     }

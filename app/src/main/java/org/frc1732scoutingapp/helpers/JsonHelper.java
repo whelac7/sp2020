@@ -34,7 +34,7 @@ public class JsonHelper {
         if (!saveDir.exists()) {
             saveDir.mkdirs();
         }
-        IOHelper.writeToFile(IOHelper.getMatchFilePath(context, compCode, teamNumber, matchNumber) + ".json", jsonString);
+        IOHelper.writeToFile(context, IOHelper.getMatchFilePath(context, compCode, teamNumber, matchNumber) + ".json", jsonString);
         return gson.fromJson(jsonString, JsonObject.class);
     }
 
@@ -55,7 +55,7 @@ public class JsonHelper {
             return readJson;
         }
         catch (IOException ex) {
-            ScoutingUtils.logException(ex, "JsonHelper.readFromJson()");
+            ScoutingUtils.logException(context, ex, "JsonHelper.readFromJson()");
             return null;
         }
     }
@@ -83,12 +83,12 @@ public class JsonHelper {
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
                         .create();
-                IOHelper.writeToFile(IOHelper.getCompetitionJsonPath(context, compCode), gson.toJson(competitionJson));
+                IOHelper.writeToFile(context, IOHelper.getCompetitionJsonPath(context, compCode), gson.toJson(competitionJson));
                 return competitionJson;
             }
         }
         catch (IOException ex) {
-            ScoutingUtils.logException(ex, "JsonHelper.buildCompetitionJson()");
+            ScoutingUtils.logException(context, ex, "JsonHelper.buildCompetitionJson()");
             return null;
         }
     }

@@ -75,27 +75,6 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-//    public static void createTableIfNotExists(SQLiteDatabase sqLiteDatabase, String table_name) {
-//        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + table_name + " (" +
-//                COMPETITION_COLUMN_TEAM_NUMBER + " INT UNSIGNED, " +
-//                COMPETITION_COLUMN_MATCH_NUMBER + " INT UNSIGNED, " +
-//                COMPETITION_COLUMN_ALLIANCE + " VARCHAR(255), " +
-//                COMPETITION_COLUMN_INIT_LINE + " BOOLEAN, " +
-//                COMPETITION_COLUMN_AUTO_LOWER + " INT UNSIGNED, " +
-//                COMPETITION_COLUMN_AUTO_OUTER + " INT UNSIGNED, " +
-//                COMPETITION_COLUMN_AUTO_INNER + " INT UNSIGNED," +
-//                COMPETITION_COLUMN_TELEOP_LOWER + " INT UNSIGNED, " +
-//                COMPETITION_COLUMN_TELEOP_OUTER + " INT UNSIGNED, " +
-//                COMPETITION_COLUMN_TELEOP_INNER + " INT UNSIGNED, " +
-//                COMPETITION_COLUMN_ROTATION + " BOOLEAN, " +
-//                COMPETITION_COLUMN_POSITION + " BOOLEAN, " +
-//                COMPETITION_COLUMN_PARK + " BOOLEAN, " +
-//                COMPETITION_COLUMN_HANG + " BOOLEAN, " +
-//                COMPETITION_COLUMN_LEVEL + " BOOLEAN, " +
-//                COMPETITION_COLUMN_DISABLE_TIME + " INT UNSIGNED, " +
-//                "UNIQUE(" + COMPETITION_COLUMN_CODE + ", " + COMPETITION_COLUMN_TEAM_NUMBER + ", " + COMPETITION_COLUMN_MATCH_NUMBER + "))");
-//    }
-
     /**
      *
      * @param database, teamNumber, match
@@ -252,7 +231,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     //TODO: Test with new schema
-    public static void insertCompetitionJsonToDB(SQLiteDatabase database, Context context, String compCode) throws IOException {
+    public static JsonArray insertCompetitionJsonToDB(SQLiteDatabase database, Context context, String compCode) throws IOException {
         JsonObject competition = JsonHelper.readCompetitionFromJson(context, compCode);
 
         if (competition == null) {
@@ -270,6 +249,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
         }
         database.setTransactionSuccessful();
         database.endTransaction();
+        return matches;
     }
 
     //TODO: Test with new schema
