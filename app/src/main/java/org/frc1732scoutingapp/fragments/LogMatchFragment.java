@@ -33,6 +33,7 @@ import com.google.zxing.WriterException;
 
 import org.frc1732scoutingapp.R;
 import org.frc1732scoutingapp.activities.QRScannerActivity;
+import org.frc1732scoutingapp.activities.SettingsActivity;
 import org.frc1732scoutingapp.databinding.FragmentLogMatchBinding;
 import org.frc1732scoutingapp.helpers.JsonHelper;
 import org.frc1732scoutingapp.helpers.QRCodeHelper;
@@ -88,13 +89,14 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
         competitionCode = sharedPref.getString("compCode", null);
 
         if (competitionCode == null || competitionCode.trim().isEmpty()) {
-            SingleToast.show(getActivity(), "competitionCode is null or empty: Make sure you set the code in settings.", Toast.LENGTH_LONG);
-            NavigationView navView = getActivity().findViewById(R.id.nav_view);
-            Menu navMenu = navView.getMenu();
-            navView.getCheckedItem().setChecked(false);
-            getFragmentManager().popBackStack();
             ScoutingUtils.logException(getActivity(), "LogMatchFragment", "competitionCode is null or empty.");
+            SingleToast.show(getActivity(), "competitionCode is null or empty: Make sure you set the code in settings.", Toast.LENGTH_LONG);
+            Intent startSettings = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(startSettings);
             return null;
+        }
+        else {
+            SingleToast.show(getActivity(), "You are inputting match info for: " + competitionCode, Toast.LENGTH_LONG);
         }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.Alliance, android.R.layout.simple_spinner_dropdown_item);
