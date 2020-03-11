@@ -74,8 +74,6 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
 
     public int placeholder;
 
-    public boolean toggleTeleopAuto = true;
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_log_match, container, false);
         View view = fragmentBinding.getRoot();
@@ -115,8 +113,7 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
         ToggleButton hang = fragmentBinding.hang;
         ToggleButton level = fragmentBinding.level;
 
-        Button toggleTeleop = fragmentBinding.teleopToggle;
-        Button toggleAuto = fragmentBinding.autoToggle;
+        ToggleButton autoTeleop = fragmentBinding.teleopToggle;
 
         TextView outerPortOutputAuto = fragmentBinding.outerPortOutputAuto;
         TextView outerPortOutputTeleop = fragmentBinding.outerPortOutputTeleop;
@@ -146,48 +143,70 @@ public class LogMatchFragment extends Fragment implements SubmitToDBCallback {
         hangOut = toggle(hang);
         levelOut = toggle(level);
 
-        toggleAuto.setOnClickListener(v -> {
-            SingleToast.show(getActivity(), "Inputting for auto!", Toast.LENGTH_SHORT);
-            outerPortUp.setOnClickListener(v1 -> {
-                outerPortAuto++;
-                outerPortOutputAuto.setText("" + outerPortAuto);
-            });
-            outerPortDown.setOnClickListener(v1 -> {
-                outerPortAuto--;
-                outerPortAuto = minimum(outerPortAuto);
-                outerPortOutputAuto.setText("" + outerPortAuto);
-            });
-            lowerPortUp.setOnClickListener(v2 -> {
-                lowerPortAuto++;
-                lowerPortOutputAuto.setText("" + lowerPortAuto);
-            });
-            lowerPortDown.setOnClickListener(v2 -> {
-                lowerPortAuto--;
-                lowerPortAuto = minimum(lowerPortAuto);
-                lowerPortOutputAuto.setText("" + lowerPortAuto);
-            });
+        outerPortUp.setOnClickListener(v1 -> {
+            outerPortAuto++;
+            outerPortOutputAuto.setText("" + outerPortAuto);
         });
-        toggleTeleop.setOnClickListener(v -> {
-            SingleToast.show(getActivity(), "Inputting for teleop!", Toast.LENGTH_SHORT);
-            outerPortUp.setOnClickListener(v1 -> {
-                outerPortTeleop++;
-                outerPortOutputTeleop.setText("" + outerPortTeleop);
-            });
-            outerPortDown.setOnClickListener(v1 -> {
-                outerPortTeleop--;
-                outerPortTeleop = minimum(outerPortTeleop);
-                outerPortOutputTeleop.setText("" + outerPortTeleop);
-            });
-            lowerPortUp.setOnClickListener(v2 -> {
-                lowerPortTeleop++;
-                lowerPortOutputTeleop.setText("" + lowerPortTeleop);
-            });
-            lowerPortDown.setOnClickListener(v2 -> {
-                lowerPortTeleop--;
-                lowerPortTeleop = minimum(lowerPortTeleop);
-                lowerPortOutputTeleop.setText("" + lowerPortTeleop);
+        outerPortDown.setOnClickListener(v1 -> {
+            outerPortAuto--;
+            outerPortAuto = minimum(outerPortAuto);
+            outerPortOutputAuto.setText("" + outerPortAuto);
+        });
+        lowerPortUp.setOnClickListener(v2 -> {
+            lowerPortAuto++;
+            lowerPortOutputAuto.setText("" + lowerPortAuto);
+        });
+        lowerPortDown.setOnClickListener(v2 -> {
+            lowerPortAuto--;
+            lowerPortAuto = minimum(lowerPortAuto);
+            lowerPortOutputAuto.setText("" + lowerPortAuto);
+        });
 
-            });
+
+        autoTeleop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    outerPortUp.setOnClickListener(v1 -> {
+                        outerPortTeleop++;
+                        outerPortOutputTeleop.setText("" + outerPortTeleop);
+                    });
+                    outerPortDown.setOnClickListener(v1 -> {
+                        outerPortTeleop--;
+                        outerPortTeleop = minimum(outerPortTeleop);
+                        outerPortOutputTeleop.setText("" + outerPortTeleop);
+                    });
+                    lowerPortUp.setOnClickListener(v2 -> {
+                        lowerPortTeleop++;
+                        lowerPortOutputTeleop.setText("" + lowerPortTeleop);
+                    });
+                    lowerPortDown.setOnClickListener(v2 -> {
+                        lowerPortTeleop--;
+                        lowerPortTeleop = minimum(lowerPortTeleop);
+                        lowerPortOutputTeleop.setText("" + lowerPortTeleop);
+
+                    });
+                } else {
+                    outerPortUp.setOnClickListener(v1 -> {
+                        outerPortAuto++;
+                        outerPortOutputAuto.setText("" + outerPortAuto);
+                    });
+                    outerPortDown.setOnClickListener(v1 -> {
+                        outerPortAuto--;
+                        outerPortAuto = minimum(outerPortAuto);
+                        outerPortOutputAuto.setText("" + outerPortAuto);
+                    });
+                    lowerPortUp.setOnClickListener(v2 -> {
+                        lowerPortAuto++;
+                        lowerPortOutputAuto.setText("" + lowerPortAuto);
+                    });
+                    lowerPortDown.setOnClickListener(v2 -> {
+                        lowerPortAuto--;
+                        lowerPortAuto = minimum(lowerPortAuto);
+                        lowerPortOutputAuto.setText("" + lowerPortAuto);
+                    });
+                }
+            }
         });
 
         fragmentBinding.saveButton.setOnClickListener(new View.OnClickListener() {
